@@ -6,7 +6,7 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/25 18:48:50 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/01 18:14:26 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/01 19:40:13 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,36 @@ int		is_redir(char *line, int *i, t_env *env, int *word)
 	return(0);
 }
 
+/*
+
+void		not_quotes_cmds(char *line, int *j, t_env *env, int *count, int *out, int *word)
+{
+	while(line[(*j)] && (!(is_quotes(line[(*j)], line, (*j)))) && \
+	line[(*j)] != '|' && line[(*j)] != ' ' && line[(*j)] != '<' && \
+	line[(*j)] != '>')
+	{
+		// REGARDER find var strlen cmds
+		if(line[(*j)] && line[(*j)] == '$')
+			find_var_and_strlen_cmds(line, j, env, word, count);
+		else
+		{
+//			printf("\n\n %c \n\n",line[(*j)]);
+			env->cmds->cmds[(*word)][(*count)] = line[(*j)];
+			(*count)++;
+			(*j)++;
+		}
+	}
+	if(line[(*j)] && line[(*j)] == '|')
+		*out = 1;
+	if(line[(*j)] && (line[(*j)] == '<' || line[(*j)] == '>'))
+		*out = 1;
+
+}
+*/
+
+int			find_var_and_strlen_cmds(char *line, int *j, t_env *env, int *word, int *count);
+
+
 void		is_quotes_cmds(char *line, int *j, int *count,  t_env *env, int *word)
 {
 	char	c;
@@ -86,10 +116,10 @@ void		is_quotes_cmds(char *line, int *j, int *count,  t_env *env, int *word)
 	while(line[(*j)] && line[(*j)] != c)
 	{
 		if(c == '\"' && line[(*j)] == '$')
-			(*count) += find_var_and_strlen(line, j, env);
+			find_var_and_strlen_cmds(line, j, env, word, count);
 		else
 		{
-			(env->cmds->cmds[(*word)])[(*count)] = line[(*j)];
+			env->cmds->cmds[(*word)][(*count)] = line[(*j)];
 			(*j)++;
 			(*count)++;
 		}
@@ -170,6 +200,7 @@ void		not_quotes_cmds(char *line, int *j, t_env *env, int *count, int *out, int 
 	line[(*j)] != '|' && line[(*j)] != ' ' && line[(*j)] != '<' && \
 	line[(*j)] != '>')
 	{
+		// REGARDER find var strlen cmds
 		if(line[(*j)] && line[(*j)] == '$')
 			find_var_and_strlen_cmds(line, j, env, word, count);
 		else
