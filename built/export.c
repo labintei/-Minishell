@@ -11,14 +11,20 @@
 /* ************************************************************************** */
 
 #include "../minishell.h"
+/*
+void		env_sans_arg(t_list_env		**env)
+{
+	
+
+}*/
 
 void		list_env_end(t_list_env		**env)
 {
 	list_start_env(env);
-	printf("\n0\n");
+//	printf("\n0\n");
 	while((*env) && (*env)->next)
 		(*env) = (*env)->next;
-	printf("\n1\n");
+//	printf("\n1\n");
 }
 
 int			ft_find_env(t_list_env **env, char *var)
@@ -29,8 +35,8 @@ int			ft_find_env(t_list_env **env, char *var)
 	list_start_env(env);
 	while((*env) && g == 0)
 	{
-		if((*env)->var && (*env)->val)
-			printf("\n VAR : %s VAL : %s\n", (*env)->var, (*env)->val);
+//		if((*env)->var && (*env)->val)
+//			printf("\n VAR : %s VAL : %s\n", (*env)->var, (*env)->val);
 		if((*env) && (*env)->var && ft_strcmp((*env)->var, var))
 			return(1);
 		if((*env) && (*env)->next)
@@ -65,7 +71,7 @@ int			export_build(t_list *cmds, t_env *env)
 
 	g = 4;
 	i = 1;
-	printf("AAAAAAAAAAAAAAAAAAAAA");
+//	printf("AAAAAAAAAAAAAAAAAAAAA");
 	while(cmds->cmds && cmds->cmds[0] && cmds->cmds[i])
 	{
 		if(ft_find('=',cmds->cmds[i]))
@@ -74,20 +80,20 @@ int			export_build(t_list *cmds, t_env *env)
 			val = ft_strdup_char_after(cmds->cmds[i], '=');
 			ft_strcpy(&temp, var);
 			ft_strcpy(&to, val);
-			printf("\nVAR : %s\n", var);
-			printf("\nVAL : %s\n", val);
+//			printf("\nVAR : %s\n", var);
+//			printf("\nVAL : %s\n", val);
 			if(var && ft_find_env(&(env->env), var))
 			{
 				change_value(&(env->env), var, val);
 			}	
 			else
 			{
-				write(1, "A", 1);
-				printf("\ENTRE1\n");
+//				write(1, "A", 1);
+//				printf("\ENTRE1\n");
 //				list_env_end(&(env->env));
 				//printf("\n2\n");
 //				if((env->env)->var)
-				printf("\nLast elem %s\n", (env->env)->var);
+//				printf("\nLast elem %s\n", (env->env)->var);
 				add_list_env(&(env->env), temp, to, g);
 			}
 			if(var)

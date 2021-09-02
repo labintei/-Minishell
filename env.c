@@ -62,8 +62,8 @@ void		add_list_env(t_list_env	**list, char	*var, char *val, int i)
 	t_list_env	*new;
 
 	new = malloc(sizeof(t_list_env));
-	if(!new)
-		return ;
+//	if(!new)
+//		return ;
 	new->previous = NULL;
 	new->next = NULL;
 	new->var = NULL;
