@@ -25,6 +25,9 @@
 #include	<curses.h>
 #include	<signal.h>
 #include	<fcntl.h>
+#include	<stdbool.h>
+
+#define CD_ERROR 4
 
 typedef	struct		s_list_env
 {
@@ -69,7 +72,7 @@ void		find_exec_path(char **path, t_env *env);
 
 // BUILT_IN
 
-int		cd(t_list *cmds, t_env *env);
+int		cd(t_list *cmds, t_list_env *env, bool fork);
 int		echo_build(t_list *cmds);
 int		unset(t_list *cmds, t_env *env);
 int		export_build(t_list *cmds, t_env *env);
@@ -102,6 +105,7 @@ void		view_tab(char **tab);
 int			ft_strlen_env(t_list_env	**list, char *var);
 void		view_list_env(t_list_env	**l);
 void		list_start_env(t_list_env **list);
+void		add_arg(t_list_env	*list, char *var, char *val);
 
 // ENV
 
