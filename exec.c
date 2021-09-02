@@ -55,6 +55,8 @@ int		exec_other(t_list	*c, t_env *env)
 	{
 		ft_convert_env(&(env->env), &test);
 		execve(c->cmds[0], c->cmds, test);
+		if(test)
+			clear_tab(&test);
 		return(0);
 	}
 	if(c->cmds && c->cmds[0])
@@ -62,6 +64,8 @@ int		exec_other(t_list	*c, t_env *env)
 		find_exec_path(&(c->cmds[0]), env);
 		ft_convert_env(&(env->env), &test);
 		execve(c->cmds[0], c->cmds, test);
+		if(test)
+			clear_tab(&test);
 	}
 	return(0);
 }

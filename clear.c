@@ -65,3 +65,9 @@ void		clear_env(t_env *env)
 	clear_cmds(&(env->cmds));
 	clear_tab(&(env->split_path));
 }
+
+void	free_mem(t_env *env)
+{
+	clear_env(env);
+	exit (EXIT_SUCCESS);
+}

@@ -57,7 +57,6 @@ void		is_pipe(t_env *env, int *i, int *word, char *line)
 
 int		is_redir(char *line, int *i, t_env *env, int *word)
 {
-
 	env->cmds->cmds_type[(*word)] = line[(*i)];
 	if(!(env->cmds->cmds[(*word)]))
 		env->cmds->cmds[(*word)] = NULL;
@@ -74,33 +73,6 @@ int		is_redir(char *line, int *i, t_env *env, int *word)
 		return(2);
 	return(0);
 }
-
-/*
-
-void		not_quotes_cmds(char *line, int *j, t_env *env, int *count, int *out, int *word)
-{
-	while(line[(*j)] && (!(is_quotes(line[(*j)], line, (*j)))) && \
-	line[(*j)] != '|' && line[(*j)] != ' ' && line[(*j)] != '<' && \
-	line[(*j)] != '>')
-	{
-		// REGARDER find var strlen cmds
-		if(line[(*j)] && line[(*j)] == '$')
-			find_var_and_strlen_cmds(line, j, env, word, count);
-		else
-		{
-//			printf("\n\n %c \n\n",line[(*j)]);
-			env->cmds->cmds[(*word)][(*count)] = line[(*j)];
-			(*count)++;
-			(*j)++;
-		}
-	}
-	if(line[(*j)] && line[(*j)] == '|')
-		*out = 1;
-	if(line[(*j)] && (line[(*j)] == '<' || line[(*j)] == '>'))
-		*out = 1;
-
-}
-*/
 
 int			find_var_and_strlen_cmds(char *line, int *j, t_env *env, int *word, int *count);
 
@@ -254,8 +226,7 @@ void		parse_line(t_env *env, char *line)
 	//		env->cmds->cmds[(++word)] = malloc(sizeof(char) * (count_char(line, i, env) + 1));
 			if(line[i] && (line[i] == '>' || line[i] == '<'))
 			{
-				if(line[i] && line[i + 1] && line[i] == line[i + 1])
-					is_redir(line, &i, env, &word);
+				is_redir(line, &i, env, &word);
 			}
 			else
 				is_word_cmds(line, &i, env, &word);
@@ -282,12 +253,14 @@ int			start_parse(t_env	*env)
 			clear_cmds(&(env->cmds));
 		}
 		add_history(line);
-		if(!line)
-			return(0);
-		if(line)
+		if (!line)
+		{
+			free_mem(env);
+		}
+		if (line)
 			free(line);
 	}
-	return(1);
+	return (1);
 }
 
 void		init_env(t_env *env)
@@ -297,34 +270,53 @@ void		init_env(t_env *env)
 	env->split_path = NULL;
 }
 
+/* Main mahaut tests */
 int			main(int argc, char **argv, char **envp)
 {
 	t_env	env;
-	int	ret;
-//	char	**tab;
+	int		ret;
 
 	(void)argv;
-	view_tab(envp);
 	ret = 0;
 	if (argc == 1)
 	{
-//		env = malloc(sizeof(t_env));
-//		if(!env)
-//			return(1);
-//		env->env = malloc(sizeof(t_list_env));
-//		env->env = NULL;
-//		init_env(env);
 		env.split_path = NULL;
 		stock_env(&env, envp);
 		get_splitted_path(&env);
 		env.cmds = NULL;
-//		ft_convert_env(&(env->env), &tab);
-//		view_list_env(&(env->env));
-//		view_tab(tab);
-//		stock_splitted_path(&list);
-//		view_list_env(&(env->env));
-//		ret = start_parse(&env);
+		ret = start_parse(&env);
 	}
 	return (ret);
 }
 
+/* Main lauranne 
+int			main(int argc, char **argv, char **envp)
+{
+	t_env	env;
+	int		ret;
+//	char	**tab;
+
+	(void)argc;
+	(void)argv;
+	view_tab(envp);
+//	env = malloc(sizeof(t_env));
+//	if(!env)
+//		return(1);
+//	env->env = malloc(sizeof(t_list_env));
+//	env->env = NULL;
+//	init_env(env);
+	env.split_path = NULL;
+	stock_env(&env, envp);
+//	printf("\n\nAAAAAAAAAAAAAAAAA\n\n");
+	get_splitted_path(&env);
+	env.cmds = NULL;
+//	ft_convert_env(&(env->env), &tab);
+//	view_list_env(&(env->env));
+//	view_tab(tab);
+//	stock_splitted_path(&list);
+
+//	view_list_env(&(env->env));
+	ret = start_parse(&env);
+	return(ret);
+}
+*/

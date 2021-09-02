@@ -84,7 +84,7 @@ void		get_splitted_path(t_env *env)
 	ft_strcpy(&s, "PATH");
 //	s = "PATH";
 	find_path(&(env->env), s, &val);
-	printf("\nPATH : %s\n", val);
+//	printf("\nPATH : %s\n", val);
 	i[0] = 1;
 	i[1] = -1;
 	while(val && val[(++i[1])])

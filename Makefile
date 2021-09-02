@@ -6,7 +6,7 @@
 #    By: labintei <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/08/16 20:11:09 by labintei          #+#    #+#              #
-#    Updated: 2021/09/02 14:12:17 by malatini         ###   ########.fr        #
+#    Updated: 2021/09/02 14:16:03 by malatini         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,6 @@ SRCS	=	env.c main.c utils.c utils1.c cmds.c convert_env.c \
 		./built/pwd.c ./built/unset.c ./free.c \
 
 OBJS	= $(SRCS:.c=.o)
-
 CC	= gcc -g3 -fsanitize=address
 RM	= rm -rf
 NAME	= minishell

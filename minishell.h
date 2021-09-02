@@ -58,7 +58,8 @@ typedef	struct		s_env
 void		clear_cmds(t_list **cmds);
 void		clear_tab(char ***s);
 void		clear_env(t_env *env);
-void		clear_list_env(t_list_env	**env);
+void		clear_list_env(t_list_env **env);
+void		free_mem(t_env *env);
 // OTHER
 
 void		list_cmds_restart(t_list	**cmds);
