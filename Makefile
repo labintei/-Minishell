@@ -17,7 +17,7 @@ SRCS	=	env.c main.c utils.c utils1.c cmds.c convert_env.c \
 
 OBJS	= $(SRCS:.c=.o)
 
-CC	= gcc -g3 -fsanitize=address
+CC	= gcc -g #3 -fsanitize=address
 RM	= rm -rf
 NAME	= minishell
 CFLAGS	= -Wall -Wextra -Werror

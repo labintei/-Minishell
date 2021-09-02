@@ -57,7 +57,6 @@ void		is_pipe(t_env *env, int *i, int *word, char *line)
 
 int		is_redir(char *line, int *i, t_env *env, int *word)
 {
-
 	env->cmds->cmds_type[(*word)] = line[(*i)];
 	if(!(env->cmds->cmds[(*word)]))
 		env->cmds->cmds[(*word)] = NULL;
@@ -74,33 +73,6 @@ int		is_redir(char *line, int *i, t_env *env, int *word)
 		return(2);
 	return(0);
 }
-
-/*
-
-void		not_quotes_cmds(char *line, int *j, t_env *env, int *count, int *out, int *word)
-{
-	while(line[(*j)] && (!(is_quotes(line[(*j)], line, (*j)))) && \
-	line[(*j)] != '|' && line[(*j)] != ' ' && line[(*j)] != '<' && \
-	line[(*j)] != '>')
-	{
-		// REGARDER find var strlen cmds
-		if(line[(*j)] && line[(*j)] == '$')
-			find_var_and_strlen_cmds(line, j, env, word, count);
-		else
-		{
-//			printf("\n\n %c \n\n",line[(*j)]);
-			env->cmds->cmds[(*word)][(*count)] = line[(*j)];
-			(*count)++;
-			(*j)++;
-		}
-	}
-	if(line[(*j)] && line[(*j)] == '|')
-		*out = 1;
-	if(line[(*j)] && (line[(*j)] == '<' || line[(*j)] == '>'))
-		*out = 1;
-
-}
-*/
 
 int			find_var_and_strlen_cmds(char *line, int *j, t_env *env, int *word, int *count);
 
@@ -254,8 +226,7 @@ void		parse_line(t_env *env, char *line)
 	//		env->cmds->cmds[(++word)] = malloc(sizeof(char) * (count_char(line, i, env) + 1));
 			if(line[i] && (line[i] == '>' || line[i] == '<'))
 			{
-				if(line[i] && line[i + 1] && line[i] == line[i + 1])
-					is_redir(line, &i, env, &word);
+				is_redir(line, &i, env, &word);
 			}
 			else
 				is_word_cmds(line, &i, env, &word);
