@@ -6,7 +6,7 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/29 20:15:32 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/02 13:23:26 by malatini         ###   ########.fr       */
+/*   Updated: 2021/09/02 20:53:07 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int		exec_build(t_list	*a, t_env *env)
 		return(unset(env->cmds, env));
 	if(a->cmds && ft_strcmp(a->cmds[0], "export"))
 	{
-		printf("\nON est dans export\n");
+//		printf("\nON est dans export\n");
 		return(export_build(env->cmds, env));
 	}
 	if(a->cmds && ft_strcmp(a->cmds[0], "pwd"))

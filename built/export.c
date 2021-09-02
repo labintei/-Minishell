@@ -6,7 +6,7 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/30 15:39:11 by labintei          #+#    #+#             */
-/*   Updated: 2021/08/30 15:40:42 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/02 21:04:53 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,27 +34,36 @@ int			sort_str(char *s, char *sbis)
 	i = 0;
 	if(!sbis || !s)
 		return(0);
-	if(s && sbis && s[i] && sbis[i] && s[i] == sbis[i])
+	while(s && sbis && s[i] && sbis[i] && s[i] == sbis[i])
 		i++;
 	return(s[i] - sbis[i]);
 }
 
 void		list_sort(t_list_env	**env)
 {
-	while((*env))
-	{
-		if((*env) && (*env)->next && (*env)->var && sort_str((*env)->var, (*env)->next->var) > 0)
-			swap_list(&(*env), &((*env)->next));
-		else
-			()
-	}
+	t_list_env	*temp;
+	int		g;
 
+	g = 0;
+	list_start_env(env);
+	while(g == 0)
+	{
+		if((*env) && (*env)->next)
+		{
+			temp = (*env)->next;
+			while((*env) && (*env)->next && (*env)->var && sort_str((*env)->var, (*env)->next->var) > 0)
+				swap_list(&(*env), &((*env)->next));
+			(*env) = temp;
+		}
+		else
+			g = 1;
+	}
 }
 
 void		env_sans_arg(t_list_env		**env)
 {
 	list_sort(env);
-
+//	view_list_env(*env);
 }
 
 void		list_env_end(t_list_env		**env)
@@ -146,10 +155,10 @@ int			export_build(t_list *cmds, t_env *env)
 		}
 		i++;
 	}
-//	else
-//	{
-		// FAIRE LA FONCTION pour export sans arguemens;
-//	}
+	if(cmds->cmds[0] && !cmds->cmds[1])
+	{
+		env_sans_arg(&(env->env));
+	}
 	return(0);
 }
 
