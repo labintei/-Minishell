@@ -6,7 +6,7 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/25 18:48:50 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/01 19:40:13 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/02 14:14:25 by malatini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -300,30 +300,31 @@ void		init_env(t_env *env)
 int			main(int argc, char **argv, char **envp)
 {
 	t_env	env;
-	int		ret;
+	int	ret;
 //	char	**tab;
 
-	(void)argc;
 	(void)argv;
 	view_tab(envp);
-//	env = malloc(sizeof(t_env));
-//	if(!env)
-//		return(1);
-//	env->env = malloc(sizeof(t_list_env));
-//	env->env = NULL;
-//	init_env(env);
-	env.split_path = NULL;
-	stock_env(&env, envp);
-//	printf("\n\nAAAAAAAAAAAAAAAAA\n\n");
-	get_splitted_path(&env);
-	env.cmds = NULL;
-//	ft_convert_env(&(env->env), &tab);
-//	view_list_env(&(env->env));
-//	view_tab(tab);
-//	stock_splitted_path(&list);
-
-//	view_list_env(&(env->env));
-	ret = start_parse(&env);
-	return(ret);
+	ret = 0;
+	if (argc == 1)
+	{
+//		env = malloc(sizeof(t_env));
+//		if(!env)
+//			return(1);
+//		env->env = malloc(sizeof(t_list_env));
+//		env->env = NULL;
+//		init_env(env);
+		env.split_path = NULL;
+		stock_env(&env, envp);
+		get_splitted_path(&env);
+		env.cmds = NULL;
+//		ft_convert_env(&(env->env), &tab);
+//		view_list_env(&(env->env));
+//		view_tab(tab);
+//		stock_splitted_path(&list);
+//		view_list_env(&(env->env));
+//		ret = start_parse(&env);
+	}
+	return (ret);
 }
 
