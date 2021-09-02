@@ -132,6 +132,9 @@ char		*ft_strdup_char_after(char *copy, char c);
 
 void		add_list_env(t_list_env	**list, char	*var, char *val, int i);
 
+
+int			ft_find_env(t_list_env **env, char *var);
+
 // exec
 
 void		exec_cmds(t_env *env);
