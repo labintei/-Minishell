@@ -25,6 +25,8 @@ int		ft_strlen_char(char	*s, char c)
 	return(i);
 }
 
+/* version Lauranne */
+/*
 char	*ft_strdup(char *copy)
 {
 	char	*new;
@@ -42,6 +44,31 @@ char	*ft_strdup(char *copy)
 	new[i] = '\0';
 	return(new);
 }
+*/
+
+char	*ft_strdup(char *src)
+{
+	int		i;
+	char	*dest;
+
+	if (!src)
+		return (NULL);
+	i = 0;
+	while (src[i])
+		i++;
+	dest = malloc(sizeof(char) * (i + 1));
+	if (dest == NULL)
+		return (NULL);
+	i = 0;
+	while (src[i])
+	{
+		dest[i] = src[i];
+		i++;
+	}
+	dest[i] = '\0';
+	return (dest);
+}
+
 
 char	*ft_strdup_char(char *copy, char c)
 {

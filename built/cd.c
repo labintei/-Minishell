@@ -108,7 +108,6 @@ int	env_manager(char *key, char *value, t_list_env *env)
 			if (!value)
 				return (0);
 			free(elem->val);
-			elem->val = NULL;
 			elem->val = ft_strdup(value);
 			if (!elem->val)
 			{
