@@ -118,6 +118,60 @@ char	*find_path_1(t_list *cmds, t_list_env *env, bool fork)
 	return (path);
 }
 
+/* Adds a env_list elem when it does not exists already*/
+t_list_env	*sub_add_arg_2(char *key, char *value)
+{
+	t_list_env	*next;
+
+	next = (t_list_env *)malloc(sizeof(t_list_env));
+	if (!next)
+	{
+		ft_putstr_fd("Failure to allocate memory\n", 2);
+		exit (EXIT_FAILURE);
+	}
+	next->var = ft_strdup(key);
+	next->val = ft_strdup(value);
+	next->next = NULL;
+	if (!next->var || ! next->val)
+	{
+		ft_putstr_fd("Failure to allocate memory\n", 2);
+		exit (EXIT_FAILURE);
+	}
+	return (next);
+}
+
+/* Edit or add a env list elem */
+int	add_arg_2(t_list_env *env, char *key, char *value)
+{
+	t_list_env	*next;
+	t_list_env	*current;
+
+	current = env;
+	if (ft_strcmp_cd(env->var, "") == 0 && ft_strcmp(env->val, "") == 0)
+	{
+		free(env->var);
+		free(env->val);
+		env->var = ft_strdup(key);
+		env->val = ft_strdup(value);
+		if (!env->var || !env->val)
+		{
+			ft_putstr_fd("Failure to allocate memory\n", 2);
+			exit (EXIT_FAILURE);
+		}
+		return (0);
+	}
+	next = sub_add_arg_2(key, value);
+	if (!next)
+	{
+		ft_putstr_fd("Failure to allocate memory\n", 2);
+		exit (EXIT_FAILURE);
+	}
+	while (current->next)
+		current = current->next;
+	current->next = next;
+	return (0);
+}
+
 int	env_manager(char *key, char *value, t_list_env *env)
 {
 	t_list_env	*elem;
@@ -125,13 +179,13 @@ int	env_manager(char *key, char *value, t_list_env *env)
 	elem = env;
 	while (elem)
 	{
-		if (ft_strcmp(elem->var, key) == 0)
+		if (ft_strcmp_cd(elem->var, key) == 0)
 		{
 			if (!value)
 				return (0);
 			free(elem->val);
 			elem->val = ft_strdup(value);
-			if (!elem->val)
+			if (!elem->val && value)
 			{
 				ft_putstr_fd("Failure to allocate memory\n", 2);
 				exit (EXIT_FAILURE);
@@ -140,7 +194,8 @@ int	env_manager(char *key, char *value, t_list_env *env)
 		}
 		elem = elem->next;
 	}
-	add_arg(env, key, value);
+	if ((add_arg_2(env, key, value)) != 0)
+		return (-1);
 	return (0);
 }
 
@@ -152,20 +207,24 @@ int	cd(t_list *cmds, t_list_env *env, bool fork)
 	char	*current;
 
 	current = find_path_1(cmds, env, fork);
+//	printf("current is %s\n", current);
 	if (current == NULL)
 		return (CD_ERROR);
 	previous = getcwd(NULL, 0);
+//	printf("previous is %s\n", previous);
 	ret = chdir(current);
-	if (!ret)
+	if (ret)
 		cd_errors(current, errno, fork);
 	else
 	{
 		if (previous)
 			env_manager("OLDPWD", previous, env);
+		//printf("previous is now %s\n", previous);
 		current = getcwd(NULL, 0);
 		if (current == NULL)
 			return (CD_ERROR);
 		env_manager("PWD", current, env);
+		//printf("current is %s\n", current);
 		free(current);
 	}
 	free(previous);

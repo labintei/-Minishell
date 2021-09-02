@@ -12,8 +12,16 @@
 
 #include "../minishell.h"
 
-int			pwd(void)
+int			pwd(t_env *env)
 {
-	printf("\nPWD\n");
+	char	*path;
+
+	path = find_value(env->env, "PWD");
+	if (!path)
+	{
+		ft_putstr_fd("Environment var not found\n", 2);
+		return (1);
+	}
+	printf("%s\n", path);
 	return (0);
 }

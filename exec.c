@@ -39,7 +39,7 @@ int		exec_build(t_list	*a, t_env *env)
 		return(export_build(env->cmds, env));
 	}
 	if(a->cmds && ft_strcmp(a->cmds[0], "pwd"))
-		return(pwd());
+		return(pwd(env));
 	if(a->cmds && ft_strcmp(a->cmds[0], "env"))
 		return(0);
 	if(a->cmds && ft_strcmp(a->cmds[0], "exit"))

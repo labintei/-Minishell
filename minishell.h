@@ -56,6 +56,11 @@ typedef	struct		s_env
 	char			**split_path;
 }					t_env;
 
+
+// pwd
+
+char		*find_value(t_list_env *env, char *key);
+
 //	clear
 
 void		clear_cmds(t_list **cmds);
@@ -76,7 +81,7 @@ int		cd(t_list *cmds, t_list_env *env, bool fork);
 int		echo_build(t_list *cmds);
 int		unset(t_list *cmds, t_env *env);
 int		export_build(t_list *cmds, t_env *env);
-int		pwd(void);
+int		pwd(t_env *env);
 int		exit_build(t_env *env);
 
 // PARSING
@@ -131,6 +136,8 @@ char		*ft_strdup_char(char *copy, char c);
 char		*ft_strdup_char_after(char *copy, char c);
 
 void		add_list_env(t_list_env	**list, char	*var, char *val, int i);
+
+void		ft_putstr_fd(char const *s, int fd);
 
 // exec
 
