@@ -68,7 +68,7 @@ void	cd_errors(char *path, int err, bool fork)
 }
 
 /* Finds the target path for cd depending on the arguments */
-char	*find_path(t_list *cmds, t_list_env *env, bool fork)
+char	*find_path_1(t_list *cmds, t_list_env *env, bool fork)
 {
 	int		length;
 	char	*path;
@@ -130,7 +130,7 @@ int	cd(t_list *cmds, t_list_env *env, bool fork)
 	char	*previous;
 	char	*current;
 
-	current = find_path(cmds, env, fork);
+	current = find_path_1(cmds, env, fork);
 	if (current == NULL)
 		return (CD_ERROR);
 	previous = getcwd(NULL, 0);

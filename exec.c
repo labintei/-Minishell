@@ -28,7 +28,7 @@ int		exec_build(t_list	*a, t_env *env)
 {
 //	return(exit_build(env));
 	if(a->cmds && ft_strcmp(a->cmds[0], "cd"))
-		return(cd(env->cmds, env));
+		return(cd(env->cmds, env->env, 0));
 	if(a->cmds && ft_strcmp(a->cmds[0], "echo"))
 		return(echo_build(env->cmds));
 	if(a->cmds && ft_strcmp(a->cmds[0], "unset"))
