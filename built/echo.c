@@ -14,6 +14,7 @@
 
 int			echo_build(t_list		*cmds)
 {
+<<<<<<< HEAD
 	int		i;
 	int		g;
 
@@ -33,4 +34,9 @@ int			echo_build(t_list		*cmds)
 	if(g == 1);
 		write(1, "\n", 1);
 	return(0);
+=======
+	(void)cmds;
+	//printf("\nECHO\n");
+	return (0);
+>>>>>>> 0bfd98f3c85f47d77a9d5cbfba7b35758ae8861c
 }

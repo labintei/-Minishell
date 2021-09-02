@@ -12,6 +12,8 @@
 
 #include "minishell.h"
 
+
+
 int		find_var_and_strlen(char *line, int *j, t_env *env)
 {
 	char	*new;
@@ -236,17 +238,17 @@ void		parse_line(t_env *env, char *line)
 	//	env->cmds->cmds[((word) + 1)] = NULL;
 	//else
 	env->cmds->cmds[(word)] = NULL;
-	view_cmds(&(env->cmds));
+//	view_cmds(&(env->cmds));
 }
 
 int			start_parse(t_env	*env)
 {
 	char	*line;
 
-	while(1)
+	while (true)
 	{
-		line = readline("\n>>");
-		if(line)
+		line = readline("Minishell$ ");
+		if (line)
 		{
 			parse_line(env, line);
 			exec_cmds(env);
@@ -255,6 +257,7 @@ int			start_parse(t_env	*env)
 		add_history(line);
 		if (!line)
 		{
+			printf("\n");
 			free_mem(env);
 		}
 		if (line)

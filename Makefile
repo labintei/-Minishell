@@ -10,29 +10,29 @@
 #                                                                              #
 # **************************************************************************** #
 
-SRCS	=	env.c main.c utils.c utils1.c cmds.c convert_env.c \
-		count_word.c count_char.c view.c exec.c path.c clear.c \
-		./built/cd.c ./built/echo.c ./built/exit.c ./built/export.c \
-		./built/pwd.c ./built/unset.c ./free.c \
+SRCS		=	env.c main.c utils.c utils1.c cmds.c convert_env.c \
+				count_word.c count_char.c view.c exec.c path.c clear.c \
+				./built/cd.c ./built/echo.c ./built/exit.c ./built/export.c \
+				./built/pwd.c ./built/unset.c ./free.c \
 
-OBJS	= $(SRCS:.c=.o)
-CC	= gcc -g3 -fsanitize=address
-RM	= rm -rf
-NAME	= minishell
-CFLAGS	= -Wall -Wextra -Werror
+OBJS		= $(SRCS:.c=.o)
+CC			= gcc -g3 -fsanitize=address
+RM			= rm -rf
+NAME		= minishell
+CFLAGS		= -Wall -Wextra -Werror
 
 all:		${NAME}
 
 .c.o:		${CC} ${CFLAGS} -c $< -o ${<:.c=.o}
 
 ${NAME}:	${OBJS}
-		${CC} -o $(NAME) $(SRCS) -lreadline
+			${CC} -o $(NAME) $(SRCS) -lreadline
 
 clean:
-		$(RM) ${OBJS}
+			$(RM) ${OBJS}
 
 fclean:		clean
-		$(RM) $(NAME)
+			$(RM) $(NAME)
 
 re: 		fclean all
 
