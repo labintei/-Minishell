@@ -25,6 +25,7 @@
 #include	<curses.h>
 #include	<signal.h>
 #include	<fcntl.h>
+#include	<stdbool.h>
 
 typedef	struct		s_list_env
 {

@@ -12,9 +12,21 @@
 
 #include "../minishell.h"
 
-int			echo_build(t_list		*cmds)
+/* version Mahaut avortee
+int			echo_build(t_list	*cmds)
 {
+	int		flag;
+	char	*n;
+	bool	option;
+
+	(void)flag;
 	(void)cmds;
-	//printf("\nECHO\n");
+	n = "-n";
+	if (!cmds->cmds[1])
+	{
+		printf("\n");
+		return (0);
+	}
 	return (0);
 }
+*/
