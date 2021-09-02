@@ -6,7 +6,7 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/26 11:54:22 by labintei          #+#    #+#             */
-/*   Updated: 2021/08/29 21:09:52 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/02 13:14:08 by malatini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,9 +39,6 @@ int			ft_strcmp(char *s, char *sbis)
 
 int			ft_second(char c, char *s, int i)
 {
-	int		j;
-
-	j = i;
 	while(s && s[(++i)])
 	{
 		if(s[i] == c)

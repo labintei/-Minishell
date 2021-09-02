@@ -15,12 +15,10 @@
 int		find_var_and_strlen(char *line, int *j, t_env *env)
 {
 	char	*new;
-	int		c;
 	int		a;
 	int		ret;
 
 	a = 0;
-	c = 0;
 	(*j)++;
 	while(line && line[(*j) + a] && is_alphanum(line[(*j) + a]))
 		a++;
@@ -130,9 +128,7 @@ void		is_quotes_cmds(char *line, int *j, int *count,  t_env *env, int *word)
 void	ft_dup_env(t_list_env	**env, char *var, char **s)
 {
 	int		a;
-	int		j;
 	t_list_env	*l;
-	char		*new;
 
 	l = (*env);
 	while(l)
@@ -154,12 +150,11 @@ int			find_var_and_strlen_cmds(char *line, int *j, t_env *env, int *word, int *c
 {
 	char	*new;
 	char	*stock;
-	int		c;
-	int		a;
-	int		ret;
+	int	a;
+	int	ret;
 
 	a = 0;
-	c = 0;
+	ret = 0;
 	(*j)++;
 	while(line && line[(*j) + a] && is_alphanum(line[(*j) + a]))
 		a++;
@@ -242,12 +237,9 @@ void		is_word_cmds(char *line, int *i, t_env *env, int *word)
 
 void		parse_line(t_env *env, char *line)
 {
-	int		i;
-	char	c;
-	int		word;
-	int		pipe;
+	int	i;
+	int	word;
 
-	pipe = 0;
 	i = 0;
 	word = 0;
 //	printf("\n%d\n", count_char(line, i, env));
@@ -309,7 +301,7 @@ int			main(int argc, char **argv, char **envp)
 {
 	t_env	env;
 	int		ret;
-	char	**tab;
+//	char	**tab;
 
 	(void)argc;
 	(void)argv;

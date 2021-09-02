@@ -106,7 +106,6 @@ void		stock_env(t_env		*env, char **envp)
 
 int			ft_strlen_env(t_list_env **list, char *var)
 {
-	int		i;
 	t_list_env	*l;
 
 	list_start_env(list);

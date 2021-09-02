@@ -6,7 +6,7 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/29 15:19:10 by labintei          #+#    #+#             */
-/*   Updated: 2021/08/29 15:38:38 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/02 13:14:34 by malatini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,6 @@ int			count_word(char *line, int *i)
 	int	word;
 	int	pipe;
 	int	redir;
-	char	c;
 
 	word = 0;
 	j = (*i);

@@ -6,7 +6,7 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/29 15:29:43 by labintei          #+#    #+#             */
-/*   Updated: 2021/08/29 17:20:31 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/02 13:16:01 by malatini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ int			count_char(char *line, int	i, t_env *env)
 	int		count;
 
 	j = i;
-	count == 0;
+	count = 0;
 	out = 0;
 	while(line && line[j])
 	{
@@ -78,6 +78,7 @@ int			count_char(char *line, int	i, t_env *env)
 		else
 			return(0);
 	}
+	return (0);
 }
 
 

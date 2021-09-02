@@ -6,7 +6,7 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/29 20:15:32 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/01 18:10:34 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/02 13:23:26 by malatini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int		exec_build(t_list	*a, t_env *env)
 	return(exit_build(env));
 	if(ft_strcmp(a->cmds[0], "cd"))
 		return(cd(env->cmds, env));
-	if(ft_strcmp(a->cmds[0], "echo"));
+	if(ft_strcmp(a->cmds[0], "echo"))
 		return(echo_build(env->cmds));
 	if(ft_strcmp(a->cmds[0], "unset"))
 		return(unset(env->cmds, env));
@@ -47,7 +47,7 @@ int		exec_build(t_list	*a, t_env *env)
 
 int		exec_other(t_list	*c, t_env *env)
 {
-	char	*path;
+//	char	*path;
 	char	**test;
 
 //	c->pid = fork();
@@ -114,10 +114,9 @@ int			exec_cmd(t_list *cmd, t_env *env)
 void		exec_cmds(t_env *env)
 {
 	t_list	*c;
-	int		status;
-	int		ret;
+//	int	status;
+//	int	ret;
 
-	status = 0;
 	list_cmds_restart(&(env->cmds));
 //	printf("\nAAAAAAA\n");
 	c = env->cmds;
@@ -125,15 +124,15 @@ void		exec_cmds(t_env *env)
 	{
 		c = env->cmds;
 		if(c && c->cmds && c->cmds[0] && is_build(c->cmds[0]))
-			ret = exec_build(c, env);
+			exec_build(c, env);
 		else if(c && c->cmds && c->cmds[0])
-			ret = exec_cmd(c, env);
+			exec_cmd(c, env);
 		if(!(env->cmds)->next)
 			break ;
 /*		if(c && c->cmds && c->cmds[0] && is_build(c->cmds[0]))
-			ret = exec_build(c, env);
+			exec_build(c, env);
 		else
-			ret = exec_other(c, env);*/
+			exec_other(c, env);*/
 		env->cmds = env->cmds->next;
 	}
 /*	c = env->cmds;
