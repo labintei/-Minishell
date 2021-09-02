@@ -24,11 +24,11 @@ int			is_build(char *s)
 	return(0);
 }
 
-int		exec_build(t_list	*a, t_env *env)
+int		exec_build(t_list	*a, t_env *env, bool fork)
 {
 //	return(exit_build(env));
 	if(ft_strcmp(a->cmds[0], "cd"))
-		return(cd(env->cmds, env));
+		return(cd(env->cmds, env->env, fork));
 	if(ft_strcmp(a->cmds[0], "echo"))
 		return(echo_build(env->cmds));
 	if(ft_strcmp(a->cmds[0], "unset"))
@@ -115,12 +115,15 @@ int			exec_cmd(t_list *cmd, t_env *env)
 	return(ret);
 }
 
+/* besoin de savoir si c est forked ou pas */
 void		exec_cmds(t_env *env)
 {
 	t_list	*c;
+	bool	fork;
 //	int	status;
 //	int	ret;
 
+	fork = false;
 	list_cmds_restart(&(env->cmds));
 //	printf("\nAAAAAAA\n");
 	c = env->cmds;
@@ -128,7 +131,7 @@ void		exec_cmds(t_env *env)
 	{
 		c = env->cmds;
 		if(c && c->cmds && c->cmds[0] && is_build(c->cmds[0]))
-			exec_build(c, env);
+			exec_build(c, env, fork);
 		else if(c && c->cmds && c->cmds[0])
 			exec_cmd(c, env);
 		if(!(env->cmds)->next)
