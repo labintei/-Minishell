@@ -14,7 +14,23 @@
 
 int			echo_build(t_list		*cmds)
 {
-	(void)cmds;
-	printf("\nECHO\n");
+	int		i;
+	int		g;
+
+	i = 1;
+	if(cmds->cmds && cmds->cmds[0] && cmds->cmds[1] && \
+	ft_strcmp(cmds->cmds[i], "-n"))
+	{
+		g  = 1;
+		i++;
+	}
+	while(cmds->cmds && cmds->cmds[0] && cmds->cmds[i])
+	{
+		write(1, cmds->cmds[i] ,ft_strlen(cmds->cmds[i]));
+		if(cmds->cmds[i + 1])
+			write(1, " ", 1);
+	}
+	if(g == 1);
+		write(1, "\n", 1);
 	return(0);
 }

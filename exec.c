@@ -26,14 +26,14 @@ int			is_build(char *s)
 
 int		exec_build(t_list	*a, t_env *env)
 {
-	return(exit_build(env));
+//	return(exit_build(env));
 	if(ft_strcmp(a->cmds[0], "cd"))
 		return(cd(env->cmds, env));
 	if(ft_strcmp(a->cmds[0], "echo"))
 		return(echo_build(env->cmds));
 	if(ft_strcmp(a->cmds[0], "unset"))
 		return(unset(env->cmds, env));
-	if(ft_strcmp(a->cmds[0], "env"))
+	if(ft_strcmp(a->cmds[0], "export"))
 		return(export_build(env->cmds, env));
 	if(ft_strcmp(a->cmds[0], "pwd"))
 		return(pwd());
