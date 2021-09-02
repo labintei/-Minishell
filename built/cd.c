@@ -6,7 +6,7 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/30 15:01:00 by labintei          #+#    #+#             */
-/*   Updated: 2021/08/30 16:46:30 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/02 18:52:29 by malatini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,22 @@ int	cmds_length(t_list *cmds)
 	return (i);
 }
 
+int	ft_strcmp_cd(const char *s1, const char *s2)
+{
+	int	i;
+
+	i = 0;
+	if (!s1 || !s2)
+		return (0);
+	while (s1[i] || s2[i])
+	{
+		if (s1[i] != s2[i])
+			return (s1[i] - s2[i]);
+		i++;
+	}
+	return (s1[i] - s2[i]);
+}
+
 /* Returns the value of the corresponding key env */
 char	*find_value(t_list_env *env, char *key)
 {
@@ -41,8 +57,10 @@ char	*find_value(t_list_env *env, char *key)
 	elem = env;
 	while (elem)
 	{
-		if (ft_strcmp(key, elem->var) == 0)
+		if (ft_strcmp_cd(key, elem->var) == 0)
+		{
 			return (elem->val);
+		}
 		elem = elem->next;
 	}
 	return (NULL);
@@ -68,12 +86,16 @@ void	cd_errors(char *path, int err, bool fork)
 }
 
 /* Finds the target path for cd depending on the arguments */
-char	*find_path(t_list *cmds, t_list_env *env, bool fork)
+/* revoir la valeur de fork */
+char	*find_path_1(t_list *cmds, t_list_env *env, bool fork)
 {
 	int		length;
 	char	*path;
 
 	length = cmds_length(cmds);
+	fork = 1;
+	//printf("la commande est : %s\n", cmds->cmds[1]);
+	//printf("length = %i\n", length);
 	if (length < 2)
 	{
 		path = find_value(env, "HOME");
@@ -81,7 +103,7 @@ char	*find_path(t_list *cmds, t_list_env *env, bool fork)
 			ft_putstr_fd("cd : HOME not set\n", 2);
 	}
 	else
-	{
+	{	
 		if (cmds->cmds[1][0] == '-' && cmds->cmds[1][1] == '\0')
 		{
 			path = find_value(env, "OLDPWD");
@@ -129,7 +151,7 @@ int	cd(t_list *cmds, t_list_env *env, bool fork)
 	char	*previous;
 	char	*current;
 
-	current = find_path(cmds, env, fork);
+	current = find_path_1(cmds, env, fork);
 	if (current == NULL)
 		return (CD_ERROR);
 	previous = getcwd(NULL, 0);
