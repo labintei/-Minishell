@@ -30,6 +30,8 @@ int			ft_strcmp(char *s, char *sbis)
 	int		i;
 
 	i = 0;
+	if(!s || !sbis)
+		return(0);
 	while(s && sbis && s[i] && sbis[i] && s[i] == sbis[i])
 		i++;
 	if(s && sbis && s[i] == '\0' && sbis[i] == '\0')

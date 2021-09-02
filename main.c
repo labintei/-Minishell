@@ -149,7 +149,7 @@ int			find_var_and_strlen_cmds(char *line, int *j, t_env *env, int *word, int *c
 	a = 0;
 	while(stock && stock[a])
 	{
-		printf("\n %c \n", stock[a]);
+//		printf("\n %c \n", stock[a]);
 		env->cmds->cmds[(*word)][(*count)] = stock[a];
 		(*count)++;
 		a++;

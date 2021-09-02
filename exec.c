@@ -27,19 +27,22 @@ int			is_build(char *s)
 int		exec_build(t_list	*a, t_env *env)
 {
 //	return(exit_build(env));
-	if(ft_strcmp(a->cmds[0], "cd"))
+	if(a->cmds && ft_strcmp(a->cmds[0], "cd"))
 		return(cd(env->cmds, env));
-	if(ft_strcmp(a->cmds[0], "echo"))
+	if(a->cmds && ft_strcmp(a->cmds[0], "echo"))
 		return(echo_build(env->cmds));
-	if(ft_strcmp(a->cmds[0], "unset"))
+	if(a->cmds && ft_strcmp(a->cmds[0], "unset"))
 		return(unset(env->cmds, env));
-	if(ft_strcmp(a->cmds[0], "export"))
+	if(a->cmds && ft_strcmp(a->cmds[0], "export"))
+	{
+		printf("\nON est dans export\n");
 		return(export_build(env->cmds, env));
-	if(ft_strcmp(a->cmds[0], "pwd"))
+	}
+	if(a->cmds && ft_strcmp(a->cmds[0], "pwd"))
 		return(pwd());
-	if(ft_strcmp(a->cmds[0], "env"))
+	if(a->cmds && ft_strcmp(a->cmds[0], "env"))
 		return(0);
-	if(ft_strcmp(a->cmds[0], "exit"))
+	if(a->cmds && ft_strcmp(a->cmds[0], "exit"))
 		return(exit_build(env));
 	else
 		return(1);
@@ -174,6 +177,3 @@ void		exec_cmds(t_env *env)
 	}
 }
 */
-
-
-

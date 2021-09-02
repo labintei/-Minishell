@@ -14,15 +14,15 @@
 
 int			echo_build(t_list		*cmds)
 {
-<<<<<<< HEAD
 	int		i;
 	int		g;
 
 	i = 1;
+	g = 0;
 	if(cmds->cmds && cmds->cmds[0] && cmds->cmds[1] && \
 	ft_strcmp(cmds->cmds[i], "-n"))
 	{
-		g  = 1;
+		g = 1;
 		i++;
 	}
 	while(cmds->cmds && cmds->cmds[0] && cmds->cmds[i])
@@ -30,13 +30,12 @@ int			echo_build(t_list		*cmds)
 		write(1, cmds->cmds[i] ,ft_strlen(cmds->cmds[i]));
 		if(cmds->cmds[i + 1])
 			write(1, " ", 1);
+		i++;
 	}
-	if(g == 1);
+	if(g != 1)
 		write(1, "\n", 1);
 	return(0);
-=======
-	(void)cmds;
+//	(void)cmds;
 	//printf("\nECHO\n");
-	return (0);
->>>>>>> 0bfd98f3c85f47d77a9d5cbfba7b35758ae8861c
+//	return (0);
 }
