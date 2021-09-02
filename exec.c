@@ -26,7 +26,7 @@ int			is_build(char *s)
 
 int		exec_build(t_list	*a, t_env *env)
 {
-	return(exit_build(env));
+//	return(exit_build(env));
 	if(ft_strcmp(a->cmds[0], "cd"))
 		return(cd(env->cmds, env));
 	if(ft_strcmp(a->cmds[0], "echo"))

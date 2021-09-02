@@ -15,6 +15,6 @@
 int			echo_build(t_list		*cmds)
 {
 	(void)cmds;
-	printf("\nECHO\n");
-	return(0);
+	//printf("\nECHO\n");
+	return (0);
 }
