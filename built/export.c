@@ -11,12 +11,51 @@
 /* ************************************************************************** */
 
 #include "../minishell.h"
-/*
+
+// PREMIER ELEMENT A LA PLUS PEITE VALEUR
+// SWAP LIST si un element [lus grand que son precedent
+void		swap_list(t_list_env	**env, t_list_env **i)
+{
+	t_list_env	*next;
+	t_list_env	*previous;
+
+	next = (*env)->next;
+	previous = (*env)->previous;
+	(*env)->next = (*i)->next;
+	(*env)->previous = (*i)->previous;
+	(*i)->next = next;
+	(*i)->previous = previous;
+}
+
+int			sort_str(char *s, char *sbis)
+{
+	int		i;
+
+	i = 0;
+	if(!sbis || !s)
+		return(0);
+	if(s && sbis && s[i] && sbis[i] && s[i] == sbis[i])
+		i++;
+	return(s[i] - sbis[i]);
+}
+
+void		list_sort(t_list_env	**env)
+{
+	while((*env))
+	{
+		if((*env) && (*env)->next && (*env)->var && sort_str((*env)->var, (*env)->next->var) > 0)
+			swap_list(&(*env), &((*env)->next));
+		else
+			()
+	}
+
+}
+
 void		env_sans_arg(t_list_env		**env)
 {
-	
+	list_sort(env);
 
-}*/
+}
 
 void		list_env_end(t_list_env		**env)
 {
