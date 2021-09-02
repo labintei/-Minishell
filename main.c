@@ -12,6 +12,8 @@
 
 #include "minishell.h"
 
+
+
 int		find_var_and_strlen(char *line, int *j, t_env *env)
 {
 	char	*new;
@@ -245,7 +247,7 @@ int			start_parse(t_env	*env)
 
 	while(1)
 	{
-		line = readline("\n>>");
+		line = readline("Minishell$ ");
 		if(line)
 		{
 			parse_line(env, line);
