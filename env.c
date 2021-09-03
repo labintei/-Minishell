@@ -6,7 +6,7 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/26 11:54:03 by labintei          #+#    #+#             */
-/*   Updated: 2021/08/31 17:52:40 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/03 17:29:51 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ void		view_list_env(t_list_env	**l)
 			printf(" VAL : %s", c->val);
 		c = c->next;
 	}
+	printf("\n");
 }
 void		add_arg(t_list_env	*list, char *var, char *val)
 {
