@@ -6,12 +6,21 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/30 15:39:11 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/03 18:54:17 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/03 19:59:53 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
+// MAIS GROSSO MOOD
+/*
+void		add_begin_list(t_list_env **list, char *var, char *val)
+{
+
+}*/
+/*
+void		end_list()
+*/
 
 void		add_list_env_between(t_list_env	**list, char *var, char *val)
 {
@@ -34,16 +43,30 @@ void		add_list_env_between(t_list_env	**list, char *var, char *val)
 void		add_before(t_list_env **list, char *var, char *val)
 {
 	t_list_env	*new;
+	//t_list_env	*prev_prev;
+//	int			g;
 
+//	g = 0;
+//	if((*list) && (*list)->previous)
+//		prev_prev = (*list)->previous;
+//	else
+//		g = 1;
 	new = malloc(sizeof(t_list_env));
 
 	new->previous = (*list)->previous;
 	new->next = (*list);
-//	(*list)->previous = new;
 	new->var = NULL;
 	new->val = NULL;
 	add_arg(new, var, val);
+	if((*list)->previous)
+		(*list)->previous->next = new;
 	(*list)->previous = new;
+//	if(g == 0)
+//		prev_prev->next = new;
+
+// LE PROBLEME EST LA
+
+//	(*list)->previous->next = new;
 }
 
 void		add_after(t_list_env **list, char *var, char *val)
@@ -109,7 +132,7 @@ void		list_sort(t_list_env *env)
 	int			i;
 	int			g = 0;
 
-	printf("\nOn est dans export\n");
+//	printf("\nOn est dans export\n");
 	c = env;
 	if(!env)
 		return ;
@@ -122,19 +145,32 @@ void		list_sort(t_list_env *env)
 		ft_strcpy(&(var), c->var);
 		ft_strcpy(&(val), c->val);
 		i = 0;
+		printf("\nVAR C %s\n", c->var);
 		while(c && sort && sort->next && (i = strcmp(c->var, sort->var)) > 0)
 		{
+//			printf("\nVAR SORT %s\n", sort->var);
 			sort = sort->next;
 		}
-		if((strcmp(c->var, sort->val)) > 0)
+		printf("\nVAR STOP %s\n", sort->var);
+		if(sort->previous == NULL && i < 0)
 		{
-	//		printf("\n1\n");
+			printf("\nBEFORE\n");
+			add_before(&(sort), c->var, c->val);
+		}
+		else if(!sort->next && i > 0)
+		{
+			printf("\nAFTER\n");
 			add_after(&(sort), c->var, c->val);
+		}
+		else if(i < 0)
+		{
+			printf("\nBEFORE\n");
+			add_before(&(sort), c->var, c->val);
 		}
 		else
 		{
-	//		printf("\n2\n");
-			add_before(&(sort), c->var, c->val);
+			printf("\nBEFORE\n");
+			add_after(&(sort), c->var, c->val);
 		}
 		list_start_env(&sort);
 		if(var)
