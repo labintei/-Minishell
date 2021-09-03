@@ -6,7 +6,7 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/25 18:50:07 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/03 09:21:18 by malatini         ###   ########.fr       */
+/*   Updated: 2021/08/31 15:58:52 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,14 @@ void		clear_cmds(t_list **cmds);
 void		clear_tab(char ***s);
 void		clear_env(t_env *env);
 void		clear_list_env(t_list_env **env);
+void		free_mem(t_env *env);
+// OTHER
+
+void		list_cmds_restart(t_list	**cmds);
+
+
+void		find_exec_path(char **path, t_env *env);
+
 // BUILT_IN
 
 int		cd(t_list *cmds, t_list_env *env, bool fork);
@@ -129,9 +137,12 @@ char		*ft_strdup_char_after(char *copy, char c);
 
 void		add_list_env(t_list_env	**list, char	*var, char *val, int i);
 
+<<<<<<< HEAD
 
-int		ft_find_env(t_list_env **env, char *var);
+int			ft_find_env(t_list_env **env, char *var);
+=======
 void		ft_putstr_fd(char const *s, int fd);
+>>>>>>> cd_mahaut
 
 // exec
 
