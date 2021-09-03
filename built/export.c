@@ -6,7 +6,7 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/30 15:39:11 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/03 18:46:55 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/03 18:54:17 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,58 @@ void		view_list_env_export(t_list_env	**l)
 	printf("\n");
 }
 
+void		list_sort(t_list_env *env)
+{
+	t_list_env	*sort;
+//	t_list_env	*temp;
+	t_list_env	*c;
+	char	*var;
+	char	*val;
+	int			i;
+	int			g = 0;
 
+	printf("\nOn est dans export\n");
+	c = env;
+	if(!env)
+		return ;
+	add_list_env(&(sort), c->var, c->val, 0);
+	c = env->next;
+	var = NULL;
+	val = NULL;
+	while(c)
+	{
+		ft_strcpy(&(var), c->var);
+		ft_strcpy(&(val), c->val);
+		i = 0;
+		while(c && sort && sort->next && (i = strcmp(c->var, sort->var)) > 0)
+		{
+			sort = sort->next;
+		}
+		if((strcmp(c->var, sort->val)) > 0)
+		{
+	//		printf("\n1\n");
+			add_after(&(sort), c->var, c->val);
+		}
+		else
+		{
+	//		printf("\n2\n");
+			add_before(&(sort), c->var, c->val);
+		}
+		list_start_env(&sort);
+		if(var)
+			free(var);
+		if(val)
+			free(val);
+		c = c->next;
+		g++;
+	}
+	list_start_env(&(sort));
+	view_list_env_export(&(sort));
+	clear_list_env(&(sort));
+}
+
+
+/*
 void		list_sort(t_list_env *env)
 {
 	t_list_env	*sort;
@@ -140,7 +191,7 @@ void		list_sort(t_list_env *env)
 	list_start_env(&(sort));
 	view_list_env_export(&(sort));
 	clear_list_env(&(sort));
-}
+}*/
 
 void		env_sans_arg(t_list_env		**env)
 {

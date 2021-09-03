@@ -6,7 +6,7 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/25 18:50:07 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/03 09:21:18 by malatini         ###   ########.fr       */
+/*   Updated: 2021/09/03 18:58:45 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,9 @@ typedef	struct		s_env
 	char			**split_path;
 }					t_env;
 
+// redirection
+//
+void		ft_redirection(t_env *env);
 
 void		find_exec_path(char **path, t_env *env);
 void		list_cmds_restart(t_list	**cmds);
@@ -133,7 +136,6 @@ char		*ft_strdup_char(char *copy, char c);
 char		*ft_strdup_char_after(char *copy, char c);
 
 void		add_list_env(t_list_env	**list, char	*var, char *val, int i);
-
 
 int		ft_find_env(t_list_env **env, char *var);
 void		ft_putstr_fd(char const *s, int fd);
