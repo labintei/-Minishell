@@ -6,7 +6,7 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/30 15:39:11 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/03 18:22:32 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/03 18:46:55 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,10 +39,11 @@ void		add_before(t_list_env **list, char *var, char *val)
 
 	new->previous = (*list)->previous;
 	new->next = (*list);
-	(*list)->previous = new;
+//	(*list)->previous = new;
 	new->var = NULL;
 	new->val = NULL;
 	add_arg(new, var, val);
+	(*list)->previous = new;
 }
 
 void		add_after(t_list_env **list, char *var, char *val)
@@ -57,6 +58,7 @@ void		add_after(t_list_env **list, char *var, char *val)
 	new->var = NULL;
 	new->val = NULL;
 	add_arg(new, var, val);
+	(*list)->next = new;
 }
 
 int			sort_str(char *s, char *sbis)
@@ -118,13 +120,19 @@ void		list_sort(t_list_env *env)
 		i = 0;
 		while(c && sort && sort->next && (i = strcmp(c->var, sort->var)) > 0)
 		{
-			printf("\n%d\n", g);
+//			printf("\n%d\n", g);
 			sort = sort->next;
 		}
-		if(g == 0 && i <= 0)
-			add_before(&(sort), c->var, c->val);
+		if(!(sort->next) && (strcmp(c->var, sort->val)) > 0)
+		{
+			printf("\n1\n");
+			add_after(&(sort), c->var, c->val);
+		}
 		else
-		add_list_env_between(&(sort), c->var, c->val);
+		{
+			printf("\n2\n");
+			add_before(&(sort), c->var, c->val);
+		}
 		list_start_env(&sort);
 		c = temp;
 		g++;
