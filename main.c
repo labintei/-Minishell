@@ -6,7 +6,7 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/25 18:48:50 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/02 14:14:25 by malatini         ###   ########.fr       */
+/*   Updated: 2021/09/03 13:37:24 by malatini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -258,7 +258,7 @@ int			start_parse(t_env	*env)
 		if (!line)
 		{
 			printf("\n");
-			free_mem(env);
+			clear_cmds(&(env->cmds));
 		}
 		if (line)
 			free(line);

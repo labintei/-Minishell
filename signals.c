@@ -60,17 +60,13 @@ int	inhibit_signals(int id)
 {
 	if (id == 0)
 	{
-		if (signal(SIGQUIT, ctrl_backslash) < 0)
-			return (false);
-		if (signal(SIGINT, ctrl_c) < 0)
-			return (false);
+		signal(SIGQUIT, ctrl_backslash);
+		signal(SIGINT, ctrl_c);
 	}
 	else
 	{
-		if (signal(SIGQUIT, ignore_signals) < 0)
-			return (false);
-		if (signal(SIGINT, ignore_signals) < 0)
-			return (false);
+		signal(SIGQUIT, ignore_signals);
+		signal(SIGINT, ignore_signals);
 	}
 	return (true);
 }
@@ -80,9 +76,7 @@ int	inhibit_signals(int id)
 */
 int	handle_signals(void)
 {
-	if (signal(SIGQUIT, ctrl_backslash) < 0)
-		return (false);
-	if (signal(SIGINT, ctrl_c) < 0)
-		return (false);
+	signal(SIGQUIT, ctrl_backslash);
+	signal(SIGINT, ctrl_c);
 	return (true);
 }

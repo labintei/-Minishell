@@ -59,6 +59,9 @@ typedef	struct		s_env
 }					t_env;
 
 
+void		find_exec_path(char **path, t_env *env);
+void		list_cmds_restart(t_list	**cmds);
+
 // pwd
 
 char		*find_value(t_list_env *env, char *key);
