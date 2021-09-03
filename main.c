@@ -287,6 +287,7 @@ int			main(int argc, char **argv, char **envp)
 		stock_env(&env, envp);
 		get_splitted_path(&env);
 		env.cmds = NULL;
+		handle_signals();
 		ret = start_parse(&env);
 	}
 	return (ret);

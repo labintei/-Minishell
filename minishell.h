@@ -28,6 +28,8 @@
 #include	<stdbool.h>
 
 #define CD_ERROR 4
+/* Only global variable for tracking signals */
+//int	g_signal
 
 typedef	struct		s_list_env
 {
@@ -136,5 +138,8 @@ void		ft_putstr_fd(char const *s, int fd);
 // exec
 
 void		exec_cmds(t_env *env);
+
+//Signals
+int			handle_signals(void);
 
 #endif
