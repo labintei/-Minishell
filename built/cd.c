@@ -86,10 +86,7 @@ void	cd_errors(char *path, int err, bool fork)
 }
 
 /* Finds the target path for cd depending on the arguments */
-<<<<<<< HEAD
-=======
 /* revoir la valeur de fork */
->>>>>>> cd_mahaut
 char	*find_path_1(t_list *cmds, t_list_env *env, bool fork)
 {
 	int		length;
@@ -210,14 +207,9 @@ int	cd(t_list *cmds, t_list_env *env, bool fork)
 	char	*current;
 
 	current = find_path_1(cmds, env, fork);
-<<<<<<< HEAD
-=======
-//	printf("current is %s\n", current);
->>>>>>> cd_mahaut
 	if (current == NULL)
 		return (CD_ERROR);
 	previous = getcwd(NULL, 0);
-//	printf("previous is %s\n", previous);
 	ret = chdir(current);
 	if (ret)
 		cd_errors(current, errno, fork);
@@ -225,12 +217,10 @@ int	cd(t_list *cmds, t_list_env *env, bool fork)
 	{
 		if (previous)
 			env_manager("OLDPWD", previous, env);
-		//printf("previous is now %s\n", previous);
 		current = getcwd(NULL, 0);
 		if (current == NULL)
 			return (CD_ERROR);
 		env_manager("PWD", current, env);
-		//printf("current is %s\n", current);
 		free(current);
 	}
 	free(previous);

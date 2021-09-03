@@ -6,11 +6,7 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/29 20:15:32 by labintei          #+#    #+#             */
-<<<<<<< HEAD
 /*   Updated: 2021/09/02 20:53:07 by labintei         ###   ########.fr       */
-=======
-/*   Updated: 2021/09/02 13:23:26 by malatini         ###   ########.fr       */
->>>>>>> cd_mahaut
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +26,6 @@ int			is_build(char *s)
 
 int		exec_build(t_list	*a, t_env *env)
 {
-//	return(exit_build(env));
 	if(a->cmds && ft_strcmp(a->cmds[0], "cd"))
 		return(cd(env->cmds, env->env, 0));
 	if(a->cmds && ft_strcmp(a->cmds[0], "echo"))
@@ -39,19 +34,11 @@ int		exec_build(t_list	*a, t_env *env)
 		return(unset(env->cmds, env));
 	if(a->cmds && ft_strcmp(a->cmds[0], "export"))
 	{
-<<<<<<< HEAD
 //		printf("\nON est dans export\n");
 		return(export_build(env->cmds, env));
 	}
 	if(a->cmds && ft_strcmp(a->cmds[0], "pwd"))
-		return(pwd());
-=======
-		printf("\nON est dans export\n");
-		return(export_build(env->cmds, env));
-	}
-	if(a->cmds && ft_strcmp(a->cmds[0], "pwd"))
 		return(pwd(env));
->>>>>>> cd_mahaut
 	if(a->cmds && ft_strcmp(a->cmds[0], "env"))
 		return(0);
 	if(a->cmds && ft_strcmp(a->cmds[0], "exit"))
