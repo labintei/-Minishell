@@ -6,13 +6,31 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/25 18:48:50 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/03 20:11:49 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/05 15:53:19 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+//void		list_cmds_restart(t_list	**cmds)
 
+
+void	view_all_redir(t_env *env)
+{
+	t_list		*r;
+	int			i;
+
+	i = 0;
+	list_cmds_restart(&(env->cmds));
+	r = (env->cmds);
+	while(r)
+	{
+		printf("\nCmds %d\n", i);
+		printf("\nLes differents types %s\n", r->cmds_type);
+		r = r->next;
+		i++;
+	}
+}
 
 int		find_var_and_strlen(char *line, int *j, t_env *env)
 {
@@ -49,6 +67,7 @@ void		ajout_cmds(t_env *env, char *line, int *i)
 void		is_pipe(t_env *env, int *i, int *word, char *line)
 {
 	env->cmds->type = '|';
+	env->cmds->cmds_type[(*word)] = '\0';
 	env->cmds->cmds[(*word)] = NULL;
 	(*i)++;
 	(*word) = 0;
@@ -59,15 +78,15 @@ void		is_pipe(t_env *env, int *i, int *word, char *line)
 
 int		is_redir(char *line, int *i, t_env *env, int *word)
 {
-	env->cmds->cmds_type[(*word)] = line[(*i)];
-	if(!(env->cmds->cmds[(*word)]))
+	env->cmds->cmds_type[(*word) - 1] = line[(*i)];
+	if(!(env->cmds->cmds[(*word) - 1]))
 		env->cmds->cmds[(*word)] = NULL;
 	(*i)++;
 	if(line[(*i)] && line[(*i) - 1] && line[(*i)] == line[((*i) - 1)])
 	{
-		env->cmds->cmds_type[(*word)] = 'L';
+		env->cmds->cmds_type[(*word) - 1] = 'L';
 		if(line[(*i)] == '>')
-			env->cmds->cmds_type[(*word)] = '<';
+			env->cmds->cmds_type[(*word) - 1] = '<';
 		(*i)++;
 	}
 	skip_space(line, i);
@@ -192,6 +211,7 @@ void		is_word_cmds(char *line, int *i, t_env *env, int *word)
 	int		count;
 	int		out;
 
+	env->cmds->cmds_type[(*word)] = '0';
 	out  = 0;
 	count = 0;
 	env->cmds->cmds[(*word)] = malloc(sizeof(char) * (count_char(line, (*i), env) + 1));
@@ -209,6 +229,18 @@ void		is_word_cmds(char *line, int *i, t_env *env, int *word)
 	(*word)++;
 }
 
+// Modifier tout ca tel que
+//
+// TAB CMDS et TAB name DOCS
+//
+// probleme la redir se met uniquement sur le dernier mot
+//
+// sera plus somplle pour executer les commandes
+//
+// Faire des test sur les redirection dans Bash faire un fichier txt
+//
+//
+
 void		parse_line(t_env *env, char *line)
 {
 	int	i;
@@ -218,6 +250,7 @@ void		parse_line(t_env *env, char *line)
 	word = 0;
 //	printf("\n%d\n", count_char(line, i, env));
 	ajout_cmds(env, line, &i);
+
 	while(line && line[i])
 	{
 		skip_space(line, &i);
@@ -234,12 +267,11 @@ void		parse_line(t_env *env, char *line)
 				is_word_cmds(line, &i, env, &word);
 		}
 	}
-//	if(env->cmds->cmds[(word)])
-	//	env->cmds->cmds[((word) + 1)] = NULL;
-	//else
+	env->cmds->cmds_type[(word)] = '\0';
 	env->cmds->cmds[(word)] = NULL;
-//	view_cmds(&(env->cmds));
 }
+
+
 
 int			start_parse(t_env	*env)
 {
@@ -251,6 +283,7 @@ int			start_parse(t_env	*env)
 		if (line)
 		{
 			parse_line(env, line);
+			view_all_redir(env);
 			ft_redirection(env);
 			exec_cmds(env);
 			clear_cmds(&(env->cmds));
@@ -293,35 +326,3 @@ int			main(int argc, char **argv, char **envp)
 	}
 	return (ret);
 }
-
-/* Main lauranne 
-int			main(int argc, char **argv, char **envp)
-{
-	t_env	env;
-	int		ret;
-//	char	**tab;
-
-	(void)argc;
-	(void)argv;
-	view_tab(envp);
-//	env = malloc(sizeof(t_env));
-//	if(!env)
-//		return(1);
-//	env->env = malloc(sizeof(t_list_env));
-//	env->env = NULL;
-//	init_env(env);
-	env.split_path = NULL;
-	stock_env(&env, envp);
-//	printf("\n\nAAAAAAAAAAAAAAAAA\n\n");
-	get_splitted_path(&env);
-	env.cmds = NULL;
-//	ft_convert_env(&(env->env), &tab);
-//	view_list_env(&(env->env));
-//	view_tab(tab);
-//	stock_splitted_path(&list);
-
-//	view_list_env(&(env->env));
-	ret = start_parse(&env);
-	return(ret);
-}
-*/

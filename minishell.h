@@ -6,7 +6,7 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/25 18:50:07 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/03 18:58:45 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/06 13:26:54 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ int		echo_build(t_list *cmds);
 int		unset(t_list *cmds, t_env *env);
 int		export_build(t_list *cmds, t_env *env);
 int		pwd(t_env *env);
-int		exit_build(t_env *env);
+int		exit_build(t_env *env, t_list *cmds, bool fork);
 
 // PARSING
 

@@ -6,7 +6,7 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/29 20:15:32 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/02 20:53:07 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/06 13:27:08 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,9 @@ int			is_build(char *s)
 
 int		exec_build(t_list	*a, t_env *env)
 {
+
+	bool	fork = 1;
+
 	if(a->cmds && ft_strcmp(a->cmds[0], "cd"))
 		return(cd(env->cmds, env->env, 0));
 	if(a->cmds && ft_strcmp(a->cmds[0], "echo"))
@@ -35,14 +38,14 @@ int		exec_build(t_list	*a, t_env *env)
 	if(a->cmds && ft_strcmp(a->cmds[0], "export"))
 	{
 //		printf("\nON est dans export\n");
-		return(export_build(env->cmds, env));
+		return(export_build(env->cmds, env/*, fork*/));
 	}
 	if(a->cmds && ft_strcmp(a->cmds[0], "pwd"))
 		return(pwd(env));
 	if(a->cmds && ft_strcmp(a->cmds[0], "env"))
 		return(0);
 	if(a->cmds && ft_strcmp(a->cmds[0], "exit"))
-		return(exit_build(env));
+		return(exit_build(env, a, fork));
 	else
 		return(1);
 }
