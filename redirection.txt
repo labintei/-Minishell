@@ -85,13 +85,46 @@ Parsing Actuelle
   '0' '>' '>' '>' '>' '>'
   ls   -a  b   c   d   e   "       ...      "
 
+
+
+_______________________________________________________________________________
+
 Comment on pourrait le modifier
 
 |______Cmds1__________________________________|
 
 1 + Nombre de redirection (Nombre de tableau de tableauleau)
 
+cmds->type
+
+
 (**cmds)[0] (**cmds)[1] (**cmds)[2] (**cmds)[3] (**cmds)[4] (**cmds)[5]
 
   ls -a        b             c          d            e          f
+_______________________________________________________________________________
+Ou sinon
 
+size		s_list_file = nb->redirection
+
+La premiere instruction qui correspond obligatoirement a une commande
+
+(*cmds)[0] s_list_file
+		
+
+char		**path          (b)   (c)    (d)      (e)       (f)
+char		redirect         <     <      <        <         <
+int			*fd              
+int			pipe[2]
+struct		next
+
+Ou sinon
+
+t_list_file
+
+t_list_path_file
+
+*first
+int		pipe[2]
+
+
+_______________________________________________________________________________

@@ -6,7 +6,7 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/25 18:50:07 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/06 15:44:19 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/06 19:10:06 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,35 +39,42 @@ typedef	struct		s_list_env
 	struct	s_list_env	*previous;
 }					t_list_env;
 
-//	'>>' 
-// (Null) >> 'fichier1.c'
-// *cmds_type   '0'  '>'  '0'
-// **cmds      |ls| |-a| |fichier1.c|
-//                '>'
-//			   ||ls| |-a| |fichier1.c |cat
-//
-// cmds				cmds
-// "ejiwjiofejiw" | "cjiejiowejiwefjifwe"
-// ***cmds
-// *fd
-//
-typedef				s_list_file
+// Posibilite 1 Faire un tableau de tableau
+// Avantage structure moins lourde
+// desavantage (Peut etre moins pratique pour les redirections)
+
+/*
+typedef	struct		s_list
 {
-	char		**path;
-	int			*fd;
-	type_enum	;
-	int			pipes[2];
-	struct		s_list_file		*next;
-}
+	char	***cmds;
+	pid_t	pid;
+	char	*cmds_type;
+	int		*fd;
+	char	type;
+	int		pipe[2];
+	struct	s_list		*previous;
+	struct	s_list		*next;
+}					t_list;
+*/
+// Posibilite 2 LIST_CHAINEES
+
+typedef	struct		s_list_file
+{
+	char					**path;
+	int						*fd;
+	int						pipe_fd[2];
+	struct	s_list_file		*next;
+}					t_list_file;
 
 typedef	struct		s_list
 {
-	char	**cmds;
+	char			**cmds;
+	t_list_file		*file;
 	pid_t	pid;
-	char	*cmds_type;
-	char	*fd;
+//	char			*cmds_type;
+//	int				*fd;
 	char	type;
-	int		pipe[2];
+	int		pipe_fd[2]; // SAME QUE SUR list_file
 	struct	s_list		*previous;
 	struct	s_list		*next;
 }					t_list;
@@ -78,6 +85,9 @@ typedef	struct		s_env
 	t_list_env		*env;
 	char			**split_path;
 }					t_env;
+
+int				count_redir(char *line, int j);
+
 
 // redirection
 //
