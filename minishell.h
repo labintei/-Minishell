@@ -6,7 +6,7 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/25 18:50:07 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/06 13:26:54 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/06 13:31:18 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,7 @@ void		ft_dup_env(t_list_env **env, char *var, char **val);
 void		ft_convert_env(t_list_env **env, char ***stock);
 void		view_tab(char **tab);
 int			ft_strlen_env(t_list_env	**list, char *var);
-void		view_list_env(t_list_env	**l);
+int			view_list_env(t_list_env	**l);
 void		list_start_env(t_list_env **list);
 void		add_arg(t_list_env	*list, char *var, char *val);
 

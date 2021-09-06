@@ -6,7 +6,7 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/26 11:54:03 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/03 17:29:51 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/06 13:31:42 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,22 +34,22 @@ int			ft_len_env(t_list_env **env)
 	return(i);
 }
 
-void		view_list_env(t_list_env	**l)
+int			view_list_env(t_list_env	**l)
 {
 	t_list_env		*c;
 
 	list_start_env(l);
 	c = (*l);
-	printf("\nVIEW_ENV\n");
+	printf("\n");
+//	printf("\nVIEW_ENV\n");
 	while(c)
 	{
-		if(c->var)
-			printf("\nVAR : %s ", c->var);
-		if(c->val)
-			printf(" VAL : %s", c->val);
+		printf("%s=", c->var);
+		printf("%s\n", c->val);
 		c = c->next;
 	}
 	printf("\n");
+	return(0);
 }
 void		add_arg(t_list_env	*list, char *var, char *val)
 {

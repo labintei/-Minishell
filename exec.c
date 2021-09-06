@@ -6,7 +6,7 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/29 20:15:32 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/06 13:27:08 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/06 13:31:07 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ int		exec_build(t_list	*a, t_env *env)
 	if(a->cmds && ft_strcmp(a->cmds[0], "pwd"))
 		return(pwd(env));
 	if(a->cmds && ft_strcmp(a->cmds[0], "env"))
-		return(0);
+		return(view_list_env(&(env->env)));
 	if(a->cmds && ft_strcmp(a->cmds[0], "exit"))
 		return(exit_build(env, a, fork));
 	else
