@@ -1,0 +1,97 @@
+
+
+Donc on peut partir du principe que
+
+La premiere suite de token correspond a la commandes
+
+cmds->cmds[0] correspond a la commande
+_______________________________________________________________________________
+
+Pour les redirection uniquement le premier token est pris en compte et les 
+autres ignores tel que
+
+ls -a > a b c == ls -a > a
+
+_______________________________________________________________________________
+
+ajoute a un fichier >
+
+_______________________________________________________________________________
+
+Il y a un caractere indetermine si plus que un token
+
+sort -n << END DE LA VEGA
+sort: cannot read: LA: No such file or directory
+
+sort -n << END file1
+
+if(file1)
+	execute sort -n sur file1
+
+
+Donc il faut bien garder tout les tokens dans ce cas si
+_______________________________________________________________________________
+
+ajoute a la fin du fichier >>
+_______________________________________________________________________________
+< <<
+_______________________________________________________________________________
+lire depuis un fichier <
+
+cat < notes.csv
+
+Notons cat < Makefile ./srcs/utils.c
+
+Donne uniquement le cat du deuxieme token
+
+Si plusieur token ignore le premier argument mais peut etre specifique a cat
+
+// N est pas specifique a cat
+_______________________________________________________________________________
+lire depuis le clavier <<
+
+sort -n << END
+>45
+>785
+>758
+>48
+>7578
+>END
+
+_______________________________________________________________________________
+
+REGARDER COMMENT les tom tom gere cette histoire
+
+_______________________________________________________________________________
+
+Verdict dans
+
+> creer le premier token sinon
+
+>> prend en compte uniquement le premier token
+
+_______________________________________________________________________________
+
+Structure du Parsing
+
+|______Cmds1___________|   |___Cmds2_______|
+
+" ls -a > b > c > d > e" | "       ...      "
+
+Parsing Actuelle
+
+|______Cmds1___________|    |___Cmds2_______|
+
+  '0' '>' '>' '>' '>' '>'
+  ls   -a  b   c   d   e   "       ...      "
+
+Comment on pourrait le modifier
+
+|______Cmds1__________________________________|
+
+1 + Nombre de redirection (Nombre de tableau de tableauleau)
+
+(**cmds)[0] (**cmds)[1] (**cmds)[2] (**cmds)[3] (**cmds)[4] (**cmds)[5]
+
+  ls -a        b             c          d            e          f
+

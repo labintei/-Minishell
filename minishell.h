@@ -6,7 +6,7 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/25 18:50:07 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/06 13:31:18 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/06 15:44:19 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,27 @@ typedef	struct		s_list_env
 	struct	s_list_env	*next;
 	struct	s_list_env	*previous;
 }					t_list_env;
+
+//	'>>' 
+// (Null) >> 'fichier1.c'
+// *cmds_type   '0'  '>'  '0'
+// **cmds      |ls| |-a| |fichier1.c|
+//                '>'
+//			   ||ls| |-a| |fichier1.c |cat
+//
+// cmds				cmds
+// "ejiwjiofejiw" | "cjiejiowejiwefjifwe"
+// ***cmds
+// *fd
+//
+typedef				s_list_file
+{
+	char		**path;
+	int			*fd;
+	type_enum	;
+	int			pipes[2];
+	struct		s_list_file		*next;
+}
 
 typedef	struct		s_list
 {
