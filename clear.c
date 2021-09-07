@@ -6,7 +6,7 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/31 15:29:51 by labintei          #+#    #+#             */
-/*   Updated: 2021/08/31 17:17:46 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/07 14:59:29 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,26 @@ void		clear_list_env(t_list_env	**env)
 	}
 }
 
+//REfaire une fonction pour clean ma liste de commandes
+
+void		clear_t_list_file(t_list_file	**file)
+{
+	t_list_file		*temp;
+
+	restart_t_list_file(file);
+	while((*file))
+	{
+		temp = (*file)->next;
+		if((*file)->path)
+			clear_tab(&((*file)->path));
+		if((*file)->fd)
+			free((*file)->fd);
+		free(*file);
+		(*file) = temp;
+	}
+}
+
+
 void		clear_cmds(t_list **cmds)
 {
 	t_list		*temp;
@@ -50,8 +70,10 @@ void		clear_cmds(t_list **cmds)
 		temp = (*cmds)->next;
 		if((*cmds)->cmds)
 			clear_tab(&((*cmds)->cmds));
-		if((*cmds)->cmds_type)
-			free((*cmds)->cmds_type);
+		if((*cmds)->file)
+			clear_t_list_file(&((*cmds)->file));
+//		if((*cmds)->cmds_type)
+//			free((*cmds)->cmds_type);
 //		if((*cmds)->fd)
 //			free((*cmds)->fd);
 		free(*cmds);

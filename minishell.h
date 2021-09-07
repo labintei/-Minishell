@@ -6,7 +6,7 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/25 18:50:07 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/06 19:10:06 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/07 14:58:57 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,8 +62,10 @@ typedef	struct		s_list_file
 {
 	char					**path;
 	int						*fd;
+	char					redir;
 	int						pipe_fd[2];
 	struct	s_list_file		*next;
+	struct	s_list_file		*previous;
 }					t_list_file;
 
 typedef	struct		s_list
@@ -74,7 +76,7 @@ typedef	struct		s_list
 //	char			*cmds_type;
 //	int				*fd;
 	char	type;
-	int		pipe_fd[2]; // SAME QUE SUR list_file
+	int		pipe[2]; // SAME QUE SUR list_file
 	struct	s_list		*previous;
 	struct	s_list		*next;
 }					t_list;
@@ -88,6 +90,8 @@ typedef	struct		s_env
 
 int				count_redir(char *line, int j);
 
+
+void		restart_t_list_file(t_list_file		**file);
 
 // redirection
 //

@@ -6,15 +6,38 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/25 18:48:50 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/06 20:47:28 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/07 15:10:13 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+void		restart_t_list_file(t_list_file		**file)
+{
+	while((*file) && (*file)->previous)
+		(*file) = (*file)->previous;
+}
+
+
 //void		list_cmds_restart(t_list	**cmds)
 //int				count_redir(char *line, int j);
-
+void		view_t_list_file(t_list_file	**read)
+{
+	t_list_file		*temp;
+	
+	restart_t_list_file(read);
+	temp = *read;
+	printf("\nLIST FILE PATH :\n");
+	while(temp)
+	{
+		if(temp && temp->path)
+		{
+			view_tab(temp->path);
+			printf("\n");
+		}
+		temp = temp->next;
+	}
+}
 
 int			count_word_before_redir(char	*line, int  i);
 
@@ -36,14 +59,32 @@ void	view_all_redir(t_env *env)
 	}
 }*/
 
-void	add_list_file(t_list_file **file, char *line, int i)
+void	add_list_file(t_list_file **file, char *line, int i, char	c)
 {
-	(void)line;
-	(void)file;
-	(void)i;
+	t_list_file		*new;
+
+	new = malloc(sizeof(t_list_file));
+	if(!new)
+		return ;
+	new->next = NULL;
+	new->redir = c;
+	new->path = malloc(sizeof(char *) * (count_word_before_redir(line, i) + 1));
+	new->fd = malloc(sizeof(int) * (count_word_before_redir(line, i)) + 1);
+	if(*file)
+	{
+		(*file)->next = new;
+		new->previous = (*file);
+		(*file) = (*file)->next;
+	}
+	else
+	{
+		new->previous = NULL;
+		(*file) = new;
+	}
+	
 }
 
-int		find_var_and_strlen(char *line, int *j, t_env *env)
+int		find_var_and_strlen(char *line, int *j, t_env *env/*, int is_cmds*/)
 {
 	char	*new;
 	int		a;
@@ -71,55 +112,66 @@ int		find_var_and_strlen(char *line, int *j, t_env *env)
 void		ajout_cmds(t_env *env, char *line, int *i)
 {
 	add_cmds(&(env->cmds));
-	env->cmds->file = malloc(sizeof(t_list_file));
+//	env->cmds->file = malloc(sizeof(t_list_file));
 	if(!(env->cmds->file))
 		return ;
-	env->cmds->file->next = NULL;
+	env->cmds->file = NULL;
 //	env->cmds->file->path = malloc(sizeof(char *) * (count_word_before_redir(line, (*i)) + 1));
-	env->cmds->file->fd = malloc(sizeof(int) * (count_word_before_redir(line, (*i)) + 1));
+//	env->cmds->file->fd = malloc(sizeof(int) * (count_word_before_redir(line, (*i)) + 1));
 	env->cmds->cmds = malloc(sizeof(char *) * (count_word_before_redir(line, (*i)) + 1));
+//	env->cmds->file = NULL;
 //	env->cmds->cmds_type = malloc(sizeof(char) * (count_word(line, i) + 1));
 }
 
 void		is_pipe(t_env *env, int *i, int *word, char *line, int		*is_cmds)
 {
-	(*is_cmds) = 1;
+//	(*is_cmds) = 1;
 	env->cmds->type = '|';
 //	env->cmds->cmds_type[(*word)] = '\0';
-	env->cmds->cmds[(*word)] = NULL;
+	if(*is_cmds)
+		env->cmds->cmds[(*word)] = NULL;
+	else
+		env->cmds->file->path[(*word)] = NULL;
+	(*is_cmds) = 1;
 	(*i)++;
 	(*word) = 0;
 	ajout_cmds(env, line, i);
+	env->cmds->cmds = malloc(sizeof(char *) * (count_word_before_redir(line, (*i)) + 1));
 	count_redir(line, (*i));
 }
 
 // GERER CE TYPE DE CAS < (NULL) > << >> 
 
-int		is_redir(char *line, int *i, t_env *env, int *word, int		*is_cmds)
+int		is_redir(char *line, int *i, t_env *env, int *word, int is_cmds)
 {
-	env->file->path[(*word)] = NULL;
-	env->cmds->cmds_type[(*word) - 1] = line[(*i)];
-	if(!(env->cmds->cmds[(*word) - 1]))
-		env->cmds->cmds[(*word)] = NULL;
+	char	c;
+	
+	if(is_cmds)
+		env->cmds->cmds[(*word)]=NULL;
+	else if(env->cmds->file)
+		env->cmds->file->path[(*word)] = NULL;
+	c = line[(*i)];
 	(*i)++;
 	if(line[(*i)] && line[(*i) - 1] && line[(*i)] == line[((*i) - 1)])
 	{
-		env->cmds->cmds_type[(*word) - 1] = 'L';
+		c = 'L';
 		if(line[(*i)] == '>')
-			env->cmds->cmds_type[(*word) - 1] = '<';
+			c = '<';
 		(*i)++;
 	}
 	skip_space(line, i);
 	if(line[(*i)] && (line[(*i)] == '<' || line[(*i)] == '>'))
 		return(2);
-	count_word_before_redir(line, (*i));
+	add_list_file(&(env->cmds->file), line, (*i), c);
+	(*word) = 0;
+	//count_word_before_redir(line, (*i));
 	return(0);
 }
 
-int			find_var_and_strlen_cmds(char *line, int *j, t_env *env, int *word, int *count);
+int			find_var_and_strlen_cmds(char *line, int *j, t_env *env, int *word, int *count, int is_cmds);
 
 
-void		is_quotes_cmds(char *line, int *j, int *count,  t_env *env, int *word)
+void		is_quotes_cmds(char *line, int *j, int *count,  t_env *env, int *word, int is_cmds)
 {
 	char	c;
 
@@ -128,10 +180,13 @@ void		is_quotes_cmds(char *line, int *j, int *count,  t_env *env, int *word)
 	while(line[(*j)] && line[(*j)] != c)
 	{
 		if(c == '\"' && line[(*j)] == '$')
-			find_var_and_strlen_cmds(line, j, env, word, count);
+			find_var_and_strlen_cmds(line, j, env, word, count, is_cmds);
 		else
 		{
-			env->cmds->cmds[(*word)][(*count)] = line[(*j)];
+			if(is_cmds)
+				env->cmds->cmds[(*word)][(*count)] = line[(*j)];
+			else
+				env->cmds->file->path[(*word)][(*count)] = line[(*j)];
 			(*j)++;
 			(*count)++;
 		}
@@ -160,7 +215,7 @@ void	ft_dup_env(t_list_env	**env, char *var, char **s)
 	}
 }
 
-int			find_var_and_strlen_cmds(char *line, int *j, t_env *env, int *word, int *count)
+int			find_var_and_strlen_cmds(char *line, int *j, t_env *env, int *word, int *count, int is_cmds)
 {
 	char	*new;
 	char	*stock;
@@ -190,7 +245,10 @@ int			find_var_and_strlen_cmds(char *line, int *j, t_env *env, int *word, int *c
 	while(stock && stock[a])
 	{
 //		printf("\n %c \n", stock[a]);
-		env->cmds->cmds[(*word)][(*count)] = stock[a];
+		if(is_cmds)
+			env->cmds->cmds[(*word)][(*count)] = stock[a];
+		else
+			env->cmds->file->path[(*word)][(*count)] = stock[a];
 		(*count)++;
 		a++;
 	}
@@ -203,7 +261,7 @@ int			find_var_and_strlen_cmds(char *line, int *j, t_env *env, int *word, int *c
 
 
 
-void		not_quotes_cmds(char *line, int *j, t_env *env, int *count, int *out, int *word)
+void		not_quotes_cmds(char *line, int *j, t_env *env, int *count, int *out, int *word, int is_cmds)
 {
 	while(line[(*j)] && (!(is_quotes(line[(*j)], line, (*j)))) && \
 	line[(*j)] != '|' && line[(*j)] != ' ' && line[(*j)] != '<' && \
@@ -211,11 +269,14 @@ void		not_quotes_cmds(char *line, int *j, t_env *env, int *count, int *out, int 
 	{
 		// REGARDER find var strlen cmds
 		if(line[(*j)] && line[(*j)] == '$')
-			find_var_and_strlen_cmds(line, j, env, word, count);
+			find_var_and_strlen_cmds(line, j, env, word, count, is_cmds);
 		else
 		{
 //			printf("\n\n %c \n\n",line[(*j)]);
-			env->cmds->cmds[(*word)][(*count)] = line[(*j)];
+			if(is_cmds == 1)
+				env->cmds->cmds[(*word)][(*count)] = line[(*j)];
+			else
+				env->cmds->file->path[(*word)][(*count)] = line[(*j)];
 			(*count)++;
 			(*j)++;
 		}
@@ -227,7 +288,7 @@ void		not_quotes_cmds(char *line, int *j, t_env *env, int *count, int *out, int 
 
 }
 
-void		is_word_cmds(char *line, int *i, t_env *env, int *word, int		is_cmds)
+void		is_word_cmds(char *line, int *i, t_env *env, int *word, int is_cmds)
 {
 	int		count;
 	int		out;
@@ -235,18 +296,24 @@ void		is_word_cmds(char *line, int *i, t_env *env, int *word, int		is_cmds)
 //	env->cmds->cmds_type[(*word)] = '0';
 	out  = 0;
 	count = 0;
-	env->cmds->cmds[(*word)] = malloc(sizeof(char) * (count_char(line, (*i), env) + 1));
+	if(is_cmds)
+		env->cmds->cmds[(*word)] = malloc(sizeof(char) * (count_char(line, (*i), env) + 1));
+	else
+		env->cmds->file->path[(*word)] = malloc(sizeof(char) * (count_char(line, (*i), env) + 1));
 	if(line[(*i)] && line[(*i)] != '|' && line[(*i)] != ' ')
 	{
 		while(line[(*i)] && line[(*i)] != ' ' && out == 0)
 		{
 			if(is_quotes(line[(*i)], line, (*i)))
-				is_quotes_cmds(line, i, &count, env, word);
+				is_quotes_cmds(line, i, &count, env, word, is_cmds);
 			else
-				not_quotes_cmds(line, i, env, &count, &out, word);
+				not_quotes_cmds(line, i, env, &count, &out, word, is_cmds);
 		}
 	}
-	env->cmds->cmds[(*word)][count] = '\0';
+	if(is_cmds)
+		env->cmds->cmds[(*word)][count] = '\0';
+	else
+		env->cmds->file->path[(*word)][count] = '\0';
 	(*word)++;
 }
 
@@ -350,8 +417,8 @@ int			count_word_before_redir(char	*line, int  j)
 		}
 	}
 	printf("\nNB_WORD %d\n", word);
+//	view_t_list_file(&(env->cmds->file));
 	return(word);
-
 }
 
 // Modifier tout ca tel que
@@ -389,14 +456,19 @@ void		parse_line(t_env *env, char *line)
 	//		env->cmds->cmds[(++word)] = malloc(sizeof(char) * (count_char(line, i, env) + 1));
 			if(line[i] && (line[i] == '>' || line[i] == '<'))
 			{
-				is_redir(line, &i, env, &word);
+				is_redir(line, &i, env, &word, is_cmds);
+				is_cmds = 0;
 			}
 			else
 				is_word_cmds(line, &i, env, &word, is_cmds);
 		}
 	}
 //	env->cmds->cmds_type[(word)] = '\0';
-	env->cmds->cmds[(word)] = NULL;
+	if(is_cmds)
+		env->cmds->cmds[(word)] = NULL;
+	else
+		env->cmds->file->path[(word)] = NULL;
+	view_t_list_file(&(env->cmds->file));
 }
 
 
@@ -412,8 +484,8 @@ int			start_parse(t_env	*env)
 		{
 			parse_line(env, line);
 //			view_all_redir(env);
-			ft_redirection(env);
-			exec_cmds(env);
+//			ft_redirection(env);
+//			exec_cmds(env);
 			clear_cmds(&(env->cmds));
 		}
 		add_history(line);

@@ -6,7 +6,7 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/29 20:15:32 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/06 13:31:07 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/07 14:56:41 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,8 +134,8 @@ void		exec_cmds(t_env *env)
 		c = env->cmds;
 		if(c && c->cmds && c->cmds[0] && is_build(c->cmds[0]))
 			exec_build(c, env);
-		else if(c && c->cmds && c->cmds[0])
-			exec_cmd(c, env);
+//		else if(c && c->cmds && c->cmds[0])
+//			exec_cmd(c, env);
 		if(!(env->cmds)->next)
 			break ;
 /*		if(c && c->cmds && c->cmds[0] && is_build(c->cmds[0]))
