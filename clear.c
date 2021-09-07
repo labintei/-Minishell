@@ -6,7 +6,7 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/31 15:29:51 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/07 14:59:29 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/07 16:33:56 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,10 +68,10 @@ void		clear_cmds(t_list **cmds)
 	while((*cmds))
 	{
 		temp = (*cmds)->next;
-		if((*cmds)->cmds)
-			clear_tab(&((*cmds)->cmds));
-		if((*cmds)->file)
-			clear_t_list_file(&((*cmds)->file));
+//		if((*cmds)->cmds)
+		clear_tab(&((*cmds)->cmds));
+//		if((*cmds)->file)
+		clear_t_list_file(&((*cmds)->file));
 //		if((*cmds)->cmds_type)
 //			free((*cmds)->cmds_type);
 //		if((*cmds)->fd)

@@ -6,7 +6,7 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/25 18:50:07 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/07 14:58:57 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/07 16:21:57 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,7 +129,7 @@ int			count_word(char *line, int *i);
 int			count_char(char *line, int i, t_env *env);
 // VIEW-CMDS
 void		view_cmds(t_list	**cmds);
-
+void		view_t_list_file(t_list_file	**read);
 // 
 int			find_var_and_strlen(char *line, int *j, t_env *env);
 

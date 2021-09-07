@@ -6,7 +6,7 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/25 18:48:50 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/07 15:10:13 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/07 16:26:37 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ void		restart_t_list_file(t_list_file		**file)
 
 //void		list_cmds_restart(t_list	**cmds)
 //int				count_redir(char *line, int j);
+/*
 void		view_t_list_file(t_list_file	**read)
 {
 	t_list_file		*temp;
@@ -37,7 +38,7 @@ void		view_t_list_file(t_list_file	**read)
 		}
 		temp = temp->next;
 	}
-}
+}*/
 
 int			count_word_before_redir(char	*line, int  i);
 
@@ -358,7 +359,7 @@ int				count_redir(char *line, int j)
 			}
 		}
 	}
-	printf("\nNOMBRE DE REDIR : %d\n", redir);
+//	printf("\nNOMBRE DE REDIR : %d\n", redir);
 	return(redir);
 }
 
@@ -407,7 +408,7 @@ int			count_word_before_redir(char	*line, int  j)
 							stop_bis = 1;
 						else if(line[i] == '>' || line[i] == '<')
 						{
-							printf("\nNB_WORD %d\n", word);
+//							printf("\nNB_WORD %d\n", word);
 							return(word);
 						}
 						i++;
@@ -416,7 +417,7 @@ int			count_word_before_redir(char	*line, int  j)
 			}
 		}
 	}
-	printf("\nNB_WORD %d\n", word);
+//	printf("\nNB_WORD %d\n", word);
 //	view_t_list_file(&(env->cmds->file));
 	return(word);
 }
@@ -468,7 +469,8 @@ void		parse_line(t_env *env, char *line)
 		env->cmds->cmds[(word)] = NULL;
 	else
 		env->cmds->file->path[(word)] = NULL;
-	view_t_list_file(&(env->cmds->file));
+//	view_t_list_file(&(env->cmds->file));
+	view_cmds(&(env->cmds));
 }
 
 
