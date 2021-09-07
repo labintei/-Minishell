@@ -6,7 +6,7 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/25 18:48:50 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/07 16:45:11 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/07 18:29:10 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,7 +157,7 @@ int		is_redir(char *line, int *i, t_env *env, int *word, int is_cmds)
 	{
 		c = 'L';
 		if(line[(*i)] == '>')
-			c = '<';
+			c = 'R';
 		(*i)++;
 	}
 	skip_space(line, i);
@@ -298,7 +298,11 @@ void		is_word_cmds(char *line, int *i, t_env *env, int *word, int is_cmds)
 	out  = 0;
 	count = 0;
 	if(is_cmds)
+	{
+		if(!env->cmds->cmds)
+			env->cmds->cmds = malloc(sizeof(char *) * (count_word_before_redir(line, (*i)) + 1));
 		env->cmds->cmds[(*word)] = malloc(sizeof(char) * (count_char(line, (*i), env) + 1));
+	}
 	else
 		env->cmds->file->path[(*word)] = malloc(sizeof(char) * (count_char(line, (*i), env) + 1));
 	if(line[(*i)] && line[(*i)] != '|' && line[(*i)] != ' ')
@@ -468,9 +472,9 @@ void		parse_line(t_env *env, char *line)
 		}
 	}
 //	env->cmds->cmds_type[(word)] = '\0';
-	if(is_cmds)
+	if(is_cmds && env->cmds && env->cmds->cmds)
 		env->cmds->cmds[(word)] = NULL;
-	else
+	else if(env->cmds && env->cmds->file && env->cmds->file->path)
 		env->cmds->file->path[(word)] = NULL;
 //	view_t_list_file(&(env->cmds->file));
 	view_cmds(&(env->cmds));
