@@ -6,7 +6,7 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/25 18:48:50 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/07 16:26:37 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/07 16:45:11 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,8 +137,8 @@ void		is_pipe(t_env *env, int *i, int *word, char *line, int		*is_cmds)
 	(*i)++;
 	(*word) = 0;
 	ajout_cmds(env, line, i);
-	env->cmds->cmds = malloc(sizeof(char *) * (count_word_before_redir(line, (*i)) + 1));
-	count_redir(line, (*i));
+//	env->cmds->cmds = malloc(sizeof(char *) * (count_word_before_redir(line, (*i)) + 1));
+//	count_redir(line, (*i));
 }
 
 // GERER CE TYPE DE CAS < (NULL) > << >> 
@@ -440,6 +440,9 @@ void		parse_line(t_env *env, char *line)
 	int	word;
 	int	is_cmds;
 
+	if(env->cmds)
+		view_cmds(&(env->cmds));
+	env->cmds = NULL;
 	i = 0;
 	word = 0;
 	is_cmds = 1;
@@ -487,7 +490,7 @@ int			start_parse(t_env	*env)
 			parse_line(env, line);
 //			view_all_redir(env);
 //			ft_redirection(env);
-//			exec_cmds(env);
+			exec_cmds(env);
 			clear_cmds(&(env->cmds));
 		}
 		add_history(line);
