@@ -6,7 +6,7 @@
 /*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/29 20:15:32 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/08 16:39:26 by malatini         ###   ########.fr       */
+/*   Updated: 2021/09/08 17:39:41 by malatini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,6 +120,35 @@ int			exec_cmd(t_list *cmd, t_env *env)
 	return(ret);
 }
 
+int		sub_exec_cmds(t_list *elem, t_env *env)
+{
+	int	ret;
+
+	ret = 0;
+	//il faudrait que les fonctions renvient toutes un int
+	if(elem && elem->cmds && elem->cmds[0] && is_build(elem->cmds[0]))
+		exec_build(elem, env);
+	else if(elem && elem->cmds && elem->cmds[0])
+		exec_cmd(elem, env);
+	return (ret);
+}
+
+int		wait_execution(t_list *cmds, t_env *env)
+{
+	int 	ret;
+	int 	status;
+
+	ret = 0;
+	waitpid(cmds->pid, &status, 0);
+	if (WIFEXITED(status))
+		ret = WEXITSTATUS(status);
+	//last_error
+	//revoir signaux
+	setup_signals();
+	return (ret);
+}
+
+
 /* Nouvelle version d exec_cmds */
 /* si il n y a pas de redirection alors t_list_file est nul */
 /* Faire une condition pour appeler ft_redirection */
@@ -134,14 +163,17 @@ int		exec_cmds(t_env *env)
 	elem->env->cmds;
 	while (elem)
 	{
-		ret = find_exec(env->cmds, env);
-		/* gestion des erreurs 
+		//il faut que les fonctions d exec aient un retour 
+		ret = sub_exec_cmds(elem, env);
+		/* gestion des erreurs ameliorer 
 		if (ret)
 		{
 
 		}*/
+		wait_execution(elem, env);
 		elem = elem->next;
 	}
+	ret = wait_execution(env->cmds, env);
 	return (ret);
 }
 
