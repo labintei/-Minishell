@@ -6,7 +6,7 @@
 /*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/25 18:50:07 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/08 15:46:10 by malatini         ###   ########.fr       */
+/*   Updated: 2021/09/08 16:34:12 by malatini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -178,7 +178,8 @@ void		ft_putstr_fd(char const *s, int fd);
 
 // exec
 
-void		exec_cmds(t_env *env);
+void		exec_cmds_old(t_env *env);
+int			exec_cmds(t_env *env);
 
 //Signals
 int			handle_signals(void);

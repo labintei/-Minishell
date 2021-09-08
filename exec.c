@@ -6,7 +6,7 @@
 /*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/29 20:15:32 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/08 13:59:28 by malatini         ###   ########.fr       */
+/*   Updated: 2021/09/08 16:39:26 by malatini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,9 +120,33 @@ int			exec_cmd(t_list *cmd, t_env *env)
 	return(ret);
 }
 
+/* Nouvelle version d exec_cmds */
 /* si il n y a pas de redirection alors t_list_file est nul */
 /* Faire une condition pour appeler ft_redirection */
-void		exec_cmds(t_env *env)
+int		exec_cmds(t_env *env)
+{
+	int		ret;
+	int 	i;
+	t_list	*elem;
+
+	i = 0;
+	ret = 0;
+	elem->env->cmds;
+	while (elem)
+	{
+		ret = find_exec(env->cmds, env);
+		/* gestion des erreurs 
+		if (ret)
+		{
+
+		}*/
+		elem = elem->next;
+	}
+	return (ret);
+}
+
+
+void		exec_cmds_old(t_env *env)
 {
 	t_list	*c;
 //	int	status;
