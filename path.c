@@ -6,13 +6,14 @@
 /*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/29 20:20:33 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/08 20:38:07 by malatini         ###   ########.fr       */
+/*   Updated: 2021/09/08 20:58:21 by malatini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void		find_exec_path(char **path, t_env *env)
+//voir les retours
+int		find_exec_path(char **path, t_env *env)
 {
 	struct		stat	si;
 	int					i;
@@ -43,11 +44,13 @@ void		find_exec_path(char **path, t_env *env)
 			ft_strcpy(path, temp);
 			if(temp)
 				free(temp);
-			return ;
+			//revoir retours
+			return (-1);
 		}
 		if(temp)
 			free(temp);
 	}
+	return (0);
 }
 
 void		find_path(t_list_env **env, char *s, char **val)

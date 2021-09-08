@@ -6,16 +6,11 @@
 /*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/08 17:52:59 by malatini          #+#    #+#             */
-/*   Updated: 2021/09/08 18:15:20 by malatini         ###   ########.fr       */
+/*   Updated: 2021/09/08 20:55:57 by malatini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-void    nice_prompt(void)
-{
-    printf("\033[1;36user@minishell $\033[0;36m");
-}
 
 void    ascii_art(void)
 {

@@ -6,7 +6,7 @@
 /*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/29 20:15:32 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/08 20:38:37 by malatini         ###   ########.fr       */
+/*   Updated: 2021/09/08 21:30:23 by malatini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,6 +150,15 @@ int		exec_other(t_list	*c, t_env *env)
 	return(0);
 }
 
+/* Demander a Lauranne ?
+** est-ce qu on ajouterait pas.
+*/
+int			dup_pipes(t_list *cmd)
+{
+	ft_dup_fd(cmd);
+	return (1);
+}
+
 int			exec_child(t_list *cmd, t_env *env)
 {
 	(void)cmd;
@@ -158,6 +167,8 @@ int			exec_child(t_list *cmd, t_env *env)
 
 //	i = 0;
 	//Fonction de duplication des pipes
+	if (!dup_pipes(cmd))
+		exit (EXIT_FAILURE);//revoir fonction de sortie 
 	//fonction qui verifie si c est un builtin puis l execute
 	//fonction qui verifie si la commande est null
 	//Autre fonction sur les pipes ?
@@ -206,7 +217,6 @@ int			exec_cmd(t_list *cmd, t_env *env)
 	if (cmd->type == 'R' || cmd->type == 'L' || cmd->type == '<' || cmd->type == '>')
 		ft_redirection(env, cmd);//revoir retour apres
 	//	return (0);//revoir les retours
-	printf("ici\n");
 	pid = fork();
 	cmd->pid = pid;//Attention vaut mieux passer par la structure ?
 	/* revoir gestion des erreurs
@@ -223,8 +233,8 @@ int			exec_cmd(t_list *cmd, t_env *env)
 			printf("\nERREUR EXIT FATAL\n");
 		if(cmd->cmds)//cmds && cmd->cmds[0]
 		{
-			//ret = exec_child(cmd, env);
-			ret = exec_other(cmd, env);//correspondrait au exec_build ? changer de nom ?
+			ret = exec_child(cmd, env);
+			//ret = exec_other(cmd, env);//correspondrait au exec_build ? changer de nom ?
 		}
 			
 	//	exit(ret);//pourquoi exit ? pour que le child se ferme comme ca?
@@ -283,16 +293,6 @@ int		wait_execution(t_list *cmds, t_env *env)
 	return (ret);
 }
 
-int	ft_find_exec(t_list *cmd, t_env *env)
-{
-	(void)cmd;
-	(void)env;
-	int	ret;
-
-	ret = 0;
-	return (ret);
-}
-
 /* Nouvelle version d exec_cmds */
 /* si il n y a pas de redirection alors t_list_file est nul */
 /* Faire une condition pour appeler ft_redirection */
@@ -306,6 +306,9 @@ int		exec_cmds(t_env *env)
 	while (elem)
 	{
 		//ret = ft_find_exec(cmds, env)
+		ret = find_exec_path(&(env->cmds->cmds[0]), env);
+		//voir retour d erreur
+	//	printf("the exec path is %s\n", c->cmds[0]);
 		//il faut que les fonctions d exec aient un retour 
 		ret = sub_exec_cmds(elem, env);
 		/* gestion des erreurs ameliorer 

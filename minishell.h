@@ -6,7 +6,7 @@
 /*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/25 18:50:07 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/08 20:29:50 by malatini         ###   ########.fr       */
+/*   Updated: 2021/09/08 20:48:47 by malatini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ void		restart_t_list_file(t_list_file		**file);
 //
 int			ft_redirection(t_env *env, t_list *cmd);
 
-void		find_exec_path(char **path, t_env *env);
+int			find_exec_path(char **path, t_env *env);
 void		list_cmds_restart(t_list	**cmds);
 
 // pwd
