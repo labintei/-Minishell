@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/25 18:50:07 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/07 16:21:57 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/08 13:20:47 by malatini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -181,5 +181,12 @@ void		exec_cmds(t_env *env);
 
 //Signals
 int			handle_signals(void);
+
+//redirections
+char	*ft_strnewcat(char *first, char *second);
+char	*get_value_from_key(char *str, int *i);
+char	*ft_expansion(char *str, t_env *env, int i, char *read);
+void	ft_heredoc(t_list_file *f, t_env *env);
+void	ft_redirection(t_env *env);
 
 #endif
