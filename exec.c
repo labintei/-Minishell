@@ -6,7 +6,7 @@
 /*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/29 20:15:32 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/08 17:39:41 by malatini         ###   ########.fr       */
+/*   Updated: 2021/09/08 17:41:40 by malatini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,11 +125,15 @@ int		sub_exec_cmds(t_list *elem, t_env *env)
 	int	ret;
 
 	ret = 0;
+	//gerer les pipes au prealable
+	//gerer les redir ensuite
+	//disable les signaux
 	//il faudrait que les fonctions renvient toutes un int
 	if(elem && elem->cmds && elem->cmds[0] && is_build(elem->cmds[0]))
 		exec_build(elem, env);
 	else if(elem && elem->cmds && elem->cmds[0])
 		exec_cmd(elem, env);
+	//fermer les pipes
 	return (ret);
 }
 
