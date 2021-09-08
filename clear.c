@@ -6,7 +6,7 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/31 15:29:51 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/07 16:33:56 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/08 16:05:31 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ void		clear_t_list_file(t_list_file	**file)
 	{
 		temp = (*file)->next;
 		if((*file)->path)
-			clear_tab(&((*file)->path));
+			free((*file)->path);
 		if((*file)->fd)
 			free((*file)->fd);
 		free(*file);

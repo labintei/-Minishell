@@ -6,7 +6,7 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/29 17:44:11 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/07 16:29:56 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/08 16:04:53 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,7 @@ void		view_t_list_file(t_list_file	**read)
 			printf("\n De type %c\n", temp->redir);
 		if(temp && temp->path)
 		{
-			view_tab(temp->path);
-			printf("\n");
+			printf("\nPATH : %s\n", temp->path);
 		}
 		temp = temp->next;
 	}
