@@ -61,8 +61,8 @@ typedef	struct		s_list
 
 typedef	struct		s_list_file
 {
-	char					**path;
-	int						*fd;
+	char					*path;
+	int					fd;
 	char					redir;
 	int						pipe_fd[2];
 	struct	s_list_file		*next;

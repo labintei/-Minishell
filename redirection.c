@@ -6,11 +6,14 @@
 /*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/31 19:23:59 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/08 15:50:21 by malatini         ###   ########.fr       */
+/*   Updated: 2021/09/08 16:21:39 by malatini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+/* Cette etape de redirection est une etape preliminaire a la commande
+** On va noter la valeur du fd et des pipes ensuite on executera */
 
 /* A remettre dans des fichiers utiles */
 char	*ft_strnewcat(char *first, char *second)
@@ -42,7 +45,9 @@ char	*ft_strnewcat(char *first, char *second)
 	return (new);
 }
 
-
+/* retourne la valeur d'une cle (variable d'environnement)
+** Necessaire pour l'expansion.
+*/
 char	*get_value_from_key(char *str, int *i)
 {
 	char 	*buffer;
@@ -72,7 +77,9 @@ char	*get_value_from_key(char *str, int *i)
 	return (buffer);
 }
 
-/* A tester - fonction deja faite ?*/
+/* A tester - fonction deja faite 
+** Fonction principale qui gere l expansion.
+?*/
 char *ft_expansion(char *str, t_env *env, int i, char *read)
 {
 	char 	*key;
@@ -153,7 +160,7 @@ int			redir_output_simple(t_list *cmd)
 	(void)f;
 	if (f && cmd->type == '<')
 	{
-		f->fd = open(f->path[0], O_RDWR | O_CREAT | O_TRUNC, 0644);
+		f->fd = open(f->path, O_RDWR | O_CREAT | O_TRUNC, 0644);
 		//Rajouter quand on aura fait les messages d erreurs
 		/*
 		if (errno == EACCES)
@@ -174,6 +181,26 @@ int		redir_input_simple(t_list *cmd, t_env *env)
 	(void)cmd;
 	(void)env;
 
+	t_list_file *f;
+
+	f = cmd->file;
+	if (f && cmd->type == '<')
+	{
+		f->fd = open(f->path, O_RDONLY);
+		/* erreur errno */
+		if (f->fd < 0)
+		{
+			ft_putstr_fd("bash: ", 2);
+			ft_putstr_fd(f->path, 2);
+			ft_putstr_fd(": No such file or directory\n", 2);
+			return (1);
+			//Ici le process child devrait s arreter
+		}
+	}
+	else if (f && cmd->type == 'L')
+	{
+		ft_heredoc(f, env);
+	}
 	return (0);
 }
 

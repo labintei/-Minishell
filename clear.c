@@ -52,8 +52,8 @@ void		clear_t_list_file(t_list_file	**file)
 		temp = (*file)->next;
 		if((*file)->path)
 			free((*file)->path);
-		if((*file)->fd)
-			free((*file)->fd);
+	//	if((*file)->fd)
+	//		free((*file)->fd);
 		free(*file);
 		(*file) = temp;
 	}
