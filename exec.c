@@ -6,7 +6,7 @@
 /*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/29 20:15:32 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/08 18:15:22 by malatini         ###   ########.fr       */
+/*   Updated: 2021/09/08 19:26:14 by malatini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,103 @@ int		exec_other(t_list	*c, t_env *env)
 	return(0);
 }
 
+int		list_env_len(t_list_env *env)
+{
+	int 		i;
+	t_list_env	*elem;
+
+	i = 0;
+	elem = env;
+	while (elem)
+	{
+		elem = elem->next;
+		i++;
+	}
+	return (i);
+}
+
+void	*ft_memcpy(void *dest, const void *src, size_t size)
+{
+	unsigned char	*buf_dest;
+	unsigned char	*buf_src;
+
+	buf_dest = (unsigned char *)dest;
+	buf_src = (unsigned char *)src;
+	if (dest == src)
+		return (dest);
+	while (size--)
+	{
+		*(buf_dest++) = *(buf_src++);
+	}
+	return (dest);
+}
+
+char	*flatten_env_var(t_list_env *env, t_env *mem)
+{
+	char 	*ret;
+	int		i;
+	int		total_len;
+
+	ret = NULL;
+	(void)mem;
+	total_len = ft_strlen(env->var) + 1 + ft_strlen(env->val) + 1;
+	ret = (char *)malloc(sizeof(char *) * total_len);
+	//fonction de gestion des mauvais malloc
+	i = ft_strlen(env->var);
+	ret[i] = '=';
+	ret[total_len - 1] = '\0';
+	ft_memcpy(ret, env->var, ft_strlen(env->var));
+	ft_memcpy(&(ret[i]), env->val, ft_strlen(env->val));
+	return (ret);
+}
+
+char	**ft_env_string_tab(t_env *env)
+{
+	int 		i;
+	t_list_env 	*elem;
+	char		**ret;
+	int			length;
+
+	i = 0;
+	length = list_env_len(env->env);
+	ret = (char **)malloc(sizeof(char *) * (length + 1));
+	//fonction de free exit proprement en cas d appel systeme rate
+	ret[length] = NULL;
+	elem = env->env;
+	while (elem && i < length)
+	{
+		ret[i] = flatten_env_var(elem, env);
+		//fonction de gestion des erreurs malloc
+		i++;
+		elem = elem->next;
+	}
+	return (ret);
+}
+
+int			exec_child(t_list *cmd, t_env *env)
+{
+	int	ret;
+
+	ret = 0;
+	(void)cmd;
+	(void)env;
+	//Fonction de duplication des pipes
+	//fonction qui verifie si c est un builtin puis l execute
+	//fonction qui verifie si la commande est null
+	//Autre fonction sur les pipes ?
+	//fonctions qui verifient que la commande n est pas un ".." ou "."
+	//fonction qui execute les commandes non builtin et verifie les erreurs
+	//attention absolute ou relatif path ?
+	if (execve(cmd->cmds[0],cmd->cmds, ft_env_string_tab(env)))
+	{
+		//gestion des erreurs
+		printf("gestion des erreurs\n");
+	}
+
+	return (ret);
+}
+
+
 int			exec_cmd(t_list *cmd, t_env *env)
 {
 	pid_t		pid;
@@ -84,25 +181,34 @@ int			exec_cmd(t_list *cmd, t_env *env)
 
 	ret  = 1;
 	pipe_open = 0;
+	/* replacer la gestion des pipes ailleurs pour la norme */
 	if(cmd->type == '|' || (cmd->previous && cmd->previous->type == '|'))
 	{
 		pipe_open = 1;
 		if(pipe(cmd->pipe))
 			printf("\nERREUR EXIT FATAL\n");
 	}
+	if (ft_redirection(env, cmd) != 0)
+		return (0);//revoir les retours
 	pid = fork();
+	cmd->pid = pid;//Attention vaut mieux passer par la structure ?
 	if(pid < 0)
 		printf("\nERREUR EXIT FATAL\n");
-	else if(pid == 0)
+	else if(pid == 0 && cmd->pid == 0)
 	{
 		if(cmd->type == '|' && dup2(cmd->pipe[1], 1) < 0)
 			printf("\nERREUR EXIT FATAL\n");
 		if(cmd->previous && cmd->previous->type == '|' && dup2(cmd->previous->pipe[0], 0) < 0)
 			printf("\nERREUR EXIT FATAL\n");
 		if(cmd && cmd->cmds && cmd->cmds[0])
-			ret = exec_other(cmd, env);
-		exit(ret);
+		{
+			ret = exec_child(cmd, env);
+			//ret = exec_other(cmd, env);//correspondrait au exec_build ? changer de nom ?
+		}
+			
+	//	exit(ret);//pourquoi exit ? pour que le child se ferme comme ca?
 	}
+	//Fonction de wait et de close a deplacer dans la fonction appelante ?
 	else
 	{
 		waitpid(pid, &status, 0);
@@ -150,6 +256,7 @@ int		wait_execution(t_list *cmds, t_env *env)
 	//last_error
 	//revoir signaux
 	//handle_signals();
+	//faire les closes dans cette fonction
 	return (ret);
 }
 
@@ -173,7 +280,7 @@ int		exec_cmds(t_env *env)
 		{
 
 		}*/
-		wait_execution(elem, env);
+	//	wait_execution(elem, env);//commente car deja appele dans la fonction de Lauranne
 		elem = elem->next;
 	}
 	ret = wait_execution(env->cmds, env);
