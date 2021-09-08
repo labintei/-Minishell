@@ -3,19 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/26 11:54:03 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/06 13:31:42 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/08 15:45:19 by malatini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void		list_start_env(t_list_env	**list)
+void		list_start_env(t_list_env **list)
 {
-	while((*list) && ((*list)->previous))
+	while ((*list) && ((*list)->previous))
+	{
 		*list = (*list)->previous;
+	}
 }
 
 int			ft_len_env(t_list_env **env)

@@ -6,7 +6,7 @@
 /*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/25 18:50:07 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/08 13:20:47 by malatini         ###   ########.fr       */
+/*   Updated: 2021/09/08 15:46:10 by malatini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@
 #include	<signal.h>
 #include	<fcntl.h>
 #include	<stdbool.h>
+#include	<errno.h>
 
 #define CD_ERROR 4
 /* Only global variable for tracking signals */
@@ -95,7 +96,7 @@ void		restart_t_list_file(t_list_file		**file);
 
 // redirection
 //
-void		ft_redirection(t_env *env);
+int			ft_redirection(t_env *env, t_list *cmd);
 
 void		find_exec_path(char **path, t_env *env);
 void		list_cmds_restart(t_list	**cmds);
@@ -186,7 +187,6 @@ int			handle_signals(void);
 char	*ft_strnewcat(char *first, char *second);
 char	*get_value_from_key(char *str, int *i);
 char	*ft_expansion(char *str, t_env *env, int i, char *read);
-void	ft_heredoc(t_list_file *f, t_env *env);
-void	ft_redirection(t_env *env);
+//void	ft_heredoc(t_list_file *f, t_env *env)
 
 #endif

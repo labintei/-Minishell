@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/29 20:15:32 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/07 16:36:14 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/08 13:59:28 by malatini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,6 +120,8 @@ int			exec_cmd(t_list *cmd, t_env *env)
 	return(ret);
 }
 
+/* si il n y a pas de redirection alors t_list_file est nul */
+/* Faire une condition pour appeler ft_redirection */
 void		exec_cmds(t_env *env)
 {
 	t_list	*c;

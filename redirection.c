@@ -6,7 +6,7 @@
 /*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/31 19:23:59 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/08 13:25:51 by malatini         ###   ########.fr       */
+/*   Updated: 2021/09/08 15:50:21 by malatini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@ char *ft_expansion(char *str, t_env *env, int i, char *read)
 	char	*value;
 	int		j;
 
+	(void)env;
 	while (str[i])
 	{
 		if (str[i] == '$')
@@ -107,17 +108,16 @@ void	ft_heredoc(t_list_file *f, t_env *env)
 	char	*line;
 	char	*temp;
 
+	(void)f;
 	pipe(f->pipe_fd);
 	while (true)
 	{
 		line = readline("> ");
 		if (!line)
 			break;
-		//revoir comment savoir si les redirections etaient entre quotes ou pas
-		//if (!f->quote)
-			temp = line;
-			line = ft_expansion(line, env, 0, NULL);
-			free(temp);
+		temp = line;
+		line = ft_expansion(line, env, 0, NULL);
+		free(temp);
 		write(f->pipe_fd[1], line, ft_strlen(line));
 		write(f->pipe_fd[1], "\n", 1);
 		free(line);
@@ -127,13 +127,7 @@ void	ft_heredoc(t_list_file *f, t_env *env)
 	//close(f->pipe_fd[0]);
 }
 
-
-void		ft_redirection(t_env *env)
-{
-	(void)env;
-}
-
-/*
+/* 
 void		redir_output_append()
 {
 	close(1);
@@ -141,20 +135,56 @@ void		redir_output_append()
 	if(fork() == 0)
 		execution(pathcmds, cmds, convert_env);
 }
+*/
 
-
-void		redir_output_simple()
+/* Redirection d'output simple
+** Bash ouvre (essai) les fichiers. 
+** Si l'un des open ne fonctionne pas c'est toute la commande qui est erronee.
+** A priori il ne devrait y avoir qu un fichier donc pas besoin de boucler sur la liste de fichier.
+** On ne peut pas donner le minimun de droits puisqu'il faut que d autres processus puissent modifier le fichier
+** 
+*/
+int			redir_output_simple(t_list *cmd)
 {
-	close(1);
-	open("doc", O_RDWR | O_CREAT | O_TRUNC, 0666);
-	if(fork() == 0)
-		execution(pathcmds, cmds, convert_env);
+	t_list_file *f;
+	(void)cmd;
+
+	f = cmd->file;
+	(void)f;
+	if (f && cmd->type == '<')
+	{
+		f->fd = open(f->path[0], O_RDWR | O_CREAT | O_TRUNC, 0644);
+		//Rajouter quand on aura fait les messages d erreurs
+		/*
+		if (errno == EACCES)
+			return (display_error(2));
+		*/
+	}
+	else if (f && cmd->type == 'R')
+	{
+		f->fd = open(f->path, O_CREAT | O_RDWR | O_APPEND, 0644);
+		//erreur errno
+	}
+	return (0);
+}
+	
+
+int		redir_input_simple(t_list *cmd, t_env *env)
+{
+	(void)cmd;
+	(void)env;
+
+	return (0);
 }
 
-void		redir_input_simple()
+/* On va boucler commande par commande depuis la fonction appelante */
+int		ft_redirection(t_env *env, t_list *cmd)
 {
-	close(0);
-	open("doc", O_RDONLY);
-	if(fork() == 0)
-		execution(pathcmds, cmds, convert_env);
-}*/
+	if (redir_input_simple(cmd, env) != 0)
+		return (-1);
+	if (redir_output_simple(cmd) != 0)
+		return (-1);
+	return (0);
+}
+
+
