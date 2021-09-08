@@ -6,7 +6,7 @@
 /*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/29 20:15:32 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/08 19:26:14 by malatini         ###   ########.fr       */
+/*   Updated: 2021/09/08 20:38:37 by malatini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,30 +50,6 @@ int		exec_build(t_list	*a, t_env *env)
 		return(1);
 }
 
-int		exec_other(t_list	*c, t_env *env)
-{
-//	char	*path;
-	char	**test;
-
-//	c->pid = fork();
-	if(c->cmds && c->cmds[0] && c->cmds[0][0] && c->cmds[0][0] == '.' && c->cmds[0][1] && c->cmds[0][1] == '/')
-	{
-		ft_convert_env(&(env->env), &test);
-		execve(c->cmds[0], c->cmds, test);
-		if(test)
-			clear_tab(&test);
-		return(0);
-	}
-	if(c->cmds && c->cmds[0])
-	{
-		find_exec_path(&(c->cmds[0]), env);
-		ft_convert_env(&(env->env), &test);
-		execve(c->cmds[0], c->cmds, test);
-		if(test)
-			clear_tab(&test);
-	}
-	return(0);
-}
 
 int		list_env_len(t_list_env *env)
 {
@@ -148,13 +124,39 @@ char	**ft_env_string_tab(t_env *env)
 	return (ret);
 }
 
+
+int		exec_other(t_list	*c, t_env *env)
+{
+//	char	*path;
+	char	**test;
+
+//	c->pid = fork();
+	if(c->cmds && c->cmds[0] && c->cmds[0][0] && c->cmds[0][0] == '.' && c->cmds[0][1] && c->cmds[0][1] == '/')
+	{
+		ft_convert_env(&(env->env), &test);
+		execve(c->cmds[0], c->cmds, test);
+		if(test)
+			clear_tab(&test);
+		return(0);
+	}
+	if(c->cmds && c->cmds[0])
+	{
+		find_exec_path(&(c->cmds[0]), env);
+		ft_convert_env(&(env->env), &test);
+		execve(c->cmds[0], c->cmds, test);
+		if(test)
+			clear_tab(&test);
+	}
+	return(0);
+}
+
 int			exec_child(t_list *cmd, t_env *env)
 {
-	int	ret;
-
-	ret = 0;
 	(void)cmd;
 	(void)env;
+//	int	i;
+
+//	i = 0;
 	//Fonction de duplication des pipes
 	//fonction qui verifie si c est un builtin puis l execute
 	//fonction qui verifie si la commande est null
@@ -162,13 +164,23 @@ int			exec_child(t_list *cmd, t_env *env)
 	//fonctions qui verifient que la commande n est pas un ".." ou "."
 	//fonction qui execute les commandes non builtin et verifie les erreurs
 	//attention absolute ou relatif path ?
-	if (execve(cmd->cmds[0],cmd->cmds, ft_env_string_tab(env)))
+	char	**e;
+
+	e = ft_env_string_tab(env);
+	/*
+	while (e[i])
+	{
+		printf("%s\n", e[i]);
+		i++;
+	}
+	*/
+	if (execve(cmd->cmds[0],cmd->cmds, e) == -1)
 	{
 		//gestion des erreurs
-		printf("gestion des erreurs\n");
+		printf("erreur\n");
 	}
-
-	return (ret);
+	clear_tab(&e);
+	exit (EXIT_FAILURE);
 }
 
 
@@ -176,39 +188,49 @@ int			exec_cmd(t_list *cmd, t_env *env)
 {
 	pid_t		pid;
 	int			ret;
-	int			status;
-	int			pipe_open;
+//	int			status;
+//separer les instructions relatives aux pipes 
+//	int			pipe_open;
 
 	ret  = 1;
-	pipe_open = 0;
+//	pipe_open = 0;
+//	printf("Nous allons executer la commande\n");
 	/* replacer la gestion des pipes ailleurs pour la norme */
 	if(cmd->type == '|' || (cmd->previous && cmd->previous->type == '|'))
 	{
-		pipe_open = 1;
+//		pipe_open = 1;
 		if(pipe(cmd->pipe))
 			printf("\nERREUR EXIT FATAL\n");
 	}
-	if (ft_redirection(env, cmd) != 0)
-		return (0);//revoir les retours
+	//verifier qu il n y a 
+	if (cmd->type == 'R' || cmd->type == 'L' || cmd->type == '<' || cmd->type == '>')
+		ft_redirection(env, cmd);//revoir retour apres
+	//	return (0);//revoir les retours
+	printf("ici\n");
 	pid = fork();
 	cmd->pid = pid;//Attention vaut mieux passer par la structure ?
+	/* revoir gestion des erreurs
 	if(pid < 0)
 		printf("\nERREUR EXIT FATAL\n");
-	else if(pid == 0 && cmd->pid == 0)
+	*/
+
+	if(pid == 0 && cmd->pid == 0)
 	{
+		//gestion des dup2 separee
 		if(cmd->type == '|' && dup2(cmd->pipe[1], 1) < 0)
 			printf("\nERREUR EXIT FATAL\n");
 		if(cmd->previous && cmd->previous->type == '|' && dup2(cmd->previous->pipe[0], 0) < 0)
 			printf("\nERREUR EXIT FATAL\n");
-		if(cmd && cmd->cmds && cmd->cmds[0])
+		if(cmd->cmds)//cmds && cmd->cmds[0]
 		{
-			ret = exec_child(cmd, env);
-			//ret = exec_other(cmd, env);//correspondrait au exec_build ? changer de nom ?
+			//ret = exec_child(cmd, env);
+			ret = exec_other(cmd, env);//correspondrait au exec_build ? changer de nom ?
 		}
 			
 	//	exit(ret);//pourquoi exit ? pour que le child se ferme comme ca?
 	}
 	//Fonction de wait et de close a deplacer dans la fonction appelante ?
+	/*
 	else
 	{
 		waitpid(pid, &status, 0);
@@ -223,6 +245,7 @@ int			exec_cmd(t_list *cmd, t_env *env)
 		if(WIFEXITED(status))
 			ret = WEXITSTATUS(status);
 	}
+	*/
 	return(ret);
 }
 
@@ -260,6 +283,15 @@ int		wait_execution(t_list *cmds, t_env *env)
 	return (ret);
 }
 
+int	ft_find_exec(t_list *cmd, t_env *env)
+{
+	(void)cmd;
+	(void)env;
+	int	ret;
+
+	ret = 0;
+	return (ret);
+}
 
 /* Nouvelle version d exec_cmds */
 /* si il n y a pas de redirection alors t_list_file est nul */
@@ -273,6 +305,7 @@ int		exec_cmds(t_env *env)
 	elem = env->cmds;
 	while (elem)
 	{
+		//ret = ft_find_exec(cmds, env)
 		//il faut que les fonctions d exec aient un retour 
 		ret = sub_exec_cmds(elem, env);
 		/* gestion des erreurs ameliorer 
