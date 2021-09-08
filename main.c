@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/25 18:48:50 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/08 16:11:05 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/08 18:18:40 by malatini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -501,7 +501,7 @@ int			start_parse(t_env	*env)
 
 	while (true)
 	{
-		line = readline("Minishell$ ");
+		line = readline("\033[1;36muser@minishell$ \033[0m$ ");
 		if (line)
 		{
 			parse_line(env, line);
@@ -539,6 +539,7 @@ int			main(int argc, char **argv, char **envp)
 	ret = 0;
 	if (argc == 1)
 	{
+		ascii_art();
 		env.split_path = NULL;
 		stock_env(&env, envp);
 		get_splitted_path(&env);

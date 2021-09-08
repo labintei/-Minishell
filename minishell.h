@@ -6,7 +6,7 @@
 /*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/25 18:50:07 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/08 16:34:12 by malatini         ###   ########.fr       */
+/*   Updated: 2021/09/08 18:16:45 by malatini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -189,5 +189,8 @@ char	*ft_strnewcat(char *first, char *second);
 char	*get_value_from_key(char *str, int *i);
 char	*ft_expansion(char *str, t_env *env, int i, char *read);
 //void	ft_heredoc(t_list_file *f, t_env *env)
+
+//fancy
+void    ascii_art(void);
 
 #endif

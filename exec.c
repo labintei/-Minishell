@@ -6,7 +6,7 @@
 /*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/29 20:15:32 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/08 17:41:40 by malatini         ###   ########.fr       */
+/*   Updated: 2021/09/08 18:15:22 by malatini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,12 +143,13 @@ int		wait_execution(t_list *cmds, t_env *env)
 	int 	status;
 
 	ret = 0;
+	(void)env;
 	waitpid(cmds->pid, &status, 0);
 	if (WIFEXITED(status))
 		ret = WEXITSTATUS(status);
 	//last_error
 	//revoir signaux
-	setup_signals();
+	//handle_signals();
 	return (ret);
 }
 
@@ -159,12 +160,10 @@ int		wait_execution(t_list *cmds, t_env *env)
 int		exec_cmds(t_env *env)
 {
 	int		ret;
-	int 	i;
 	t_list	*elem;
 
-	i = 0;
 	ret = 0;
-	elem->env->cmds;
+	elem = env->cmds;
 	while (elem)
 	{
 		//il faut que les fonctions d exec aient un retour 
