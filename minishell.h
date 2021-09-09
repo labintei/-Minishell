@@ -6,7 +6,7 @@
 /*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/25 18:50:07 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/09 17:52:59 by malatini         ###   ########.fr       */
+/*   Updated: 2021/09/09 18:43:13 by malatini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,7 +174,7 @@ int			disable_signals(int fork);
 char		*ft_strnewcat(char *first, char *second);
 char		*get_value_from_key(char *str, int *i);
 char		*ft_expansion(char *str, t_env *env, int i, char *read);
-//void	ft_heredoc(t_list_file *f, t_env *env)
+//int			ft_heredoc(t_list_file *f, t_env *env);
 
 //fancy
 void   		 ascii_art(void);
@@ -190,5 +190,10 @@ int			list_env_len(t_list_env *env);
 char	**ft_env_string_tab(t_env *env);
 int		exec_build(t_list	*a, t_env *env);
 int		ma_strcmp(char *s1, char *s2);
+
+//utils3.c 
+char	*ft_strnewcat(char *first, char *second);
+char 	*ft_expansion(char *str, t_env *env, int i, char *read);
+char	*get_value_from_key(char *str, int *i);
 
 #endif

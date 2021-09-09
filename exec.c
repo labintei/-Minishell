@@ -6,7 +6,7 @@
 /*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/29 20:15:32 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/09 18:08:19 by malatini         ###   ########.fr       */
+/*   Updated: 2021/09/09 19:02:57 by malatini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -169,18 +169,18 @@ int		sub_exec_cmds(t_list *elem, t_env *env)
 		if (pipe(elem->pipe))
 			exit (EXIT_FAILURE);//revoir fonction de sortie et exit mauvais syscall
 	}
-	printf("Avant redir :\n");
-	printf("----------------------\n");
-	view_cmds(&env->cmds);
+	//printf("Avant redir :\n");
+	//printf("----------------------\n");
+	//view_cmds(&env->cmds);
 	if (is_redirected(elem))
 	{
 	//	printf("Redirection !\n");
 		if (ft_redirection(env, elem) != 0)
 			return (0);
 	}
-	printf("Apres redir :\n");
-	printf("----------------------\n");
-	view_cmds(&env->cmds);
+	//printf("Apres redir :\n");
+	//printf("----------------------\n");
+	//view_cmds(&env->cmds);
 	elem->pid = fork();
 	if (elem->pid == -1)
 		exit (EXIT_FAILURE);//revoir erreur mauvais syscall
