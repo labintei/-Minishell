@@ -6,7 +6,7 @@
 /*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/29 17:44:11 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/08 19:28:18 by malatini         ###   ########.fr       */
+/*   Updated: 2021/09/09 13:10:08 by malatini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,8 +68,9 @@ void		view_cmds(t_list	**cmds)
 	{
 		if(read->cmds)
 		{
-			printf("\nVIEW CMDS\n");
+			printf("VIEW CMDS\n");
 			view_tab(read->cmds);
+			printf("cmd->type: [%c]\n", read->type);
 		}
 		if(read->file)
 		{

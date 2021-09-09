@@ -6,7 +6,7 @@
 /*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/25 18:48:50 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/08 20:25:29 by malatini         ###   ########.fr       */
+/*   Updated: 2021/09/09 13:06:06 by malatini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -490,7 +490,7 @@ void		parse_line(t_env *env, char *line)
 	}
 	if(is_cmds && env->cmds && env->cmds->cmds)
 		env->cmds->cmds[(word)] = NULL;
-//	view_cmds(&(env->cmds));
+	view_cmds(&(env->cmds));
 }
 
 

@@ -6,7 +6,7 @@
 /*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/25 18:50:07 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/08 20:48:47 by malatini         ###   ########.fr       */
+/*   Updated: 2021/09/09 13:07:38 by malatini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ typedef	struct		s_list
 	pid_t	pid;
 //	char			*cmds_type;
 //	int				*fd;
-	char	*path;//ajout Mahaut
+//	char	*path;
 	char	type;
 	int		pipe[2]; // SAME QUE SUR list_file
 	struct	s_list		*previous;

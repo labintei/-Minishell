@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   convert_env.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/26 20:55:33 by labintei          #+#    #+#             */
-/*   Updated: 2021/08/27 16:15:45 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/09 13:09:15 by malatini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,5 +67,5 @@ void			view_tab(char	**tab)
 
 	i = -1;
 	while(tab && tab[(++i)])
-		printf("\n%s\n",tab[i]);
+		printf("[cmds %i]: %s\n",i, tab[i]);
 }

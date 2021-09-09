@@ -6,7 +6,7 @@
 /*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/29 20:15:32 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/08 21:30:23 by malatini         ###   ########.fr       */
+/*   Updated: 2021/09/09 13:04:27 by malatini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,6 +148,31 @@ int		exec_other(t_list	*c, t_env *env)
 			clear_tab(&test);
 	}
 	return(0);
+}
+
+/* Je l ai peut etre deja ecrit quelque part mais je me perds dans les fichiers */
+void	ft_dup_fd(t_list *cmd)
+{
+	t_list_file *f;
+
+	f = cmd->file;
+	if (f)
+	{
+		if (f->redir == '>' || f->redir == 'L')
+			dup2(f->fd, 1);
+		else if (f->redir == '<' || f->redir == 'R')
+		{
+			if (f->redir == '<')
+			{
+				dup2(f->fd, 0);
+			}
+			else
+			{
+				dup2(f->pipe_fd[0], 0);
+				close(f->pipe_fd[0]);
+			}
+		}
+	}
 }
 
 /* Demander a Lauranne ?
