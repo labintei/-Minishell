@@ -6,7 +6,7 @@
 /*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/31 19:23:59 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/08 20:55:34 by malatini         ###   ########.fr       */
+/*   Updated: 2021/09/09 14:36:12 by malatini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,9 +157,9 @@ int			redir_output_simple(t_list *cmd)
 	(void)cmd;
 
 	f = cmd->file;
-	(void)f;
-	if (f && cmd->type == '<')
+	if (f && f->redir == '<')
 	{
+		//printf("le path est %s\n", f->path);
 		f->fd = open(f->path, O_RDWR | O_CREAT | O_TRUNC, 0644);
 		//Rajouter quand on aura fait les messages d erreurs
 		/*
@@ -167,7 +167,7 @@ int			redir_output_simple(t_list *cmd)
 			return (display_error(2));
 		*/
 	}
-	else if (f && cmd->type == 'R')
+	else if (f && f->redir == 'R')
 	{
 		f->fd = open(f->path, O_CREAT | O_RDWR | O_APPEND, 0644);
 		//erreur errno
@@ -184,7 +184,7 @@ int		redir_input_simple(t_list *cmd, t_env *env)
 	t_list_file *f;
 
 	f = cmd->file;
-	if (f && cmd->type == '<')
+	if (f && f->redir == '<')
 	{
 		f->fd = open(f->path, O_RDONLY);
 		/* erreur errno */
@@ -197,7 +197,7 @@ int		redir_input_simple(t_list *cmd, t_env *env)
 			//Ici le process child devrait s arreter
 		}
 	}
-	else if (f && cmd->type == 'L')
+	else if (f && f->redir == 'L')
 	{
 		ft_heredoc(f, env);
 	}

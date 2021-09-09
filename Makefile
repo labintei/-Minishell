@@ -6,7 +6,7 @@
 #    By: malatini <malatini@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/08/16 20:11:09 by labintei          #+#    #+#              #
-#    Updated: 2021/09/08 18:00:22 by malatini         ###   ########.fr        #
+#    Updated: 2021/09/09 14:45:53 by malatini         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ SRCS		=	env.c main.c utils.c utils1.c cmds.c convert_env.c \
 				count_word.c count_char.c view.c exec.c path.c clear.c \
 				./built/cd.c ./built/echo.c ./built/exit.c ./built/export.c \
 				./built/pwd.c ./built/unset.c ./free.c ./signals.c \
-				redirection.c ./fancy.c \
+				redirection.c ./fancy.c ./exec_old.c ./exec_builtin.c \
 
 OBJS		= $(SRCS:.c=.o)
 CC			= gcc -Wall -Werror -Wextra -g #-fsanitize=address

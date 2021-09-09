@@ -6,7 +6,7 @@
 /*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/29 17:44:11 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/09 13:31:45 by malatini         ###   ########.fr       */
+/*   Updated: 2021/09/09 14:33:43 by malatini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,18 +46,24 @@ void		view_t_list_file(t_list_file	**read)
 	while(temp)
 	{
 		if(temp && temp->redir)
-			printf("TYPE: %c\n", temp->redir);
+			printf("TYPE: [%c]\n", temp->redir);
 		if(temp && temp->path)
 		{
-			printf("PATH: %s\n", temp->path);
+			printf("PATH: [%s]\n", temp->path);
+		}
+		if (temp->pipe_fd && &temp->pipe_fd[0] && &temp->pipe_fd[1])
+		{
+			printf("pipe_fd[0] = [%i]\npipe_fd[1] = [%i]\n", temp->pipe_fd[0], temp->pipe_fd[1]);
+		}
+		if (temp->fd)
+		{
+			printf("fd: [%i]\n", temp->fd);
 		}
 		temp = temp->next;
 	}
 }
 
-
-
-
+/* Pour savoir s'il y a une redirection il faut voir un  t_list_file */
 void		view_cmds(t_list	**cmds)
 {
 	t_list	*read;
@@ -70,13 +76,13 @@ void		view_cmds(t_list	**cmds)
 		{
 			printf("VIEW CMDS\n");
 			view_tab(read->cmds);
-			printf("cmd->type: [%c]\n", read->type);
+	//		printf("cmd->type: [%c]\n", read->type);
 			if (read->pipe && &read->pipe[0] && &read->pipe[1])
 				printf("cmd->pipe: [0: %i][1: %i]\n", read->pipe[0], read->pipe[1]);
 		}
 		if(read->file)
 		{
-			printf("\nVIEW T_LIST_FILE\n");
+			printf("VIEW T_LIST_FILE\n");
 			view_t_list_file(&(read->file));
 		}
 		read = read->next;

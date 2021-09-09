@@ -6,7 +6,7 @@
 /*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/25 18:50:07 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/09 13:07:38 by malatini         ###   ########.fr       */
+/*   Updated: 2021/09/09 14:32:14 by malatini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,8 @@
 
 typedef	struct		s_list_env
 {
-	char	*var;
-	char	*val;
+	char				*var;
+	char				*val;
 	struct	s_list_env	*next;
 	struct	s_list_env	*previous;
 }					t_list_env;
@@ -62,7 +62,7 @@ typedef	struct		s_list
 typedef	struct		s_list_file
 {
 	char					*path;
-	int					fd;
+	int						fd;
 	char					redir;
 	int						pipe_fd[2];
 	struct	s_list_file		*next;
@@ -77,7 +77,7 @@ typedef	struct		s_list
 //	char			*cmds_type;
 //	int				*fd;
 //	char	*path;
-	char	type;
+	char	type;//pipe
 	int		pipe[2]; // SAME QUE SUR list_file
 	struct	s_list		*previous;
 	struct	s_list		*next;
