@@ -6,7 +6,7 @@
 /*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/29 20:15:32 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/09 13:04:27 by malatini         ###   ########.fr       */
+/*   Updated: 2021/09/09 13:27:29 by malatini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,11 +175,14 @@ void	ft_dup_fd(t_list *cmd)
 	}
 }
 
-/* Demander a Lauranne ?
-** est-ce qu on ajouterait pas.
+/* Demander a lauranne tom :
+** On ne fait un dup que sur la commande qui porte le | ou aussi celle qui suit?
 */
 int			dup_pipes(t_list *cmd)
 {
+//	if (cmd->type && cmd->type == '|')
+//		if (dup2(cmd->pipe[1], 1) < 0)
+//			exit (EXIT_FAILURE);//Fonction de free et exit en cas d appel systeme qui 
 	ft_dup_fd(cmd);
 	return (1);
 }

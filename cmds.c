@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmds.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/26 14:26:15 by labintei          #+#    #+#             */
-/*   Updated: 2021/08/27 13:16:10 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/09 13:34:55 by malatini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,13 @@ void		add_cmds(t_list		**cmds)
 	new->type = '0';
 	new->next = NULL;
 	new->cmds = NULL;
+	new->pipe[0] = 0;
+	new->pipe[1] = 1;
 	if((*cmds))
 	{
 		(*cmds)->next = new;
+//		new->pipe[0] = 0;
+//		new->pipe[1] = 1;
 		new->previous = (*cmds);
 		(*cmds) = (*cmds)->next;
 	}

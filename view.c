@@ -6,7 +6,7 @@
 /*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/29 17:44:11 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/09 13:10:08 by malatini         ###   ########.fr       */
+/*   Updated: 2021/09/09 13:31:45 by malatini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,14 +42,14 @@ void		view_t_list_file(t_list_file	**read)
 	
 	restart_t_list_file(read);
 	temp = *read;
-	printf("\nLIST FILE PATH :\n");
+	printf("LIST FILE :\n");
 	while(temp)
 	{
 		if(temp && temp->redir)
-			printf("\n De type %c\n", temp->redir);
+			printf("TYPE: %c\n", temp->redir);
 		if(temp && temp->path)
 		{
-			printf("\nPATH : %s\n", temp->path);
+			printf("PATH: %s\n", temp->path);
 		}
 		temp = temp->next;
 	}
@@ -71,6 +71,8 @@ void		view_cmds(t_list	**cmds)
 			printf("VIEW CMDS\n");
 			view_tab(read->cmds);
 			printf("cmd->type: [%c]\n", read->type);
+			if (read->pipe && &read->pipe[0] && &read->pipe[1])
+				printf("cmd->pipe: [0: %i][1: %i]\n", read->pipe[0], read->pipe[1]);
 		}
 		if(read->file)
 		{
