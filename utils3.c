@@ -6,7 +6,7 @@
 /*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/09 18:30:45 by malatini          #+#    #+#             */
-/*   Updated: 2021/09/09 18:31:25 by malatini         ###   ########.fr       */
+/*   Updated: 2021/09/09 19:37:08 by malatini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,4 +39,41 @@ char	*ft_strnewcat(char *first, char *second)
 	if (first)
 		free(first);
 	return (new);
+}
+
+/* returns the number of arguments from commands' list */
+int	cmds_length(t_list *cmds)
+{
+	int	i;
+
+	i = 0;
+	while (cmds->cmds[i])
+		i++;
+	return (i);
+}
+
+void	ft_putstr_fd(char const *s, int fd)
+{
+	int		i;
+
+	i = 0;
+	if (s)
+		while (s[i])
+			write(fd, &s[i++], 1);
+}
+
+int	ft_strcmp_cd(const char *s1, const char *s2)
+{
+	int	i;
+
+	i = 0;
+	if (!s1 || !s2)
+		return (0);
+	while (s1[i] || s2[i])
+	{
+		if (s1[i] != s2[i])
+			return (s1[i] - s2[i]);
+		i++;
+	}
+	return (s1[i] - s2[i]);
 }

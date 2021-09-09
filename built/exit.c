@@ -3,15 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/30 15:38:22 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/06 13:26:18 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/09 19:38:55 by malatini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
+/* retours a verifier, tests */
 bool	ft_isdigit(int c)
 {
 	if (c >= '0' && c <= '9')
@@ -94,11 +95,3 @@ int		exit_build(t_env *env, t_list *cmds, bool fork)
 	exit (ret);
 	return (ret);
 }
-/*
-
-int		exit_build(t_env *env)
-{
-	clear_env(env);
-	exit(0);
-	return(1);
-}*/

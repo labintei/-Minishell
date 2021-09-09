@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/30 15:39:47 by labintei          #+#    #+#             */
-/*   Updated: 2021/08/30 16:48:31 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/09 19:38:26 by malatini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int			echo_build(t_list		*cmds)
+/* Lauranne - a verifier / tester */
+int			echo_build(t_list *cmds)
 {
 	int		i;
 	int		g;
@@ -35,7 +36,4 @@ int			echo_build(t_list		*cmds)
 	if(g != 1)
 		write(1, "\n", 1);
 	return(0);
-//	(void)cmds;
-	//printf("\nECHO\n");
-//	return (0);
 }

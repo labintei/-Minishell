@@ -6,7 +6,7 @@
 /*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/29 20:15:32 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/09 19:02:57 by malatini         ###   ########.fr       */
+/*   Updated: 2021/09/09 19:42:03 by malatini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,14 +109,14 @@ void	start_child_process(t_list *elem, t_env *env, bool builtin)
 	(void)env;
 	(void)builtin;
 	//gerer les pipes au prealable
+
+
 	if (!dup_pipes(elem))
 	{
 		exit (EXIT_FAILURE);
 	}
-	/*
-	if (elem && elem->cmds && elem->cmds[0] && is_builtin(elem->cmds[0]))
+	if (elem && elem->cmds && elem->cmds[0] && builtin)
 		exit(exec_build(elem, env));
-	*/
 	//verif si les commandes sont mauvaises - a revoir
 	check_cmds_errors(elem, env);
 	//il faudrait que les fonctions renvient toutes un int

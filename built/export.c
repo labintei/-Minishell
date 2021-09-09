@@ -3,15 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/30 15:39:11 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/03 19:59:53 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/09 19:40:06 by malatini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
+/* A remettre au propre - Lauranne */
 // MAIS GROSSO MOOD
 /*
 void		add_begin_list(t_list_env **list, char *var, char *val)
@@ -26,7 +27,7 @@ void		add_list_env_between(t_list_env	**list, char *var, char *val)
 {
 	t_list_env	*new;
 
-	new = malloc(sizeof(t_list_env));
+	new = (t_list_env *)malloc(sizeof(t_list_env));//fonction de free + exit en cas d erreur malloc
 //	if(!new)
 //		return ;
 	new->previous = (*list);
@@ -122,6 +123,7 @@ void		view_list_env_export(t_list_env	**l)
 	printf("\n");
 }
 
+/* a remettre au propre */
 void		list_sort(t_list_env *env)
 {
 	t_list_env	*sort;

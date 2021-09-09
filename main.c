@@ -6,7 +6,7 @@
 /*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/25 18:48:50 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/09 18:25:22 by malatini         ###   ########.fr       */
+/*   Updated: 2021/09/09 19:20:13 by malatini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,8 +70,8 @@ void	add_list_file(t_list_file **file, char *line, int i, char	c, t_env *env)
 	new->next = NULL;
 	new->redir = c;
 	//new->fd = open();//est-ce qu il faudrait faire l open ici
-	new->pipe_fd[0] = 0;
-	new->pipe_fd[1] = 1;
+	//new->pipe_fd[0] = 0;
+	//new->pipe_fd[1] = 1;
 	new->path = malloc(sizeof(char) * (count_char(line, i, env) + 1));
 	if(*file)
 	{
