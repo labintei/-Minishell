@@ -6,7 +6,7 @@
 /*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/29 20:15:32 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/09 17:36:23 by malatini         ###   ########.fr       */
+/*   Updated: 2021/09/09 18:08:19 by malatini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ void	ft_dup_fd(t_list *cmd)
 */
 int			dup_pipes(t_list *cmd)
 {
-	if (cmd->type && cmd->type == '|')
+	if (cmd && cmd->type == '|')
 	{
 		if (dup2(cmd->pipe[1], 1) < 0)
 			exit (EXIT_FAILURE);//Fonction de free et exit en cas d appel systeme qui 
@@ -120,17 +120,38 @@ void	start_child_process(t_list *elem, t_env *env, bool builtin)
 	//verif si les commandes sont mauvaises - a revoir
 	check_cmds_errors(elem, env);
 	//il faudrait que les fonctions renvient toutes un int
-	if(elem && elem->cmds && elem->cmds[0] && !builtin)
+	if (elem && elem->cmds && elem->cmds[0] && !builtin)
 	{
 	//	printf("on va executer\n");
 		exec_bin(elem, env);
 	}
-		
-	/*
-	else if (builtin)
-		exec_build(cmds, env);//A revoir pour que ca fasse partie de exec bin
-	*/
 	//fermer les pipes
+}
+
+void	close_fd(t_list *elem)
+{
+	t_list_file *f;
+
+	f = elem->file;
+	//if ou while ? A revoir
+	if (f)
+	{
+		if (f->redir != 'R')
+			close(f->fd);
+	}
+}
+
+/* va permettre de fermer les fd du file et fd de la cmd */
+int		close_pipes(t_list *elem)
+{
+	(void)elem;
+	/*
+	t_list_file *f;
+
+	close_fd(elem);
+	*/
+	//faire la suite
+	return (0);
 }
 
 /* On exit puisqu'il s'agit du child */
@@ -142,17 +163,24 @@ int		sub_exec_cmds(t_list *elem, t_env *env)
 
 	ret = 0;
 	builtin = is_builtin(elem->cmds[0]);
-	printf("builtin is %i\n", builtin);
+//	printf("builtin is %i\n", builtin);
 	if (is_piped(elem))
 	{
 		if (pipe(elem->pipe))
 			exit (EXIT_FAILURE);//revoir fonction de sortie et exit mauvais syscall
 	}
+	printf("Avant redir :\n");
+	printf("----------------------\n");
+	view_cmds(&env->cmds);
 	if (is_redirected(elem))
 	{
+	//	printf("Redirection !\n");
 		if (ft_redirection(env, elem) != 0)
 			return (0);
 	}
+	printf("Apres redir :\n");
+	printf("----------------------\n");
+	view_cmds(&env->cmds);
 	elem->pid = fork();
 	if (elem->pid == -1)
 		exit (EXIT_FAILURE);//revoir erreur mauvais syscall
@@ -160,6 +188,7 @@ int		sub_exec_cmds(t_list *elem, t_env *env)
 	if (elem->pid == 0)
 		start_child_process(elem, env, builtin);
 	//faire la fonction de close_pipes
+	close_pipes(elem);
 	return (ret);
 }
 

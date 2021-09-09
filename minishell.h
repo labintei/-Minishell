@@ -6,7 +6,7 @@
 /*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/25 18:50:07 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/09 17:37:46 by malatini         ###   ########.fr       */
+/*   Updated: 2021/09/09 17:52:59 by malatini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -190,4 +190,5 @@ int			list_env_len(t_list_env *env);
 char	**ft_env_string_tab(t_env *env);
 int		exec_build(t_list	*a, t_env *env);
 int		ma_strcmp(char *s1, char *s2);
+
 #endif

@@ -6,7 +6,7 @@
 /*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/31 19:23:59 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/09 14:36:12 by malatini         ###   ########.fr       */
+/*   Updated: 2021/09/09 18:05:16 by malatini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,16 +133,6 @@ void	ft_heredoc(t_list_file *f, t_env *env)
 	//Pourquoi tom/thomas n ont pas ferme le deuxieme pipe ?
 	//close(f->pipe_fd[0]);
 }
-
-/* 
-void		redir_output_append()
-{
-	close(1);
-	open("doc", O_RDWR | O_CREAT | O_APPEND, 0644);
-	if(fork() == 0)
-		execution(pathcmds, cmds, convert_env);
-}
-*/
 
 /* Redirection d'output simple
 ** Bash ouvre (essai) les fichiers. 
