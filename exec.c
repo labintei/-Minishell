@@ -6,7 +6,7 @@
 /*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/29 20:15:32 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/09 17:15:58 by malatini         ###   ########.fr       */
+/*   Updated: 2021/09/09 17:36:23 by malatini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,16 @@ int		exec_bin(t_list *cmd, t_env *env)
 	return (ret);
 }
 
+int	ma_strcmp(char *s1, char *s2)
+{
+	int	i;
+
+	i = 0;
+	while (s1[i] == s2[i] && s1[i] != '\0' && s2[i] != '\0')
+		i++;
+	return (s1[i] - s2[i]);
+}
+
 int		check_cmds_errors(t_list *elem, t_env *env)
 {
 	int	ret;
@@ -85,13 +95,12 @@ int		check_cmds_errors(t_list *elem, t_env *env)
 	(void)elem;
 	(void)env;
 	ret = 0;
-
 	if (!elem->cmds[0])
 		exit (EXIT_FAILURE);//revoir les erreurs
-	if (!ft_strcmp(elem->cmds[0], ".."))
-		printf("Erreur mauvaise commande\n");//a revoir
-	if (!ft_strcmp(elem->cmds[0], "."))
-		printf("Erreur mauvaise commande\n");//a revoir
+	if (ma_strcmp(elem->cmds[0], "..") == 0)
+		printf("Erreur mauvaise commande 1\n");//a revoir
+	else if (ma_strcmp(elem->cmds[0], ".") == 0)
+		printf("Erreur mauvaise commande 2\n");//a revoir
 	return (ret);
 }
 
@@ -101,14 +110,22 @@ void	start_child_process(t_list *elem, t_env *env, bool builtin)
 	(void)builtin;
 	//gerer les pipes au prealable
 	if (!dup_pipes(elem))
+	{
 		exit (EXIT_FAILURE);
+	}
+	/*
 	if (elem && elem->cmds && elem->cmds[0] && is_builtin(elem->cmds[0]))
 		exit(exec_build(elem, env));
+	*/
 	//verif si les commandes sont mauvaises - a revoir
 	check_cmds_errors(elem, env);
 	//il faudrait que les fonctions renvient toutes un int
 	if(elem && elem->cmds && elem->cmds[0] && !builtin)
+	{
+	//	printf("on va executer\n");
 		exec_bin(elem, env);
+	}
+		
 	/*
 	else if (builtin)
 		exec_build(cmds, env);//A revoir pour que ca fasse partie de exec bin
@@ -121,8 +138,11 @@ void	start_child_process(t_list *elem, t_env *env, bool builtin)
 int		sub_exec_cmds(t_list *elem, t_env *env)
 {
 	int	ret;
+	int	builtin;
 
 	ret = 0;
+	builtin = is_builtin(elem->cmds[0]);
+	printf("builtin is %i\n", builtin);
 	if (is_piped(elem))
 	{
 		if (pipe(elem->pipe))
@@ -138,7 +158,7 @@ int		sub_exec_cmds(t_list *elem, t_env *env)
 		exit (EXIT_FAILURE);//revoir erreur mauvais syscall
 	//disable_signals(true);
 	if (elem->pid == 0)
-		start_child_process(elem, env, is_builtin(elem->cmds[0]));
+		start_child_process(elem, env, builtin);
 	//faire la fonction de close_pipes
 	return (ret);
 }

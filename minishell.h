@@ -6,7 +6,7 @@
 /*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/25 18:50:07 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/09 17:20:16 by malatini         ###   ########.fr       */
+/*   Updated: 2021/09/09 17:37:46 by malatini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,14 +152,11 @@ int			ft_strlen_char(char *s, char c);
 char		*ft_strdup(char *copy);
 char		*ft_strdup_char(char *copy, char c);
 char		*ft_strdup_char_after(char *copy, char c);
-
 void		add_list_env(t_list_env	**list, char	*var, char *val, int i);
-
-int		ft_find_env(t_list_env **env, char *var);
+int			ft_find_env(t_list_env **env, char *var);
 void		ft_putstr_fd(char const *s, int fd);
 
 // exec
-
 void		exec_cmds_old(t_env *env);
 int			exec_cmds(t_env *env);
 int			wait_execution(t_list *cmds, t_env *env);
@@ -192,5 +189,5 @@ int			list_env_len(t_list_env *env);
 //env2.c 
 char	**ft_env_string_tab(t_env *env);
 int		exec_build(t_list	*a, t_env *env);
-
+int		ma_strcmp(char *s1, char *s2);
 #endif

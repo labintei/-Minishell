@@ -6,7 +6,7 @@
 /*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/09 15:34:11 by malatini          #+#    #+#             */
-/*   Updated: 2021/09/09 16:21:01 by malatini         ###   ########.fr       */
+/*   Updated: 2021/09/09 17:37:46 by malatini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,9 +50,9 @@ int			is_builtin(char *s)
 {
 	if (s)
 	{
-		if (!ft_strcmp(s, "echo") || !ft_strcmp(s, "cd") || !ft_strcmp(s, "pwd") \
-		|| !ft_strcmp(s, "unset") || !ft_strcmp(s, "export") 
-		|| !ft_strcmp(s, "exit") || !ft_strcmp(s, "env"))
+		if (!ma_strcmp(s, "echo") || !ma_strcmp(s, "cd") || !ma_strcmp(s, "pwd") \
+		|| !ma_strcmp(s, "unset") || !ma_strcmp(s, "export") 
+		|| !ma_strcmp(s, "exit") || !ma_strcmp(s, "env"))
 			return (true);
 	}
 	return (false);
@@ -70,7 +70,7 @@ bool	is_piped(t_list *elem)
 
 bool	is_redirected(t_list *elem)
 {
-	if (elem)
+	if (elem && elem->file)
 	{
 		if (elem->file->redir == '<' || elem->file->redir == '>'
 		|| elem->file->redir == 'L' || elem->file->redir == 'R')

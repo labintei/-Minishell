@@ -6,7 +6,7 @@
 #    By: malatini <malatini@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/08/16 20:11:09 by labintei          #+#    #+#              #
-#    Updated: 2021/09/09 17:19:24 by malatini         ###   ########.fr        #
+#    Updated: 2021/09/09 17:28:29 by malatini         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,7 @@ SRCS		=	env.c main.c utils.c utils1.c cmds.c convert_env.c \
 				./env2.c \
 
 OBJS		= $(SRCS:.c=.o)
-CC			= gcc -Wall -Werror -Wextra -g #-fsanitize=address
+CC			= gcc -Wall -Werror -Wextra -g3 #-fsanitize=address
 RM			= rm -rf
 NAME		= minishell
 CFLAGS		= -Wall -Wextra -Werror
