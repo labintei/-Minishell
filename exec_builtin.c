@@ -6,12 +6,13 @@
 /*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/09 14:45:22 by malatini          #+#    #+#             */
-/*   Updated: 2021/09/09 16:13:36 by malatini         ###   ########.fr       */
+/*   Updated: 2021/09/09 17:13:49 by malatini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+//rajout de env par mahaut 
 int			is_build(char *s)
 {
 	if(s && *s)

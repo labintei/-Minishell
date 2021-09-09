@@ -6,7 +6,7 @@
 /*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/09 14:39:06 by malatini          #+#    #+#             */
-/*   Updated: 2021/09/09 14:57:10 by malatini         ###   ########.fr       */
+/*   Updated: 2021/09/09 17:17:57 by malatini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,7 +155,8 @@ void		exec_cmds_old(t_env *env)
 	while(env->cmds)
 	{
 		c = env->cmds;
-		if(c && c->cmds && c->cmds[0] && is_build(c->cmds[0]))
+		//reprendre fonction is_build de lauranne
+		if(c && c->cmds && c->cmds[0] && is_builtin(c->cmds[0]))
 			exec_build(c, env);
 		else if(c && c->cmds && c->cmds[0])
 			exec_cmd(c, env);

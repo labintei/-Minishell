@@ -6,7 +6,7 @@
 /*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/25 18:50:07 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/09 15:50:33 by malatini         ###   ########.fr       */
+/*   Updated: 2021/09/09 17:20:16 by malatini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,6 +162,8 @@ void		ft_putstr_fd(char const *s, int fd);
 
 void		exec_cmds_old(t_env *env);
 int			exec_cmds(t_env *env);
+int			wait_execution(t_list *cmds, t_env *env);
+int			dup_pipes(t_list *cmd);
 
 //Signals
 int			handle_signals(void);
@@ -172,12 +174,23 @@ int			setup_signals(void);
 int			disable_signals(int fork);
 
 //redirections
-char	*ft_strnewcat(char *first, char *second);
-char	*get_value_from_key(char *str, int *i);
-char	*ft_expansion(char *str, t_env *env, int i, char *read);
+char		*ft_strnewcat(char *first, char *second);
+char		*get_value_from_key(char *str, int *i);
+char		*ft_expansion(char *str, t_env *env, int i, char *read);
 //void	ft_heredoc(t_list_file *f, t_env *env)
 
 //fancy
-void    ascii_art(void);
+void   		 ascii_art(void);
+
+//utils2
+int			is_builtin(char *s);
+bool		is_piped(t_list *elem);
+bool		is_redirected(t_list *elem);
+void		*ft_memcpy(void *dest, const void *src, size_t size);
+int			list_env_len(t_list_env *env);
+
+//env2.c 
+char	**ft_env_string_tab(t_env *env);
+int		exec_build(t_list	*a, t_env *env);
 
 #endif

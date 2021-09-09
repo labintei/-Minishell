@@ -6,7 +6,7 @@
 /*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/29 20:15:32 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/09 16:38:33 by malatini         ###   ########.fr       */
+/*   Updated: 2021/09/09 17:15:58 by malatini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,12 +61,12 @@ int			dup_pipes(t_list *cmd)
 int		exec_bin(t_list *cmd, t_env *env)
 {
 	int ret;
-	char *e;
+	char **e;
 
 	(void)cmd;
 	(void)env;
 	e = ft_env_string_tab(env);
-	ret = execve(cmd->cmds[0], cmds->cmds, e);
+	ret = execve(cmd->cmds[0], cmd->cmds, e);
 	if (ret == 1)
 	{
 		exit (EXIT_FAILURE);//fonction erreur appel systeme
@@ -95,15 +95,14 @@ int		check_cmds_errors(t_list *elem, t_env *env)
 	return (ret);
 }
 
-void	start_child_process(t_list *cmds, t_env *env, bool builtin)
+void	start_child_process(t_list *elem, t_env *env, bool builtin)
 {
-	(void)cmds;
 	(void)env;
 	(void)builtin;
 	//gerer les pipes au prealable
 	if (!dup_pipes(elem))
 		exit (EXIT_FAILURE);
-	if (elem && elem->cmds && elem->cmds[0] && is_build(elem->cmds[0]))
+	if (elem && elem->cmds && elem->cmds[0] && is_builtin(elem->cmds[0]))
 		exit(exec_build(elem, env));
 	//verif si les commandes sont mauvaises - a revoir
 	check_cmds_errors(elem, env);
@@ -126,19 +125,19 @@ int		sub_exec_cmds(t_list *elem, t_env *env)
 	ret = 0;
 	if (is_piped(elem))
 	{
-		if (pipe(cmds->pipe))
+		if (pipe(elem->pipe))
 			exit (EXIT_FAILURE);//revoir fonction de sortie et exit mauvais syscall
 	}
 	if (is_redirected(elem))
 	{
-		if (ft_redirection(cmds, env) != 0)
+		if (ft_redirection(env, elem) != 0)
 			return (0);
 	}
-	cmds->pid = fork();
-	if (cmds->pid == -1)
+	elem->pid = fork();
+	if (elem->pid == -1)
 		exit (EXIT_FAILURE);//revoir erreur mauvais syscall
 	//disable_signals(true);
-	if (cmds->pid = 0)
+	if (elem->pid == 0)
 		start_child_process(elem, env, is_builtin(elem->cmds[0]));
 	//faire la fonction de close_pipes
 	return (ret);
