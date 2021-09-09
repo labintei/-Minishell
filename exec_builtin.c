@@ -6,7 +6,7 @@
 /*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/09 14:45:22 by malatini          #+#    #+#             */
-/*   Updated: 2021/09/09 14:45:42 by malatini         ###   ########.fr       */
+/*   Updated: 2021/09/09 16:13:36 by malatini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int			is_build(char *s)
 	{
 		if(ft_strcmp(s, "echo") || ft_strcmp(s, "cd") || ft_strcmp(s, "pwd") \
 		|| ft_strcmp(s, "unset") || ft_strcmp(s, "export") || \
-		ft_strcmp(s, "exit"))
+		ft_strcmp(s, "exit") || ft_strcmp(s, "env"))
 			return(1);
 	}
 	return(0);

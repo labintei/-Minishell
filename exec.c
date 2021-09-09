@@ -6,7 +6,7 @@
 /*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/29 20:15:32 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/09 15:06:08 by malatini         ###   ########.fr       */
+/*   Updated: 2021/09/09 16:38:33 by malatini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,40 +15,6 @@
 /* permet de savoir si la commande est un buuiltin
 ** ! RAJOUTER env !
 */
-
-/* retourne la longueur de la liste chainee de var d'env */
-int		list_env_len(t_list_env *env)
-{
-	int 		i;
-	t_list_env	*elem;
-
-	i = 0;
-	elem = env;
-	while (elem)
-	{
-		elem = elem->next;
-		i++;
-	}
-	return (i);
-}
-
-/* A mettre dans un fichier utils */
-void	*ft_memcpy(void *dest, const void *src, size_t size)
-{
-	unsigned char	*buf_dest;
-	unsigned char	*buf_src;
-
-	buf_dest = (unsigned char *)dest;
-	buf_src = (unsigned char *)src;
-	if (dest == src)
-		return (dest);
-	while (size--)
-	{
-		*(buf_dest++) = *(buf_src++);
-	}
-	return (dest);
-}
-
 
 /* Je l ai peut etre deja ecrit quelque part mais je me perds dans les fichiers */
 void	ft_dup_fd(t_list *cmd)
@@ -91,14 +57,24 @@ int			dup_pipes(t_list *cmd)
 	return (1);
 }
 
+/* */
 int		exec_bin(t_list *cmd, t_env *env)
 {
 	int ret;
+	char *e;
 
 	(void)cmd;
 	(void)env;
-
-	ret = 0;
+	e = ft_env_string_tab(env);
+	ret = execve(cmd->cmds[0], cmds->cmds, e);
+	if (ret == 1)
+	{
+		exit (EXIT_FAILURE);//fonction erreur appel systeme
+	}
+	else
+	{
+		clear_tab(&e);
+	}
 	return (ret);
 }
 
@@ -112,7 +88,33 @@ int		check_cmds_errors(t_list *elem, t_env *env)
 
 	if (!elem->cmds[0])
 		exit (EXIT_FAILURE);//revoir les erreurs
+	if (!ft_strcmp(elem->cmds[0], ".."))
+		printf("Erreur mauvaise commande\n");//a revoir
+	if (!ft_strcmp(elem->cmds[0], "."))
+		printf("Erreur mauvaise commande\n");//a revoir
 	return (ret);
+}
+
+void	start_child_process(t_list *cmds, t_env *env, bool builtin)
+{
+	(void)cmds;
+	(void)env;
+	(void)builtin;
+	//gerer les pipes au prealable
+	if (!dup_pipes(elem))
+		exit (EXIT_FAILURE);
+	if (elem && elem->cmds && elem->cmds[0] && is_build(elem->cmds[0]))
+		exit(exec_build(elem, env));
+	//verif si les commandes sont mauvaises - a revoir
+	check_cmds_errors(elem, env);
+	//il faudrait que les fonctions renvient toutes un int
+	if(elem && elem->cmds && elem->cmds[0] && !builtin)
+		exec_bin(elem, env);
+	/*
+	else if (builtin)
+		exec_build(cmds, env);//A revoir pour que ca fasse partie de exec bin
+	*/
+	//fermer les pipes
 }
 
 /* On exit puisqu'il s'agit du child */
@@ -122,21 +124,23 @@ int		sub_exec_cmds(t_list *elem, t_env *env)
 	int	ret;
 
 	ret = 0;
-	//gerer les pipes au prealable
-	if (!dup_pipes(elem))
-		exit (EXIT_FAILURE);
-	//
-	if (elem && elem->cmds && elem->cmds[0] && is_build(elem->cmds[0]))
-		exit(exec_build(elem, env));
-	//verif si les commandes sont mauvaises - a revoir
-	check_cmds_errors(elem, env);
-	//gerer les redir ensuite
-	//disable les signaux
-	//il faudrait que les fonctions renvient toutes un int
-	
-	else if(elem && elem->cmds && elem->cmds[0])
-		exec_bin(elem, env);
-	//fermer les pipes
+	if (is_piped(elem))
+	{
+		if (pipe(cmds->pipe))
+			exit (EXIT_FAILURE);//revoir fonction de sortie et exit mauvais syscall
+	}
+	if (is_redirected(elem))
+	{
+		if (ft_redirection(cmds, env) != 0)
+			return (0);
+	}
+	cmds->pid = fork();
+	if (cmds->pid == -1)
+		exit (EXIT_FAILURE);//revoir erreur mauvais syscall
+	//disable_signals(true);
+	if (cmds->pid = 0)
+		start_child_process(elem, env, is_builtin(elem->cmds[0]));
+	//faire la fonction de close_pipes
 	return (ret);
 }
 
@@ -152,11 +156,7 @@ int		exec_cmds(t_env *env)
 	elem = env->cmds;
 	while (elem)
 	{
-		//ret = ft_find_exec(cmds, env)
 		ret = find_exec_path(&(env->cmds->cmds[0]), env);
-		//voir retour d erreur
-	//	printf("the exec path is %s\n", c->cmds[0]);
-		//il faut que les fonctions d exec aient un retour 
 		ret = sub_exec_cmds(elem, env);
 		/* gestion des erreurs ameliorer 
 		if (ret)

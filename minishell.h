@@ -6,31 +6,30 @@
 /*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/25 18:50:07 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/09 14:32:14 by malatini         ###   ########.fr       */
+/*   Updated: 2021/09/09 15:50:33 by malatini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef		MINISHELL_H
 #define		MINISHELL_H
 
-#include	<stdlib.h>
-#include	<stdio.h>
-#include	<unistd.h>
-#include	<readline/readline.h>
-#include	<readline/history.h>
-#include	<errno.h>
-#include	<sys/wait.h>
-#include	<sys/time.h>
-#include	<sys/stat.h>
-#include	<curses.h>
-#include	<signal.h>
-#include	<fcntl.h>
-#include	<stdbool.h>
-#include	<errno.h>
+# include	<stdlib.h>
+# include	<stdio.h>
+# include	<unistd.h>
+# include	<readline/readline.h>
+# include	<readline/history.h>
+# include	<errno.h>
+# include	<sys/wait.h>
+# include	<sys/time.h>
+# include	<sys/stat.h>
+# include	<curses.h>
+# include	<signal.h>
+# include	<fcntl.h>
+# include	<stdbool.h>
+# include	<errno.h>
 
+//Revoir les erreurs - sous forme de variables globales (comme qdam)
 #define CD_ERROR 4
-/* Only global variable for tracking signals */
-//int	g_signal
 
 typedef	struct		s_list_env
 {
@@ -40,25 +39,7 @@ typedef	struct		s_list_env
 	struct	s_list_env	*previous;
 }					t_list_env;
 
-// Posibilite 1 Faire un tableau de tableau
-// Avantage structure moins lourde
-// desavantage (Peut etre moins pratique pour les redirections)
-
-/*
-typedef	struct		s_list
-{
-	char	***cmds;
-	pid_t	pid;
-	char	*cmds_type;
-	int		*fd;
-	char	type;
-	int		pipe[2];
-	struct	s_list		*previous;
-	struct	s_list		*next;
-}					t_list;
-*/
-// Posibilite 2 LIST_CHAINEES
-
+/* Attention entre les fd du file et les fd de la cmd */
 typedef	struct		s_list_file
 {
 	char					*path;
@@ -90,7 +71,7 @@ typedef	struct		s_env
 	char			**split_path;
 }					t_env;
 
-int				count_redir(char *line, int j);
+int			count_redir(char *line, int j);
 
 
 void		restart_t_list_file(t_list_file		**file);
@@ -184,6 +165,11 @@ int			exec_cmds(t_env *env);
 
 //Signals
 int			handle_signals(void);
+void		ctrl_c(int sig);
+void		ctrl_slash(int sig);
+void		ignore(int sig);
+int			setup_signals(void);
+int			disable_signals(int fork);
 
 //redirections
 char	*ft_strnewcat(char *first, char *second);
