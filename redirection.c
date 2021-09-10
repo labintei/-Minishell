@@ -58,7 +58,7 @@ int			redir_output_simple(t_list *cmd)
 			return (display_error(2));
 		*/
 	}
-	else if (f && f->redir == 'L')
+	else if (f && f->redir == 'R')
 	{
 		f->fd = open(f->path, O_CREAT | O_RDWR | O_APPEND, 0644);
 		//erreur errno
@@ -86,7 +86,7 @@ int		redir_input_simple(t_list *cmd, t_env *env)
 			return (1);
 		}
 	}
-	else if (f && f->redir == 'R')
+	else if (f && f->redir == 'L')
 		ft_heredoc(f, env);
 	return (0);
 }
