@@ -24,6 +24,11 @@ int	ft_heredoc(t_list_file *f, t_env *env)
 		line = readline("> ");
 		if (!line)
 			break;
+		if (!ma_strcmp(line, f->path))
+		{
+			free(line);
+			break ;
+		}
 		temp = line;
 		line = ft_expansion(line, env, 0, NULL);
 		free(temp);
