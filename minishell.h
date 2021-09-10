@@ -6,7 +6,7 @@
 /*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/25 18:50:07 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/10 15:19:45 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/10 16:36:26 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ typedef	struct		s_env
 	int				is_cmds;
 }					t_env;
 
-
+int			find_var_and_strlen_cmds(char *line, t_env *env, int *count);
 int			count_redir(char *line, int j);
 void		restart_t_list_file(t_list_file		**file);
 
