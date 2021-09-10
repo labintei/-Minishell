@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   view.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mahautlatinis <mahautlatinis@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/29 17:44:11 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/09 17:53:18 by malatini         ###   ########.fr       */
+/*   Updated: 2021/09/10 15:43:26 by mahautlatin      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void		view_cmds(t_list	**cmds)
 void		view_t_list_file(t_list_file	**read)
 {
 	t_list_file		*temp;
-	
+
 	restart_t_list_file(read);
 	temp = *read;
 	printf("LIST FILE :\n");
@@ -51,7 +51,7 @@ void		view_t_list_file(t_list_file	**read)
 		{
 			printf("PATH: [%s]\n", temp->path);
 		}
-		if (temp->pipe_fd && &temp->pipe_fd[0] && &temp->pipe_fd[1])
+		if (&temp->pipe_fd[0] && &temp->pipe_fd[1])
 		{
 			printf("pipe_fd[0] = [%i]\npipe_fd[1] = [%i]\n", temp->pipe_fd[0], temp->pipe_fd[1]);
 		}
@@ -67,7 +67,7 @@ void		view_t_list_file(t_list_file	**read)
 void		view_cmds(t_list	**cmds)
 {
 	t_list	*read;
-	
+
 	list_cmds_restart(cmds);
 	read = (*cmds);
 	while(read)
@@ -77,7 +77,7 @@ void		view_cmds(t_list	**cmds)
 			printf("VIEW CMDS\n");
 			view_tab(read->cmds);
 	//		printf("cmd->type: [%c]\n", read->type);
-			if (read->pipe && &read->pipe[0] && &read->pipe[1])
+			if (&read->pipe[0] && &read->pipe[1])
 				printf("cmd->pipe: [0: %i][1: %i]\n", read->pipe[0], read->pipe[1]);
 		}
 		if(read->file)
