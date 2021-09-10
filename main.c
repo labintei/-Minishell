@@ -6,7 +6,7 @@
 /*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/25 18:48:50 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/10 15:35:50 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/10 15:53:44 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,10 +148,10 @@ int		is_redir(char *line, int *i, t_env *env)
 	return(0);
 }
 
-int			find_var_and_strlen_cmds(char *line, int *j, t_env *env, int *word, int *count, int is_cmds);
+int			find_var_and_strlen_cmds(char *line, t_env *env, int *count);
 
 
-void		is_quotes_cmds(char *line, int *count,  t_env *env, int *word, int is_cmds)
+void		is_quotes_cmds(char *line, int *count,  t_env *env)
 {
 	char	c;
 
@@ -160,11 +160,11 @@ void		is_quotes_cmds(char *line, int *count,  t_env *env, int *word, int is_cmds
 	while(line[(env->i)] && line[(env->i)] != c)
 	{
 		if(c == '\"' && line[(env->i)] == '$')
-			find_var_and_strlen_cmds(line, &(env->i), env, word, count, is_cmds);
+			find_var_and_strlen_cmds(line, env, count);
 		else
 		{
-			if(is_cmds)
-				env->cmds->cmds[(*word)][(*count)] = line[(env->i)];
+			if(env->is_cmds)
+				env->cmds->cmds[(env->word)][(*count)] = line[(env->i)];
 			else
 				env->cmds->file->path[(*count)] = line[(env->i)];
 			(env->i)++;
@@ -195,9 +195,7 @@ void	ft_dup_env(t_list_env	**env, char *var, char **s)
 	}
 }
 
-// GARDER J ET COUNT EN POINTEUR
-// ENVOYER WORD ET IS-CMDS en INT
-int			find_var_and_strlen_cmds(char *line, int *j, t_env *env, int *word, int *count, int is_cmds)
+int			find_var_and_strlen_cmds(char *line, t_env *env, int *count)
 {
 	char	*new;
 	char	*stock;
@@ -206,16 +204,16 @@ int			find_var_and_strlen_cmds(char *line, int *j, t_env *env, int *word, int *c
 
 	a = 0;
 	ret = 0;
-	(*j)++;
-	while(line && line[(*j) + a] && is_alphanum(line[(*j) + a]))
+	(env->i)++;
+	while(line && line[(env->i) + a] && is_alphanum(line[(env->i) + a]))
 		a++;
 	new = malloc(sizeof(char) * (a + 1));
 	a  = 0;
-	while(line && line[(*j)] && is_alphanum(line[(*j)]))
+	while(line && line[(env->i)] && is_alphanum(line[(env->i)]))
 	{
-		new[a] = line[(*j)];
+		new[a] = line[(env->i)];
 		a++;
-		(*j)++;
+		(env->i)++;
 	}
 	new[a] = '\0';
 	printf("\nNEW %s\n", new);
@@ -224,8 +222,8 @@ int			find_var_and_strlen_cmds(char *line, int *j, t_env *env, int *word, int *c
 	a = 0;
 	while(stock && stock[a])
 	{
-		if(is_cmds)
-			env->cmds->cmds[(*word)][(*count)] = stock[a];
+		if(env->is_cmds)
+			env->cmds->cmds[(env->word)][(*count)] = stock[a];
 		else
 			env->cmds->file->path[(*count)] = stock[a];
 		(*count)++;
@@ -250,62 +248,62 @@ int		is_only_space(char *line)
 	return(0);
 }
 
-void	not_quotes_cmds(char *line, int *j, t_env *env, int *count, int *out, int *word, int is_cmds)
+void	not_quotes_cmds(char *line, t_env *env, int *count, int *out)
 {
-	while(line[(*j)] && (!(is_quotes(line[(*j)], line, (*j)))) && \
-	line[(*j)] != '|' && line[(*j)] != ' ' && line[(*j)] != '<' && \
-	line[(*j)] != '>')
+	while(line[(env->i)] && (!(is_quotes(line[(env->i)], line, (env->i)))) && \
+	line[(env->i)] != '|' && line[(env->i)] != ' ' && line[(env->i)] != '<' && \
+	line[(env->i)] != '>')
 	{
-		if(line[(*j)] && line[(*j)] == '$')
-			find_var_and_strlen_cmds(line, j, env, word, count, is_cmds);
+		if(line[(env->i)] && line[(env->i)] == '$')
+			find_var_and_strlen_cmds(line, env, count);
 		else
 		{
-			if(is_cmds == 1)
-				env->cmds->cmds[(*word)][(*count)] = line[(*j)];
+			if(env->is_cmds == 1)
+				env->cmds->cmds[(env->word)][(*count)] = line[(env->i)];
 			else
-				env->cmds->file->path[(*count)] = line[(*j)];
+				env->cmds->file->path[(*count)] = line[(env->i)];
 			(*count)++;
-			(*j)++;
+			env->i++;
 		}
 	}
-	if(line[(*j)] && line[(*j)] == '|')
+	if(line[(env->i)] && line[(env->i)] == '|')
 		*out = 1;
-	if(line[(*j)] && (line[(*j)] == '<' || line[(*j)] == '>'))
+	if(line[(env->i)] && (line[(env->i)] == '<' || line[(env->i)] == '>'))
 		*out = 1;
 
 }
 
-void		is_word_cmds(char *line, int *i, t_env *env, int *word, int *is_cmds)
+void		is_word_cmds(char *line, int *i, t_env *env)
 {
 	int		count;
 	int		out;
 
 	out  = 0;
 	count = 0;
-	if((*is_cmds))
+	if((env->is_cmds))
 	{
 		if(!env->cmds->cmds)
 			env->cmds->cmds = malloc(sizeof(char *) * (count_word(line, i) - nb_redir(line, (*i)) + 1));
-		env->cmds->cmds[(*word)] = malloc(sizeof(char) * (count_char(line, (*i), env) + 1));
+		env->cmds->cmds[(env->word)] = malloc(sizeof(char) * (count_char(line, (*i), env) + 1));
 	}
 	if(line[(*i)] && line[(*i)] != '|' && line[(*i)] != ' ')
 	{
 		while(line[(*i)] && line[(*i)] != ' ' && out == 0)
 		{
 			if(is_quotes(line[(*i)], line, (*i)))
-				is_quotes_cmds(line, &count, env, word, *is_cmds);
+				is_quotes_cmds(line, &count, env);
 			else
-				not_quotes_cmds(line, i, env, &count, &out, word, *is_cmds);
+				not_quotes_cmds(line, env, &count, &out);
 		}
 	}
-	if((*is_cmds))
-		env->cmds->cmds[(*word)][count] = '\0';
+	if((env->is_cmds))
+		env->cmds->cmds[(env->word)][count] = '\0';
 	else
 		env->cmds->file->path[count] = '\0';
-	if((*is_cmds))
-		(*word)++;
-	if((*is_cmds) == 0)
-		(*is_cmds) = 1;
+	if((env->is_cmds))
+		(env->word)++;
+	if((env->is_cmds) == 0)
+		(env->is_cmds) = 1;
 }
 
 int		count_redir(char *line, int j)
@@ -431,7 +429,7 @@ void	parse_line(t_env *env, char *line)
 				env->is_cmds = 0;
 			}
 			else
-				is_word_cmds(line, &(env->i), env, &(env->word), &(env->is_cmds));
+				is_word_cmds(line, &(env->i), env);
 		}
 	}
 	if(env->is_cmds && env->cmds && env->cmds->cmds)
