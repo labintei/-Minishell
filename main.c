@@ -6,7 +6,7 @@
 /*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/25 18:48:50 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/09 19:20:13 by malatini         ###   ########.fr       */
+/*   Updated: 2021/09/10 13:35:26 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,47 +18,7 @@ void		restart_t_list_file(t_list_file		**file)
 		(*file) = (*file)->previous;
 }
 
-
-//void		list_cmds_restart(t_list	**cmds)
-//int				count_redir(char *line, int j);
-/*
-void		view_t_list_file(t_list_file	**read)
-{
-	t_list_file		*temp;
-	
-	restart_t_list_file(read);
-	temp = *read;
-	printf("\nLIST FILE PATH :\n");
-	while(temp)
-	{
-		if(temp && temp->path)
-		{
-			view_tab(temp->path);
-			printf("\n");
-		}
-		temp = temp->next;
-	}
-}*/
-
 int			count_word_before_redir(char	*line, int  i);
-
-/*
-void	view_all_redir(t_env *env)
-{
-	t_list		*r;
-	int			i;
-
-	i = 0;
-	list_cmds_restart(&(env->cmds));
-	r = (env->cmds);
-	while(r)
-	{
-		printf("\nCmds %d\n", i);
-		printf("\nLes differents types %s\n", r->cmds_type);
-		r = r->next;
-		i++;
-	}
-}*/
 
 void	add_list_file(t_list_file **file, char *line, int i, char	c, t_env *env)
 {
@@ -153,7 +113,9 @@ void		ajout_cmds(t_env *env, char *line, int *i)
 	add_cmds(&(env->cmds));
 	if(!(env->cmds->file))
 		return ;
+	env->cmds->cmds = NULL;
 	env->cmds->file = NULL;
+//	if(count_word(line, i) + 1 > nb_redir(line, (*i)))
 	env->cmds->cmds = malloc(sizeof(char *) * (count_word(line, i) + 1 - nb_redir(line, (*i))));
 }
 
@@ -282,6 +244,17 @@ int			find_var_and_strlen_cmds(char *line, int *j, t_env *env, int *word, int *c
 	return(ret);
 }
 
+int			is_only_space(char *line)
+{
+	int  i;
+
+	i = 0;
+	while(line && line[i] == ' ')
+		i++;
+	if(line[i] == '\0')
+		return(1);
+	return(0);
+}
 
 
 void		not_quotes_cmds(char *line, int *j, t_env *env, int *count, int *out, int *word, int is_cmds)
@@ -467,9 +440,15 @@ void		parse_line(t_env *env, char *line)
 	int	word;
 	int	is_cmds;
 
+	if(!line || line[0] == '\0' || is_only_space(line))
+	{
+		env->cmds = NULL;
+		return ;
+	}
 //	if(env->cmds)
 //		view_cmds(&(env->cmds));
 	env->cmds = NULL;
+//	env->cmds->cmds = NULL;
 	i = 0;
 	word = 0;
 	is_cmds = 1;
@@ -510,8 +489,11 @@ int			start_parse(t_env	*env)
 			parse_line(env, line);
 //			view_all_redir(env);
 //			ft_redirection(env);
-			exec_cmds(env);
-			clear_cmds(&(env->cmds));
+			if(env->cmds)
+			{
+				exec_cmds(env);
+				clear_cmds(&(env->cmds));
+			}
 		}
 		add_history(line);
 		if (!line)

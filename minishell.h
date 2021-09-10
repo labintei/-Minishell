@@ -6,7 +6,7 @@
 /*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/25 18:50:07 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/09 19:45:13 by malatini         ###   ########.fr       */
+/*   Updated: 2021/09/10 13:17:47 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -185,4 +185,7 @@ int			ma_strcmp(char *s1, char *s2);
 char		*ft_strnewcat(char *first, char *second);
 char 		*ft_expansion(char *str, t_env *env, int i, char *read);
 char		*get_value_from_key(char *str, int *i);
+
+int			count_word_before_redir(char	*line, int  i);
+
 #endif
