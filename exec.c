@@ -24,9 +24,9 @@ void	ft_dup_fd(t_list *cmd)
 	f = cmd->file;
 	if (f)
 	{
-		if (f->redir == '>' || f->redir == 'L')
+		if (f->redir == '>' || f->redir == 'R')
 			dup2(f->fd, 1);
-		else if (f->redir == '<' || f->redir == 'R')
+		else if (f->redir == '<' || f->redir == 'L')
 		{
 			if (f->redir == '<')
 			{
