@@ -6,11 +6,11 @@
 /*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/09 18:30:45 by malatini          #+#    #+#             */
-/*   Updated: 2021/09/09 19:37:08 by malatini         ###   ########.fr       */
+/*   Updated: 2021/09/10 19:02:50 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 char	*ft_strnewcat(char *first, char *second)
 {

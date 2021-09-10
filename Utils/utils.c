@@ -6,11 +6,11 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/26 11:54:22 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/02 13:14:08 by malatini         ###   ########.fr       */
+/*   Updated: 2021/09/10 19:02:26 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 void		ft_strcpy(char **s, char *copy)
 {

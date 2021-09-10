@@ -6,11 +6,11 @@
 /*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/29 20:20:33 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/08 20:58:21 by malatini         ###   ########.fr       */
+/*   Updated: 2021/09/10 19:01:30 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 //voir les retours
 int		find_exec_path(char **path, t_env *env)

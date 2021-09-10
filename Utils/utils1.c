@@ -6,11 +6,11 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/26 12:22:03 by labintei          #+#    #+#             */
-/*   Updated: 2021/08/26 19:30:46 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/10 19:02:33 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 int		ft_strlen_char(char	*s, char c)
 {

@@ -1,40 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cmds.c                                             :+:      :+:    :+:   */
+/*   fancy.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/08/26 14:26:15 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/09 13:34:55 by malatini         ###   ########.fr       */
+/*   Created: 2021/09/08 17:52:59 by malatini          #+#    #+#             */
+/*   Updated: 2021/09/10 19:02:10 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
-void		add_cmds(t_list		**cmds)
+void    ascii_art(void)
 {
-	t_list	*new;
-
-	new = malloc(sizeof(t_list));
-	if(!new)
-		return ;
-	new->type = '0';
-	new->next = NULL;
-	new->cmds = NULL;
-	new->pipe[0] = 0;
-	new->pipe[1] = 1;
-	if((*cmds))
-	{
-		(*cmds)->next = new;
-//		new->pipe[0] = 0;
-//		new->pipe[1] = 1;
-		new->previous = (*cmds);
-		(*cmds) = (*cmds)->next;
-	}
-	else
-	{
-		new->previous = NULL;
-		(*cmds) = new;
-	}
+    printf("\033[1;36m        _       _     _          _ _ \n");
+    printf("  /\\/\\ (_)_ __ (_)___| |__   ___| | |\n");
+    printf(" /    \\| | '_ \\| / __| '_ \\ / _ \\ | |\n");
+    printf("/ /\\/\\ \\ | | | | \\__ \\ | | |  __/ | |\n");
+    printf("\\/    \\/_|_| |_|_|___/_| |_|\\___|_|_|\033[0m\n\n\n");
 }

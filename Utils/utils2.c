@@ -6,11 +6,11 @@
 /*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/09 15:34:11 by malatini          #+#    #+#             */
-/*   Updated: 2021/09/09 17:37:46 by malatini         ###   ########.fr       */
+/*   Updated: 2021/09/10 19:02:41 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 /* retourne la longueur de la liste chainee de var d'env */
 int		list_env_len(t_list_env *env)

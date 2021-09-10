@@ -6,11 +6,11 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/31 16:00:53 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/05 18:40:00 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/10 19:01:47 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 #include <stdint.h>
 
 /* Attention aux différences Mac/Linux

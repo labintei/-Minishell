@@ -6,11 +6,11 @@
 /*   By: mahautlatinis <mahautlatinis@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/29 17:44:11 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/10 15:43:26 by mahautlatin      ###   ########.fr       */
+/*   Updated: 2021/09/10 19:02:57 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 void		list_cmds_restart(t_list	**cmds)
 {

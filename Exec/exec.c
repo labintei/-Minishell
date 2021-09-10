@@ -6,11 +6,11 @@
 /*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/29 20:15:32 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/09 19:42:03 by malatini         ###   ########.fr       */
+/*   Updated: 2021/09/10 18:58:51 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 /* permet de savoir si la commande est un buuiltin
 ** ! RAJOUTER env !

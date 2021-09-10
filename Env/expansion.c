@@ -6,11 +6,11 @@
 /*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/09 18:31:49 by malatini          #+#    #+#             */
-/*   Updated: 2021/09/09 18:31:56 by malatini         ###   ########.fr       */
+/*   Updated: 2021/09/10 18:58:31 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 /* retourne la valeur d'une cle (variable d'environnement)
 ** Necessaire pour l'expansion.

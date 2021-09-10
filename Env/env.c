@@ -6,11 +6,11 @@
 /*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/26 11:54:03 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/09 19:45:53 by malatini         ###   ########.fr       */
+/*   Updated: 2021/09/10 18:37:50 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 //Besoin pour Mahaut
 t_list_env	*sub_add_arg_2(char *key, char *value)

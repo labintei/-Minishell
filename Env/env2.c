@@ -6,11 +6,11 @@
 /*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/09 14:52:39 by malatini          #+#    #+#             */
-/*   Updated: 2021/09/09 17:20:13 by malatini         ###   ########.fr       */
+/*   Updated: 2021/09/10 18:37:41 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 /* Va servir pour le char ** a envoyer a execve */
 char	*flatten_env_var(t_list_env *env, t_env *mem)

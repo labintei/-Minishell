@@ -6,11 +6,11 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/31 15:29:51 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/10 13:38:29 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/10 19:02:01 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 void		clear_tab(char ***s)
 {

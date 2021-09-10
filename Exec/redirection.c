@@ -6,11 +6,11 @@
 /*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/31 19:23:59 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/09 19:04:23 by malatini         ###   ########.fr       */
+/*   Updated: 2021/09/10 19:01:38 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 /* revoir les signaux pour le heredoc pour mieux coller au bash */
 int	ft_heredoc(t_list_file *f, t_env *env)

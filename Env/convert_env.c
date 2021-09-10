@@ -6,11 +6,11 @@
 /*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/26 20:55:33 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/09 13:09:15 by malatini         ###   ########.fr       */
+/*   Updated: 2021/09/10 18:37:56 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 char			*ft_dup_var_val(t_list_env	*env)
 {
