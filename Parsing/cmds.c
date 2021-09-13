@@ -6,7 +6,7 @@
 /*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/26 14:26:15 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/13 17:53:35 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/13 21:56:08 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ void		add_cmds(t_list		**cmds)
 	new->cmds = NULL;
 	new->pipe[0] = 0;
 	new->pipe[1] = 1;
+	new->is_piped = 0;
 	if((*cmds))
 	{
 		(*cmds)->next = new;

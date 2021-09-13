@@ -6,7 +6,7 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/13 13:45:00 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/13 18:04:59 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/13 22:09:27 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ int			wait_exec_cmds(t_list		*cmds)
 	ret = 0;
 	while(cmds)
 	{
-		if(cmds->pid != 0)
+		if(cmds && cmds->cmds && cmds->cmds[0] && !is_builtin(cmds->cmds[0]))
 		{
 			waitpid(cmds->pid, &status, 0);
 			if(WIFEXITED(status))
@@ -101,7 +101,62 @@ int			wait_exec_cmds(t_list		*cmds)
 // 
 // Il dup les pipes et apres seulemnt il fait les dup_fd
 //
+// Je crois que tu ai oblige d attendre les pid
+// AUTRE PROBLEME 
+// dans start child ligne 48 IL Y A UN CLOSE CMDS->PIPES[0]
+// JUSTE APRES DUP_PIPES
+// utilise EXIT
 //
+//
+
+int			exec_cmd(t_list *cmd, t_env *env)
+{
+	pid_t		pid;
+	int			ret;
+	int			is_piped;
+
+	is_piped = 0;
+	ret = 1;
+	if(cmd->type == '|' || (cmd->previous && cmd->previous->type == '|'))
+	{
+		if(pipe(cmd->pipe))
+			printf("\nErreur\n");
+		is_piped = 1;
+		cmd->is_piped = 1;
+	}
+	if(cmd->file)
+		ft_redirection(env, cmd);
+	pid = fork();
+	cmd->pid = pid;
+	if(pid == 0 && cmd->pid == 0)
+	{
+		if(cmd->type == '|' && dup2(cmd->pipe[1], 1) < 0)
+			printf("\nErreur\n");
+	//  MAYBE THE SAME
+	//	if(cmd->previous && cmd->previous->is_piped && dup2(cmd->previous->pipe[0], 0) < 0)
+		if(cmd->previous && cmd->previous->type == '|' && dup2(cmd->previous->pipe[0], 0) < 0)
+			printf("\nErreur\n");
+		if(cmd->file)
+			ft_dup_fd2(cmd->file);
+		if(is_piped)
+			close(cmd->pipe[0]);
+		if(cmd->cmds)
+		{
+			if(is_builtin(cmd->cmds[0]))
+				exit(ret = exec_build(cmd, env));
+			else
+				exit(ret = exec_other(cmd, env));
+		//	if(is_builtin(cmd->cmds[0]))
+		//		ret = exec_build(cmd, env);
+		//	else
+		//		ret = exec_other(cmd, env);
+		}
+	}
+	close_pipes(cmd, is_piped);
+	return(ret);
+}
+
+/*
 int			exec_cmd(t_list *cmd, t_env *env)
 {
 	pid_t		pid;
@@ -118,31 +173,35 @@ int			exec_cmd(t_list *cmd, t_env *env)
 	}
 	if(cmd->file)
 		ft_redirection(env, cmd);
-	pid = fork();
-	cmd->pid = pid;
-//	if(cmd->pid == -1)
-//		printf("\nErreur\n");
-	if(pid == 0 && cmd->pid == 0)
+	if(cmd->type == '|' && dup2(cmd->pipe[1], 1) < 0)
+		printf("\nErreur\n");
+	if(cmd->previous && cmd->previous->type == '|' && dup2(cmd->previous->pipe[0], 0) < 0)
+		printf("\nErreur\n");
+	if(cmd->file)
+		ft_dup_fd2(cmd->file);
+	if(is_piped)
+		close(cmd->pipe[0]);
+	if(cmd && cmd->cmds[0] && is_builtin(cmd->cmds[0]))
 	{
-		// DUP PIPES
-		if(cmd->type == '|' && dup2(cmd->pipe[1], 1) < 0)
-			printf("\nErreur\n");
-		if(cmd->previous && cmd->previous->type == '|' && dup2(cmd->previous->pipe[0], 0) < 0)
-			printf("\nErreur\n");
-		if(cmd->file)
-		// END
-			ft_dup_fd2(cmd->file);
-		if(cmd->cmds)
+		(ret = exec_build(cmd, env));
+	}
+	else
+	{
+		pid = fork();
+		cmd->pid = pid;
+		if(pid == 0 && cmd->pid == 0)
 		{
-			if(is_builtin(cmd->cmds[0]))
-				ret = exec_build(cmd, env);
-			else
-				ret = exec_other(cmd, env);
+			if(cmd->cmds)
+			{
+				(ret = exec_other(cmd, env));
+			}
 		}
 	}
 	close_pipes(cmd, is_piped);
 	return(ret);
 }
+*/
+
 
 int			exec_cmds(t_env *env)
 {
