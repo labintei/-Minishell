@@ -6,7 +6,7 @@
 /*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/25 18:50:07 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/10 16:36:26 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/13 15:02:00 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,10 +73,12 @@ typedef	struct		s_env
 	// UN INT WORD (correspondra au mot dans cmds)
 	// UN INT I (correspondra a l index qu on utilisera pour parcourir line[i])
 	// UN INT CMDS(dira si correspond a une cmds)
+	int				last_ret;
 	int				word;
 	int				i;
 	int				is_cmds;
 }					t_env;
+
 
 int			find_var_and_strlen_cmds(char *line, t_env *env, int *count);
 int			count_redir(char *line, int j);
@@ -166,6 +168,7 @@ int			setup_signals(void);
 int			disable_signals(int fork);
 
 // redirection
+int			exec_other(t_list *c, t_env *env);
 int			ft_redirection(t_env *env, t_list *cmd);
 int			find_exec_path(char **path, t_env *env);
 void		list_cmds_restart(t_list	**cmds);
@@ -194,5 +197,7 @@ char 		*ft_expansion(char *str, t_env *env, int i, char *read);
 char		*get_value_from_key(char *str, int *i);
 
 int			count_word_before_redir(char	*line, int  i);
+
+void		ft_dup_fd2(t_list_file *cmd);
 
 #endif

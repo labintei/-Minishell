@@ -6,7 +6,7 @@
 /*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/29 20:15:32 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/10 18:58:51 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/13 16:10:05 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,31 @@
 */
 
 /* Je l ai peut etre deja ecrit quelque part mais je me perds dans les fichiers */
+void	ft_dup_fd2(t_list_file *cmd)
+{
+	t_list_file		*temp;
+
+	temp = cmd;
+	while(temp)
+	{
+		if(temp->redir == '>' || temp->redir == 'R')
+			dup2(temp->fd, 1);
+		else
+		{
+			if(temp->redir == '<')
+			{
+				dup2(temp->fd, 0);
+			}
+			else
+			{
+				dup2(temp->pipe_fd[0], 0);
+				close(temp->pipe_fd[0]);
+			}
+		}
+		temp = temp->next;
+	}
+}
+
 void	ft_dup_fd(t_list *cmd)
 {
 	t_list_file *f;
@@ -77,7 +102,7 @@ int		exec_bin(t_list *cmd, t_env *env)
 	}
 	return (ret);
 }
-
+/*
 int	ma_strcmp(char *s1, char *s2)
 {
 	int	i;
@@ -86,7 +111,7 @@ int	ma_strcmp(char *s1, char *s2)
 	while (s1[i] == s2[i] && s1[i] != '\0' && s2[i] != '\0')
 		i++;
 	return (s1[i] - s2[i]);
-}
+}*/
 
 int		check_cmds_errors(t_list *elem, t_env *env)
 {

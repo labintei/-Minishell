@@ -6,11 +6,23 @@
 /*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/09 18:30:45 by malatini          #+#    #+#             */
-/*   Updated: 2021/09/10 19:02:50 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/13 16:10:17 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+int	ma_strcmp(char *s1, char *s2)
+{
+	int	i;
+
+	i = 0;
+	while (s1[i] == s2[i] && s1[i] != '\0' && s2[i] != '\0')
+		i++;
+	return (s1[i] - s2[i]);
+}
+
+
 
 char	*ft_strnewcat(char *first, char *second)
 {
