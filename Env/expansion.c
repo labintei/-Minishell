@@ -6,7 +6,7 @@
 /*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/09 18:31:49 by malatini          #+#    #+#             */
-/*   Updated: 2021/09/10 18:58:31 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/13 21:05:32 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,15 +45,17 @@ char	*get_value_from_key(char *str, int *i)
 }
 
 /* A tester - fonction deja faite 
-** Fonction principale qui gere l expansion.
+** Fonction principale qui gere l expansion
 ?*/
 char *ft_expansion(char *str, t_env *env, int i, char *read)
 {
 	char 	*key;
 	char	*value;
 	int		j;
+	int		seen;
 
 	(void)env;
+	seen = 0;
 	while (str[i])
 	{
 		if (str[i] == '$')
@@ -73,5 +75,7 @@ char *ft_expansion(char *str, t_env *env, int i, char *read)
 		}
 		i++;
 	}
+	if (seen == 0 && !str[i])
+		return (str);
 	return (read);
 }

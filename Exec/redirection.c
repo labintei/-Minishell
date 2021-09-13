@@ -6,7 +6,7 @@
 /*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/31 19:23:59 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/10 19:01:38 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/13 20:00:02 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,9 @@ int	ft_heredoc(t_list_file *f, t_env *env)
 			break ;
 		}
 		temp = line;
+		printf("\n%s\n", line);
 		line = ft_expansion(line, env, 0, NULL);
+		printf("\n%s\n", line);
 		free(temp);
 		write(f->pipe_fd[1], line, ft_strlen(line));
 		write(f->pipe_fd[1], "\n", 1);
