@@ -6,7 +6,7 @@
 /*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/25 18:50:07 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/13 21:55:41 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/15 16:34:34 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ typedef	struct		s_list
 	char			**cmds;
 	t_list_file		*file;
 	pid_t	pid;
+	int		is_fork;
 //	char			*cmds_type;
 //	int				*fd;
 //	char	*path;

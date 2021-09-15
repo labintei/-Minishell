@@ -1,0 +1,43 @@
+
+Je fais des test dans Bash pour ;ieux comprendre le fonction des exit ou cd dans certains type de comportements
+
+
+________________________________________________________________________________
+PIPE ET EXECUTON DE CD
+________________________________________________________________________________
+
+cd New_doc | ls -a
+
+ls -a (sur le documents courant dans lequel je me trouve)
+Je n ai pas changer de position
+
+
+ls -a | cd New_doc
+
+Ne fais pas de ls -a (ligne vide)
+
+________________________________________________________________________________
+
+PIPE ET EXECUTION D EXIT
+________________________________________________________________________________
+
+exit | ls -a
+
+fais un ls -a sur le repertoire courant
+
+ls -a | exit
+
+Fais rien ligne vide
+
+On va donc partir d un principe de base
+On fork() uniqument quand on pipe 
+
+Si il n y a pas de pipe ill n y a donc as de processus "enfant" et les 
+fonctions cd et exit s execute alors sur le processus parent
+
+Neamoins les fonction exec_other nessecite obligatoirement un processus enfant 
+fork() pour pouvoir s executer
+
+________________________________________________________________________________
+
+

@@ -6,17 +6,12 @@
 /*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/29 20:15:32 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/13 16:10:05 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/15 15:51:18 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-/* permet de savoir si la commande est un buuiltin
-** ! RAJOUTER env !
-*/
-
-/* Je l ai peut etre deja ecrit quelque part mais je me perds dans les fichiers */
 void	ft_dup_fd2(t_list_file *cmd)
 {
 	t_list_file		*temp;
@@ -42,34 +37,6 @@ void	ft_dup_fd2(t_list_file *cmd)
 	}
 }
 
-void	ft_dup_fd(t_list *cmd)
-{
-	t_list_file *f;
-
-	f = cmd->file;
-	if (f)
-	{
-		if (f->redir == '>' || f->redir == 'R')
-			dup2(f->fd, 1);
-		else if (f->redir == '<' || f->redir == 'L')
-		{
-			if (f->redir == '<')
-			{
-				dup2(f->fd, 0);
-			}
-			else
-			{
-				dup2(f->pipe_fd[0], 0);
-				close(f->pipe_fd[0]);
-			}
-		}
-	}
-}
-
-/* Demander a lauranne tom :
-** On ne fait un dup que sur la commande qui porte le | ou aussi celle qui suit?
-** on veut plutot faire des dup du file ? A tester
-*/
 int			dup_pipes(t_list *cmd)
 {
 	if (cmd && cmd->type == '|')
@@ -77,8 +44,7 @@ int			dup_pipes(t_list *cmd)
 		if (dup2(cmd->pipe[1], 1) < 0)
 			exit (EXIT_FAILURE);//Fonction de free et exit en cas d appel systeme qui 
 	}	
-	ft_dup_fd(cmd);
-//	view_cmds(&cmd);
+	ft_dup_fd2(cmd);
 	return (1);
 }
 
@@ -102,16 +68,6 @@ int		exec_bin(t_list *cmd, t_env *env)
 	}
 	return (ret);
 }
-/*
-int	ma_strcmp(char *s1, char *s2)
-{
-	int	i;
-
-	i = 0;
-	while (s1[i] == s2[i] && s1[i] != '\0' && s2[i] != '\0')
-		i++;
-	return (s1[i] - s2[i]);
-}*/
 
 int		check_cmds_errors(t_list *elem, t_env *env)
 {
@@ -133,8 +89,6 @@ void	start_child_process(t_list *elem, t_env *env, bool builtin)
 {
 	(void)env;
 	(void)builtin;
-	//gerer les pipes au prealable
-
 
 	if (!dup_pipes(elem))
 	{
@@ -142,15 +96,11 @@ void	start_child_process(t_list *elem, t_env *env, bool builtin)
 	}
 	if (elem && elem->cmds && elem->cmds[0] && builtin)
 		exit(exec_build(elem, env));
-	//verif si les commandes sont mauvaises - a revoir
 	check_cmds_errors(elem, env);
-	//il faudrait que les fonctions renvient toutes un int
 	if (elem && elem->cmds && elem->cmds[0] && !builtin)
 	{
-	//	printf("on va executer\n");
 		exec_bin(elem, env);
 	}
-	//fermer les pipes
 }
 
 void	close_fd(t_list *elem)
@@ -217,9 +167,6 @@ int		sub_exec_cmds(t_list *elem, t_env *env)
 	return (ret);
 }
 
-/* Nouvelle version d exec_cmds */
-/* si il n y a pas de redirection alors t_list_file est nul */
-/* Faire une condition pour appeler ft_redirection */
 int		exec_cmds(t_env *env)
 {
 	int		ret;

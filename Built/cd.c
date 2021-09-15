@@ -6,7 +6,7 @@
 /*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/30 15:01:00 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/09 19:49:08 by malatini         ###   ########.fr       */
+/*   Updated: 2021/09/15 17:30:37 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,22 +32,31 @@ char	*find_value(t_list_env *env, char *key)
 }
 
 /* Prints current cd errors */
-void	cd_errors(char *path, int err, bool fork)
+int		cd_errors(t_list *cmds, int err, bool fork, char *path)
 {
-	if (!fork)
-		return ;
-	if (err == ENOTDIR)
+	if (fork == 1)
+		return(1);
+	if(cmds->cmds && cmds->cmds[0] && cmds->cmds[1] && cmds->cmds[2])
+	{
+		ft_putstr_fd("cd: ", 2);
+		ft_putstr_fd(": trop d'arguments\n", 2);
+		return(1);
+	}
+	else if (err == ENOTDIR)
 	{
 		ft_putstr_fd("cd: ", 2);
 		ft_putstr_fd(path, 2);
 		ft_putstr_fd(": Not a directory\n", 2);
+		return(1);
 	}
 	else if (err == ENOENT)
 	{
 		ft_putstr_fd("cd: ", 2);
 		ft_putstr_fd(path, 2);
 		ft_putstr_fd(": No such file or directory\n", 2);
+		return(1);
 	}
+	return(0);
 }
 
 /* Finds the target path for cd depending on the arguments */
@@ -93,8 +102,11 @@ int	cd(t_list *cmds, t_list_env *env, bool fork)
 		return (CD_ERROR);
 	previous = getcwd(NULL, 0);
 	ret = chdir(current);
-	if (ret)
-		cd_errors(current, errno, fork);
+	if (cd_errors(cmds, errno, fork, current))
+	{
+		free(previous);
+		return(ret);
+	}
 	else
 	{
 		if (previous)
