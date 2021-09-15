@@ -40,4 +40,17 @@ fork() pour pouvoir s executer
 
 ________________________________________________________________________________
 
+Plus complique que ca
+
+Par default bool fork toujour egale a 1 // Pourquoi l utilite de cette variable
+
+a NOTER QUE DANS LA FONCTION 
+exit_built toujours effectuer avant de fermer le pipe 
+
+// if(cmds->is_piped)
+//		close(cmds->pipes[0]);
+// Et relance execve
+//     Mais pas tres propres parce que relance ls et autre commandes 
+		au niveau des built in
+
 

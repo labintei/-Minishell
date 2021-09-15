@@ -6,7 +6,7 @@
 /*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/30 15:01:00 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/15 17:30:37 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/15 19:03:35 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,7 @@ char	*find_value(t_list_env *env, char *key)
 /* Prints current cd errors */
 int		cd_errors(t_list *cmds, int err, bool fork, char *path)
 {
-	if (fork == 1)
-		return(1);
+	(void)fork;
 	if(cmds->cmds && cmds->cmds[0] && cmds->cmds[1] && cmds->cmds[2])
 	{
 		ft_putstr_fd("cd: ", 2);
@@ -91,7 +90,7 @@ char	*find_path_1(t_list *cmds, t_list_env *env, bool fork)
 }
 
 /* executes the cd commands */
-int	cd(t_list *cmds, t_list_env *env, bool fork)
+int		cd(t_list *cmds, t_list_env *env, bool fork)
 {
 	int		ret;
 	char	*previous;
@@ -102,21 +101,16 @@ int	cd(t_list *cmds, t_list_env *env, bool fork)
 		return (CD_ERROR);
 	previous = getcwd(NULL, 0);
 	ret = chdir(current);
-	if (cd_errors(cmds, errno, fork, current))
-	{
-		free(previous);
+	if(!fork)
 		return(ret);
-	}
-	else
-	{
-		if (previous)
-			env_manager("OLDPWD", previous, env);
-		current = getcwd(NULL, 0);
-		if (current == NULL)
-			return (CD_ERROR);
-		env_manager("PWD", current, env);
-		free(current);
-	}
+	cd_errors(cmds, errno, fork, current);
+	if (previous)
+		env_manager("OLDPWD", previous, env);
+	current = getcwd(NULL, 0);
+	if (current == NULL)
+		return (CD_ERROR);
+	env_manager("PWD", current, env);
+	free(current);
 	free(previous);
 	return (ret);
 }

@@ -6,7 +6,7 @@
 /*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/30 15:38:22 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/09 19:38:55 by malatini         ###   ########.fr       */
+/*   Updated: 2021/09/15 19:07:30 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,8 +68,6 @@ bool	ft_str_is_digit(char *str)
 
 int		exit_build(t_env *env, t_list *cmds, bool fork)
 {
-	(void)fork;
-
 	int	ret;
 	fork = 1;
 	if (cmds && cmds->cmds[0] && cmds->cmds[1] && cmds->cmds[2]/*cmds_length(cmds) > 2 && fork*/)

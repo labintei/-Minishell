@@ -6,7 +6,7 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/13 13:45:00 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/15 16:42:11 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/15 20:28:06 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,40 +112,47 @@ int			exec_cmd(t_list *cmd, t_env *env)
 	}
 	if(cmd->file)
 		ft_redirection(env, cmd);
-	if(cmd->type == '|' || (cmd->previous && cmd->previous->type == '|'))
+	//if(cmd->type == '|' || (cmd->previous && cmd->previous->type == '|'))
+	//{
+	pid = fork();
+	cmd->pid = pid;
+	cmd->is_fork = 1;
+	if(pid == 0 && cmd->pid == 0)
 	{
-		pid = fork();
-		cmd->pid = pid;
-		cmd->is_fork = 1;
-		if(pid == 0 && cmd->pid == 0)
+		if(cmd->type == '|' && dup2(cmd->pipe[1], 1) < 0)
+			printf("\nErreur\n");
+		if(cmd->previous && cmd->previous->type == '|' && dup2(cmd->previous->pipe[0], 0) < 0)
+			printf("\nErreur\n");
+		if(cmd->file)
+			ft_dup_fd2(cmd->file);
+		if(is_builtin(cmd->cmds[0]))
+			exit(ret = exec_build(cmd, env));
+		if(is_piped)
+			close(cmd->pipe[0]);
+		if(cmd->cmds /*&& !(is_builtin(cmd->cmds[0]))*/)
 		{
-			if(cmd->type == '|' && dup2(cmd->pipe[1], 1) < 0)
-				printf("\nErreur\n");
-			if(cmd->previous && cmd->previous->type == '|' && dup2(cmd->previous->pipe[0], 0) < 0)
-				printf("\nErreur\n");
-			if(cmd->file)
-				ft_dup_fd2(cmd->file);
-			if(is_piped)
-				close(cmd->pipe[0]);
-			if(cmd->cmds)
-			{
-				if(is_builtin(cmd->cmds[0]))
-					exit(ret = exec_build(cmd, env));
-				else
-					exit(ret = exec_other(cmd, env));
-			}
+			exit(ret = exec_other(cmd, env));
 		}
-	}
-	else
+	}/*
+	if(pid != 0)
 	{
-		if(cmd->cmds)
-		{
-			if(is_builtin(cmd->cmds[0]))
-				exit(ret = exec_build(cmd, env));
-			else
-				exit(ret = exec_other(cmd, env));
-		}
-	}
+		if(cmd->cmds && cmd->cmds[0] && (ma_strcmp(cmd->cmds[0], "cd") || ma_strcmp(cmd->cmds[0], "exit")))
+			ret = exec_build(cmd, env);
+	}*/
+//	}
+//	else
+//	{
+//		pid = fork();
+//		cmd->pid = pid;
+//		cmd->is_fork = 1;
+//		if(pid == 0 && cmd->cmds)
+//		{
+//			if(is_builtin(cmd->cmds[0]))
+//				exit(ret = exec_build(cmd, env));
+//			else
+//				exit(ret = exec_other(cmd, env));
+//		}
+//	}
 	close_pipes(cmd, is_piped);
 	return(ret);
 }
