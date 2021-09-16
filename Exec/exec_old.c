@@ -6,13 +6,13 @@
 /*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/09 14:39:06 by malatini          #+#    #+#             */
-/*   Updated: 2021/09/15 16:37:21 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/16 10:23:54 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 /* Sauvegarde de l ancien code separee pour plus de lisibilite */
 #include "../minishell.h"
-
+/*
 int		exec_other(t_list	*c, t_env *env)
 {
 	char	**test;
@@ -43,4 +43,4 @@ int		exec_other(t_list	*c, t_env *env)
 		}
 	}
 	return(ret);
-}
+}*/

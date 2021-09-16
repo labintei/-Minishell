@@ -6,13 +6,14 @@
 /*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/25 18:50:07 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/15 16:34:34 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/16 11:18:09 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef		MINISHELL_H
 #define		MINISHELL_H
 
+#include	<limits.h>
 # include	<stdlib.h>
 # include	<stdio.h>
 # include	<unistd.h>

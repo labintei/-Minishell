@@ -6,7 +6,7 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/13 13:45:00 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/15 20:28:06 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/16 10:37:38 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,39 @@
 // redirection (NULL)
 // ft_redirection -> cmds
 //  > a > b
+
+int		exec_other(t_list	*c, t_env *env)
+{
+	char	**test;
+	int		ret;
+
+	if(c->is_fork == 0)
+	{
+		c->is_fork = 1;
+		c->pid = fork();
+	}
+	ret = 0;
+	if(c->pid == 0)
+	{
+		if(c->cmds && c->cmds[0] && c->cmds[0][0] && c->cmds[0][0] == '.' && c->cmds[0][1] && c->cmds[0][1] == '/')
+		{
+			ft_convert_env(&(env->env), &test);
+			ret = execve(c->cmds[0], c->cmds, test);
+			if(test)
+				clear_tab(&test);
+			return(ret);
+		}
+		if(c->cmds && c->cmds[0])
+		{
+			find_exec_path(&(c->cmds[0]), env);
+			ft_convert_env(&(env->env), &test);
+			ret = execve(c->cmds[0], c->cmds, test);
+			if(test)
+				clear_tab(&test);
+		}
+	}
+	return(ret);
+}
 
 void		close_fd(t_list_file	**file)
 {
@@ -84,7 +117,7 @@ int			wait_exec_cmds(t_list		*cmds)
 	ret = 0;
 	while(cmds)
 	{
-		if(cmds && cmds->cmds && cmds->cmds[0] && !is_builtin(cmds->cmds[0]))
+		if(cmds && cmds->cmds && cmds->is_fork)
 		{
 			waitpid(cmds->pid, &status, 0);
 			if(WIFEXITED(status))
@@ -112,47 +145,39 @@ int			exec_cmd(t_list *cmd, t_env *env)
 	}
 	if(cmd->file)
 		ft_redirection(env, cmd);
-	//if(cmd->type == '|' || (cmd->previous && cmd->previous->type == '|'))
-	//{
-	pid = fork();
-	cmd->pid = pid;
-	cmd->is_fork = 1;
-	if(pid == 0 && cmd->pid == 0)
+	if(cmd->type == '|' || (cmd->previous && cmd->previous->type == '|'))
 	{
-		if(cmd->type == '|' && dup2(cmd->pipe[1], 1) < 0)
-			printf("\nErreur\n");
-		if(cmd->previous && cmd->previous->type == '|' && dup2(cmd->previous->pipe[0], 0) < 0)
-			printf("\nErreur\n");
-		if(cmd->file)
-			ft_dup_fd2(cmd->file);
-		if(is_builtin(cmd->cmds[0]))
-			exit(ret = exec_build(cmd, env));
-		if(is_piped)
-			close(cmd->pipe[0]);
-		if(cmd->cmds /*&& !(is_builtin(cmd->cmds[0]))*/)
+		pid = fork();
+		cmd->pid = pid;
+		cmd->is_fork = 1;
+		if(pid == 0 && cmd->pid == 0)
 		{
-			exit(ret = exec_other(cmd, env));
+			if(cmd->type == '|' && dup2(cmd->pipe[1], 1) < 0)
+				printf("\nErreur\n");
+			if(cmd->previous && cmd->previous->type == '|' && dup2(cmd->previous->pipe[0], 0) < 0)
+				printf("\nErreur\n");
+			if(cmd->file)
+				ft_dup_fd2(cmd->file);
+			if(is_builtin(cmd->cmds[0]))
+				exit(ret = exec_build(cmd, env));
+			if(is_piped)
+				close(cmd->pipe[0]);
+			if(cmd->cmds /*&& !(is_builtin(cmd->cmds[0]))*/)
+			{
+				if(cmd->cmds && cmd->cmds[0] && is_builtin(cmd->cmds[0]))
+					ret = exec_build(cmd, env);
+				else
+					ret = exec_other(cmd, env);
+			}
 		}
-	}/*
-	if(pid != 0)
+	}
+	else
 	{
-		if(cmd->cmds && cmd->cmds[0] && (ma_strcmp(cmd->cmds[0], "cd") || ma_strcmp(cmd->cmds[0], "exit")))
+		if(cmd->cmds && cmd->cmds[0] && is_builtin(cmd->cmds[0]))
 			ret = exec_build(cmd, env);
-	}*/
-//	}
-//	else
-//	{
-//		pid = fork();
-//		cmd->pid = pid;
-//		cmd->is_fork = 1;
-//		if(pid == 0 && cmd->cmds)
-//		{
-//			if(is_builtin(cmd->cmds[0]))
-//				exit(ret = exec_build(cmd, env));
-//			else
-//				exit(ret = exec_other(cmd, env));
-//		}
-//	}
+		else
+			ret = exec_other(cmd, env);
+	}
 	close_pipes(cmd, is_piped);
 	return(ret);
 }

@@ -6,7 +6,7 @@
 /*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/25 18:48:50 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/10 18:04:18 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/16 10:43:11 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -459,6 +459,9 @@ int	start_parse(t_env *env)
 			printf("\n");
 			clear_cmds(&(env->cmds));
 		}
+		if(env->split_path)
+			clear_tab(&(env->split_path));
+		get_splitted_path(env);
 		if (line)
 			free(line);
 	}

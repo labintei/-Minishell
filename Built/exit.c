@@ -6,7 +6,7 @@
 /*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/30 15:38:22 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/15 19:07:30 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/16 11:17:12 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,19 +22,20 @@ bool	ft_isdigit(int c)
 
 int	ft_atoi(const char *str)
 {
-	long i;
-	long max;
-	long sign;
-	long result;
+	int i;
+	int max;
+	int sign;
+	int result;
 
 	i = 0;
 	max = 0;
 	sign = 1;
 	result = 0;
-	while (str[i] == '\t' || str[i] == '\n' || str[i] == '\v'
-			|| str[i] == '\f' || str[i] == '\r' || str[i] == ' ')
+	while (str && str[i] && (str[i] == '\t' || str[i] == '\n' || str[i] == '\v'
+			|| str[i] == '\f' || str[i] == '\r' || str[i] == ' '))
 		i++;
-	while (str[i] == '-' || str[i] == '+')
+	while (str && str[i] && (str[i] == '-' || str[i] == '+') && \
+	(result >= INT_MIN && result <= INT_MAX))
 	{
 		if (max >= 1)
 			return (0);
@@ -43,9 +44,9 @@ int	ft_atoi(const char *str)
 		max++;
 		i++;
 	}
-	while (ft_isdigit(str[i]))
+	while (str && str[i] && ft_isdigit((int)str[i]))
 		result = result * 10 + (str[i++] - '0');
-	return ((int)result * sign);
+	return (((int)result) * ((int)sign));
 }
 
 /* A afficher si l argument d exit n est pas un nombre */
@@ -57,9 +58,9 @@ bool	ft_str_is_digit(char *str)
 	int	i;
 
 	i = 0;
-	while (str[i])
+	while (str && str[i])
 	{
-		if (ft_isdigit(str[i]) == 0)
+		if (ft_isdigit((int)str[i]) == 0)
 			return (false);
 		i++;
 	}
@@ -75,7 +76,6 @@ int		exit_build(t_env *env, t_list *cmds, bool fork)
 		ft_putstr_fd("minishell: exit: too many arguments\n", 2);
 		return (1);
 	}
-	//if (cmds && cmds_length(cmds) <= 2)
 	else
 	{
 		if (ft_str_is_digit(cmds->cmds[1]) == true)

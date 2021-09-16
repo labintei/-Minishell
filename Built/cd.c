@@ -6,7 +6,7 @@
 /*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/30 15:01:00 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/15 19:03:35 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/16 11:28:54 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,22 +95,26 @@ int		cd(t_list *cmds, t_list_env *env, bool fork)
 	int		ret;
 	char	*previous;
 	char	*current;
+	int		i;
 
+	i = 0;
 	current = find_path_1(cmds, env, fork);
 	if (current == NULL)
 		return (CD_ERROR);
 	previous = getcwd(NULL, 0);
 	ret = chdir(current);
-	if(!fork)
-		return(ret);
-	cd_errors(cmds, errno, fork, current);
-	if (previous)
+	if(cd_errors(cmds, errno, fork, current))
+		i = 1;
+	if (previous && i == 0)
 		env_manager("OLDPWD", previous, env);
 	current = getcwd(NULL, 0);
 	if (current == NULL)
 		return (CD_ERROR);
-	env_manager("PWD", current, env);
-	free(current);
-	free(previous);
+	if(i == 0)
+		env_manager("PWD", current, env);
+	if(current)
+		free(current);
+	if(previous)
+		free(previous);
 	return (ret);
 }
