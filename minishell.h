@@ -6,7 +6,7 @@
 /*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/25 18:50:07 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/16 11:18:09 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/16 12:37:40 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,7 +168,7 @@ void		ctrl_c(int sig);
 void		ctrl_slash(int sig);
 void		ignore(int sig);
 int			setup_signals(void);
-int			disable_signals(int fork);
+int			inhibit_signals(int id);
 
 // redirection
 int			exec_other(t_list *c, t_env *env);

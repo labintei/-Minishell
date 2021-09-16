@@ -6,7 +6,7 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/13 13:45:00 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/16 10:37:38 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/16 14:41:08 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,10 @@ int		exec_other(t_list	*c, t_env *env)
 	{
 		c->is_fork = 1;
 		c->pid = fork();
+//		inhibit_signals(c->pid);
 	}
 	ret = 0;
+	inhibit_signals(c->pid);
 	if(c->pid == 0)
 	{
 		if(c->cmds && c->cmds[0] && c->cmds[0][0] && c->cmds[0][0] == '.' && c->cmds[0][1] && c->cmds[0][1] == '/')
@@ -125,6 +127,8 @@ int			wait_exec_cmds(t_list		*cmds)
 		}
 		cmds = cmds->next;
 	}
+//	if(cmds->is_fork)
+	handle_signals();
 	return(ret);
 }
 
@@ -150,6 +154,9 @@ int			exec_cmd(t_list *cmd, t_env *env)
 		pid = fork();
 		cmd->pid = pid;
 		cmd->is_fork = 1;
+		inhibit_signals(cmd->pid);
+//		cmd->pid = pid;
+//		cmd->is_fork = 1;
 		if(pid == 0 && cmd->pid == 0)
 		{
 			if(cmd->type == '|' && dup2(cmd->pipe[1], 1) < 0)

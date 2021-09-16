@@ -1,30 +1,41 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   signals.c                                          :+:      :+:    :+:   */
+/*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/08/31 16:00:53 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/16 14:41:12 by labintei         ###   ########.fr       */
+/*   Created: 2021/09/16 14:42:10 by labintei          #+#    #+#             */
+/*   Updated: 2021/09/16 14:44:24 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
-#include <stdint.h>
+#include	<limits.h>
+# include	<stdlib.h>
+# include	<stdio.h>
+# include	<unistd.h>
+# include	<readline/readline.h>
+# include	<readline/history.h>
+# include	<errno.h>
+# include	<sys/wait.h>
+# include	<sys/time.h>
+# include	<sys/stat.h>
+# include	<curses.h>
+# include	<signal.h>
+# include	<fcntl.h>
+# include	<stdbool.h>
+# include	<errno.h>
 
-// GROSSO MODO handle_signals correspond a set_up_signals || inhibit_signals a 
-// inhiber les signaux
-// Les signaux doivent continuer a marcher dans les pipes 
-// Exemple 
-// cat | ls
-// ^D
-// (arret du process)
+void	ft_putstr_fd(char const *s, int fd)
+{
+	int		i;
 
-//
-// SIG_IGN    ignore le signal
-// SIG_DFL    Reset le signal
-//
+	i = 0;
+	if (s)
+		while (s[i])
+			write(fd, &s[i++], 1);
+}
+
 
 void	ctrl_backslash(int signal)
 {

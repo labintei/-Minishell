@@ -53,4 +53,89 @@ exit_built toujours effectuer avant de fermer le pipe
 //     Mais pas tres propres parce que relance ls et autre commandes 
 		au niveau des built in
 
+________________________________________________________________________________
 
+DONE
+
+
+________________________________________________________________________________
+
+
+J ai legerement regarder comment fonctionner les assignations par curiosite
+
+grosso modo l assignations se fait uniquement si uniquement des assignations
+
+Si assignations et commandes la commandes s effectue et les assignations qui
+la suivent sont consideres commes des tokens 
+
+
+________________________________________________________________________________
+
+
+
+
+Grosso modo On met la fonction 
+_____________________________________________________
+
+setup_signals || handle_signals(void)
+
+au debut du main
+
+if(!setup_signals())
+	return(nice_errors(0, NULL))
+-----------------------------------
+
+setup_signal
+
+Fin wait_exec(Sans protections);
+
+_____________________________________________________
+
+disable_signals || inhibit_signals(int id)
+
+apres le fork();
+ou avant l execution
+_____________________________________________________
+
+Ctrl C
+
+recoit un SIGINT au processus courant (terminer l application)
+
+Ctrl \
+
+Comme Ctrl C
+
+Ctrl D
+
+dit au terminal un EOF sur l entree standard qui est interprete comme un 
+desire de sortir
+
+________________________________________________________________________________
+
+Grosso modo d apres la fonction disable_signals
+
+Si la est fork(cmds->pid)
+
+ou
+                cmds->pid == 0
+
+	On met le signal (SIGQUIT, SIG_DFL < 0)
+						return(0);
+					(SIGINT, SIG_DFL) < 0
+	Sinon
+				cmds->pid != 0 (Processus parent)
+			le signal((SIGQUIT, ignore) < 0)
+					return(0);
+			le signal((SIGINT, ignore) < 0)
+					return(0);
+
+set_up signals
+
+Attends que tous les processus fils soit effectuer
+
+puis
+
+remet (SIGQUIT, ctrl_slash)
+      (SIGINT, ctrl_C)
+
+________________________________________________________________________________
