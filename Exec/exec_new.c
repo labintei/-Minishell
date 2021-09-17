@@ -6,7 +6,7 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/13 13:45:00 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/17 16:10:59 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/17 21:14:06 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,8 @@ int		exec_other(t_list	*c, t_env *env)
 			ret = execve(c->cmds[0], c->cmds, test);
 			if(test)
 				clear_tab(&test);
-			return(ret);
+			exit(ret);
+			//return(ret);
 		}
 		if(c->cmds && c->cmds[0])
 		{
@@ -46,7 +47,9 @@ int		exec_other(t_list	*c, t_env *env)
 			ret = execve(c->cmds[0], c->cmds, test);
 			if(test)
 				clear_tab(&test);
+			exit(ret);
 		}
+		exit(ret);
 	}
 	return(ret);
 }
@@ -148,7 +151,13 @@ int			exec_cmd(t_list *cmd, t_env *env)
 		cmd->is_piped = 1;
 	}
 	if(cmd->file)
-		ft_redirection(env, cmd);
+	{
+		restart_t_list_file(&(cmd->file));
+		ft_redirection(cmd->file, env);
+		restart_t_list_file(&(cmd->file));
+		if(!(cmd->type == '|' || (cmd->previous && cmd->previous->type == '|')))
+			ft_dup_fd2(cmd->file);
+	}
 	if(cmd->type == '|' || (cmd->previous && cmd->previous->type == '|'))
 	{
 		pid = fork();

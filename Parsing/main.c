@@ -6,19 +6,19 @@
 /*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/25 18:48:50 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/17 15:53:41 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/17 20:40:01 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	restart_t_list_file(t_list_file		**file)
+void	restart_t_list_file(t_list_file **file)
 {
 	while ((*file) && (*file)->previous)
 		(*file) = (*file)->previous;
 }
 
-void	add_list_file(t_list_file **file, int i, char	c)
+void	add_list_file(t_list_file **file, int i, char c)
 {
 	t_list_file		*new;
 
@@ -116,7 +116,7 @@ void	ajout_cmds(t_env *env, char *line, int *i)
 	env->cmds->cmds = NULL;
 	env->cmds->file = NULL;
 	env->cmds->cmds = malloc(sizeof(char *) * \
-	(count_word(line, i) + 1 - nb_redir(line, (*i))));
+	(count_word(line, i, env) + 1 - nb_redir(line, (*i))));
 }
 
 void	is_pipe(t_env *env, char *line)
@@ -281,7 +281,7 @@ void	is_word_cmds(char *line, int *i, t_env *env)
 	{
 		if (!env->cmds->cmds)
 			env->cmds->cmds = malloc(sizeof(char *) * \
-			(count_word(line, i) - nb_redir(line, (*i)) + 1));
+			(count_word(line, i, env) - nb_redir(line, (*i)) + 1));
 		env->cmds->cmds[(env->word)] = malloc(sizeof(char) * \
 		(count_char(line, (*i), env) + 1));
 	}
@@ -345,64 +345,6 @@ int	count_redir(char *line, int j)
 		}
 	}
 	return (redir);
-}
-
-int	count_word_before_redir(char *line, int  j)
-{
-	int			word;
-	int			i;
-	char		stop;
-	char		stop_bis;
-	char		c;
-
-	stop_bis = 0;
-	stop = 0;
-	i = j;
-	word = 0;
-	while (line[i] && stop == 0)
-	{
-		if (line[i] && line[i] == '|')
-			stop = 1;
-		else if (line[i] && line[i] == ' ' && stop == 0)
-		{
-			while (line[i] && line[i] == ' ')
-				i++;
-		}
-		else if (line[i] && stop == 0)
-		{
-			if (line[i] && (line[i] != '<' && line[i] != '>'))
-				word++;
-			stop_bis = 0;
-			while (line[i] && stop_bis == 0)
-			{
-				if (line[i] && ((line[i] == '\'' || line[i] == '\"') && \
-				ft_second(line[i], line, i)))
-				{
-					c = line[i];
-					i++;
-					while (line[i] && line[i] != c)
-						i++;
-					if (line[i] && line[i] == c)
-						i++;
-				}
-				else
-				{
-					while (line[i] && (!((line[i] == '\'' || line[i] == '\"') \
-					&& ft_second(line[i], line, i))) && stop_bis == 0)
-					{
-						if (line[i] && line[i] == ' ')
-							stop_bis = 1;
-						else if (line[i] == '>' || line[i] == '<')
-						{
-							return(word);
-						}
-						i++;
-					}
-				}
-			}
-		}
-	}
-	return (word);
 }
 
 void	parse_line(t_env *env, char *l)
@@ -488,10 +430,7 @@ int	main(int argc, char **argv, char **envp)
 		env.split_path = NULL;
 		stock_env(&env, envp);
 		get_splitted_path(&env);
-//		if(!(handle_signals()))
-//			printf("Erreur signals");
 		env.cmds = NULL;
-//		handle_signals();
 		ret = start_parse(&env);
 	}
 	return (ret);

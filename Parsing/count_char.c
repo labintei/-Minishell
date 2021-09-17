@@ -6,7 +6,7 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/29 15:29:43 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/10 17:15:07 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/17 20:17:59 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ void	not_quotes_char(char *line, int *j, t_env *env, int (*i)[2])
 		(*i)[1] = 1;
 }
 
-int		count_char(char *line, int h, t_env *env)
+int	count_char(char *line, int h, t_env *env)
 {
 	int		i[2];
 	int		j;

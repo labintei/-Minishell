@@ -6,7 +6,7 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/31 16:00:53 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/16 14:41:12 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/17 19:05:57 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,10 +39,11 @@ void	ctrl_c(int signal)
 	ft_putstr_fd("\b\b", 0);
 	ft_putstr_fd("  \b\b", 0);
 	write(1, "\n", 1);
-	rl_replace_line("", 0);
-	rl_on_new_line();
-	rl_redisplay();
-	//faire un free mem ?
+//	rl_replace_line("", 0);
+//	rl_on_new_line();
+//	rl_redisplay();
+
+//faire un free mem ?
 }
 
 void	ignore_signals(int signal)

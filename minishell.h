@@ -6,7 +6,7 @@
 /*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/25 18:50:07 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/16 12:37:40 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/17 21:03:39 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,7 @@ int		exit_build(t_env *env, t_list *cmds, bool fork);
 // COUNT WORD
 void		skip_space(char *line, int *j);
 int			is_quotes(char c, char *line, int i);
-int			count_word(char *line, int *i);
+int			count_word(char *line, int *i, t_env *env);
 
 // COUNT char
 int			count_char(char *line, int i, t_env *env);
@@ -172,7 +172,7 @@ int			inhibit_signals(int id);
 
 // redirection
 int			exec_other(t_list *c, t_env *env);
-int			ft_redirection(t_env *env, t_list *cmd);
+int			ft_redirection(t_list_file *file, t_env *env);
 int			find_exec_path(char **path, t_env *env);
 void		list_cmds_restart(t_list	**cmds);
 char		*ft_strnewcat(char *first, char *second);
@@ -202,5 +202,9 @@ char		*get_value_from_key(char *str, int *i);
 int			count_word_before_redir(char	*line, int  i);
 
 void		ft_dup_fd2(t_list_file *cmd);
+
+//PARSING
+void			is_in_word_not_quotes(char *line, int *j, int *redir, int *pipe);
+void			spe_case(char *line, int *j, int *pipe, int *redir);
 
 #endif

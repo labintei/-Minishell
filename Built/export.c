@@ -6,7 +6,7 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/17 17:35:58 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/17 17:36:03 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/17 19:08:31 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,7 +148,7 @@ void		list_sort(t_list_env *env)
 		ft_strcpy(&(val), c->val);
 		i = 0;
 		printf("\nVAR C %s\n", c->var);
-		while(c && sort && sort->next && (i = strcmp(c->var, sort->var)) > 0)
+		while(c && sort && sort->next && (i = ma_strcmp(c->var, sort->var)) > 0)
 		{
 //			printf("\nVAR SORT %s\n", sort->var);
 			sort = sort->next;

@@ -1,0 +1,6 @@
+Probleme quand unclosed quotes
+
+Probleme quand multiples redirection de fd
+
+
+

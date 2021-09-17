@@ -6,7 +6,7 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/17 17:42:29 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/17 18:07:41 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/17 21:03:27 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,11 +41,8 @@ int	ft_heredoc(t_list_file *f, t_env *env)
 	return (0);
 }
 
-int			redir_output_simple(t_list *cmd)
+int			redir_output_simple(t_list_file *f)
 {
-	t_list_file *f;
-
-	f = cmd->file;
 	if (f && f->redir == '>')
 	{
 		f->fd = open(f->path, O_RDWR | O_CREAT | O_TRUNC, 0644);
@@ -57,11 +54,8 @@ int			redir_output_simple(t_list *cmd)
 	return (0);
 }
 
-int		redir_input_simple(t_list *cmd, t_env *env)
+int		redir_input_simple(t_list_file	*f, t_env *env)
 {
-	t_list_file *f;
-
-	f = cmd->file;
 	if (f && f->redir == '<')
 	{
 		f->fd = open(f->path, O_RDONLY);
@@ -80,11 +74,15 @@ int		redir_input_simple(t_list *cmd, t_env *env)
 	return (0);
 }
 
-int		ft_redirection(t_env *env, t_list *cmd)
+int		ft_redirection(t_list_file		*file, t_env *env)
 {
-	if (redir_input_simple(cmd, env) != 0)
-		return (-1);
-	if (redir_output_simple(cmd) != 0)
-		return (-1);
+	while(file)
+	{
+		if (redir_input_simple(file, env) != 0)
+			return (-1);
+		if (redir_output_simple(file) != 0)
+			return (-1);
+		file = file->next;
+	}
 	return (0);
 }
