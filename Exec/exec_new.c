@@ -6,7 +6,7 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/13 13:45:00 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/17 21:14:06 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/17 21:55:33 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,9 @@
 // redirection (NULL)
 // ft_redirection -> cmds
 //  > a > b
+
+void		close_fd(t_list_file	**file);
+
 
 int		exec_other(t_list	*c, t_env *env)
 {
@@ -37,6 +40,7 @@ int		exec_other(t_list	*c, t_env *env)
 			ret = execve(c->cmds[0], c->cmds, test);
 			if(test)
 				clear_tab(&test);
+			close_fd(&(c->file));
 			exit(ret);
 			//return(ret);
 		}
@@ -47,6 +51,8 @@ int		exec_other(t_list	*c, t_env *env)
 			ret = execve(c->cmds[0], c->cmds, test);
 			if(test)
 				clear_tab(&test);
+			close_fd(&(c->file));
+			//  PROBLEMME JE NE CLOSE PAS LES FDd
 			exit(ret);
 		}
 		exit(ret);
@@ -163,9 +169,6 @@ int			exec_cmd(t_list *cmd, t_env *env)
 		pid = fork();
 		cmd->pid = pid;
 		cmd->is_fork = 1;
-//		inhibit_signals(cmd->pid);
-//		cmd->pid = pid;
-//		cmd->is_fork = 1;
 		if(pid == 0 && cmd->pid == 0)
 		{
 			if(cmd->type == '|' && dup2(cmd->pipe[1], 1) < 0)
@@ -192,7 +195,9 @@ int			exec_cmd(t_list *cmd, t_env *env)
 		if(cmd->cmds && cmd->cmds[0] && is_builtin(cmd->cmds[0]))
 			ret = exec_build(cmd, env);
 		else
+		{
 			ret = exec_other(cmd, env);
+		}
 	}
 	close_pipes(cmd, is_piped);
 	return(ret);
