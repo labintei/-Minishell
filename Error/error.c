@@ -6,7 +6,7 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/17 15:33:18 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/17 16:05:04 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/17 17:25:31 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,26 @@ void		ft_putstr_err(int err, char c, char *s)
 	ft_putstr_fd("%s : commande introuvable", s);
 	//
 
+Erreur 2
+}
+	Incapable d executer
+	Fail dans le fork process
+	Es un dossier
+	Pas de tel fichier ou directory
+	Erreur de syntax
+	Filename argument required
+}
 
+Erreur Other
+{
+	Erreur inconnu
+	Echec dans l allocation memoire
+	Permission refuse
+	Les variables d envirronements existent et overwrite est oof
+	Variables d environnement non trouve
+	L environnement est vide
+	Expansion invalide
+	sinon
+		Erreur 2
 }
 
