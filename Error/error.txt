@@ -1,0 +1,32 @@
+
+1 DIVISION PAR ZERO ...
+2 MAUVAISE UTILISATION DE COMMANDES INTEGRE PAR BASH
+126 LA COMMANDE APPELE NE PEUT S EXECUTER
+127 COMMANDE INTROUVABLE
+128 ARGUMENT INVALIDE POUR EXIT
+128+n SIGNAL D ERREUR FATAL (kill du pid d un script par ex)
+130   SCRIPT TERMINE PAR UN Ctrl_C
+255*  CODE DE SORTIE EN DEHORS DE LA LIMITE (exit prend seulement des arguments
+compris entre 0 et 255)
+
+ln / chmod / cd / clear / diff / comm / comp / cp / rm / exit / ...
+
+Ctrl+c (BREAK signal)
+Ctrl+d (EOF)
+$PATH (chemin vers les executables)
+
+______________________________________________________________________________________
+
+CAS PARTICULIER
+
+pipe sans rien apres
+
+ls -a |
+>
+>
+>
+>
+> wc -m
+
+Ouvre un heredoc pour avaoir wc -m comme commandes
+(CAS SIMILAIRE A unclosed et closed quotes)
