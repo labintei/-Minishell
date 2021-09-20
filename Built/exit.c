@@ -6,7 +6,7 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/17 17:35:25 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/17 17:35:29 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/20 22:32:48 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,10 @@ bool	ft_str_is_digit(char *str)
 	}
 	return (true);
 }
+
+
+// Si Exit a un input et que le documents en Input existe pas (N e s exeecute pas)
+// Sinon s execute
 
 int		exit_build(t_env *env, t_list *cmds, bool fork)
 {

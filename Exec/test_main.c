@@ -6,7 +6,7 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/20 18:48:32 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/20 19:08:15 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/20 22:12:50 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,10 +48,12 @@ int		main(void)
 	fd = open("Temp", O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	write(fd, s2, strlen(s2));
 
-	fflush(stdout);
+//	fflush(stdout);
 	close(pipe_fd[0]);
 	close(pipe_fd[1]);
 	close(fd);
+	dup2( n, 1);
+	printf("\nRetour dans le main process\n");
 	//close(n);
 
 	return 0;

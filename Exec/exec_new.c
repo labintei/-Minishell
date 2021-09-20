@@ -6,7 +6,7 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/13 13:45:00 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/20 18:19:11 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/20 22:15:28 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -184,6 +184,8 @@ int			exec_cmd(t_list *cmd, t_env *env)
 	pid_t		pid;
 	int			ret;
 	int			is_piped;
+	int			input;
+	int			output;
 	//int			status;
 
 //	status = 0;
@@ -234,22 +236,21 @@ int			exec_cmd(t_list *cmd, t_env *env)
 		{
 			if(cmd->file)
 			{
-				if(pipe(cmd->pipe))
-					printf("Erreur");
-				cmd->is_piped = 1;
-				pid = fork();
-				cmd->pid = pid;
-				cmd->is_fork = 1;
-				if(cmd->pid != 0)
-				{
-					if(dup2(cmd->pipe[1], 1) < 0)
-						printf("\nErreur\n");
-					//if(dup2(cmd->previous))
-					ft_dup_fd2(cmd->file);
-					ret = exec_build(cmd, env);
-				}
-				else
-					exit(ret);
+				input = dup(0);
+				output = dup(1);
+				pipe(cmd->pipe);
+				if(dup2(cmd->pipe[1], 1) < 0)
+					printf("\nErreur\n");
+				if(dup2(cmd->pipe[0], 0) < 0)
+					printf("\nErreur\n");
+				ft_dup_fd2(cmd->file);
+				ret = exec_build(cmd, env);
+				close(cmd->pipe[0]);
+				close(cmd->pipe[1]);
+				close_fd(&(cmd->file));
+				dup2(input, 0);
+				dup2(output, 1);
+				return(ret);
 			}
 			else
 			{

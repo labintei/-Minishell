@@ -6,7 +6,7 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/17 17:42:29 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/20 18:03:12 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/20 22:17:48 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,8 +59,6 @@ int		redir_input_simple(t_list_file	*f, t_env *env)
 	if (f && f->redir == '<')
 	{
 		f->fd = open(f->path, O_RDONLY);
-		/* erreur errno */
-		printf("The fd is %i\n", f->fd);
 		if (f->fd < 0)
 		{
 			ft_putstr_fd("bash: ", 2);
