@@ -6,7 +6,7 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/13 13:45:00 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/17 21:55:33 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/20 18:19:11 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,13 +23,18 @@ int		exec_other(t_list	*c, t_env *env)
 {
 	char	**test;
 	int		ret;
+//	int		i;
+//	int		status;
 
-	if(c->is_fork == 0)
-	{
-		c->is_fork = 1;
-		c->pid = fork();
+//	status = 0;
+//	i = 0;
+//	if(c->is_fork == 0)
+//	{
+//		i = 1;
+//		c->is_fork = 1;
+//		c->pid = fork();
 //		inhibit_signals(c->pid);
-	}
+//	}
 	ret = 0;
 	//inhibit_signals(c->pid);
 	if(c->pid == 0)
@@ -40,7 +45,7 @@ int		exec_other(t_list	*c, t_env *env)
 			ret = execve(c->cmds[0], c->cmds, test);
 			if(test)
 				clear_tab(&test);
-			close_fd(&(c->file));
+	//		close_fd(&(c->file));
 			exit(ret);
 			//return(ret);
 		}
@@ -51,12 +56,18 @@ int		exec_other(t_list	*c, t_env *env)
 			ret = execve(c->cmds[0], c->cmds, test);
 			if(test)
 				clear_tab(&test);
-			close_fd(&(c->file));
+	//		close_fd(&(c->file));
 			//  PROBLEMME JE NE CLOSE PAS LES FDd
 			exit(ret);
 		}
 		exit(ret);
 	}
+//	if(c->pid != 0 && i == 1)
+//	{
+//		waitpid(c->pid, &status, 0);
+//		if(WIFEXITED(status))
+//			ret = WEXITSTATUS(status);
+//	}
 	return(ret);
 }
 
@@ -128,7 +139,8 @@ int			wait_exec_cmds(t_list		*cmds)
 	ret = 0;
 	while(cmds)
 	{
-		if(cmds && cmds->cmds && cmds->is_fork)
+		// Wait le pid de Execother
+		if(cmds && cmds->cmds && cmds->is_fork /*&& (cmds->type == '|' || (cmds->previous && cmds->previous->type == '|'))*/)
 		{
 			waitpid(cmds->pid, &status, 0);
 			if(WIFEXITED(status))
@@ -141,12 +153,40 @@ int			wait_exec_cmds(t_list		*cmds)
 	return(ret);
 }
 
+void		ft_find_redirection(t_list_file		**file)
+{
+	t_list_file		*redir;
+	int				i;
+	int				j;
+
+	i = 0;
+	j = 0;
+	restart_t_list_file(file);
+	redir = (*file);
+	while(redir)
+	{
+		if(i == 0 && (redir->redir == 'L' || redir->redir == '<'))
+		{
+			 i = 1;
+			close(0);
+		}
+		if(j == 0 && (redir->redir == 'R' || redir->redir == '>'))
+		{
+			j = 1;
+			close(1);
+		}
+		redir = redir->next;
+	}
+}
+
 int			exec_cmd(t_list *cmd, t_env *env)
 {
 	pid_t		pid;
 	int			ret;
 	int			is_piped;
+	//int			status;
 
+//	status = 0;
 	is_piped = 0;
 	ret = 1;
 	if(cmd->type == '|' || (cmd->previous && cmd->previous->type == '|'))
@@ -161,8 +201,6 @@ int			exec_cmd(t_list *cmd, t_env *env)
 		restart_t_list_file(&(cmd->file));
 		ft_redirection(cmd->file, env);
 		restart_t_list_file(&(cmd->file));
-		if(!(cmd->type == '|' || (cmd->previous && cmd->previous->type == '|')))
-			ft_dup_fd2(cmd->file);
 	}
 	if(cmd->type == '|' || (cmd->previous && cmd->previous->type == '|'))
 	{
@@ -193,16 +231,48 @@ int			exec_cmd(t_list *cmd, t_env *env)
 	else
 	{
 		if(cmd->cmds && cmd->cmds[0] && is_builtin(cmd->cmds[0]))
-			ret = exec_build(cmd, env);
+		{
+			if(cmd->file)
+			{
+				if(pipe(cmd->pipe))
+					printf("Erreur");
+				cmd->is_piped = 1;
+				pid = fork();
+				cmd->pid = pid;
+				cmd->is_fork = 1;
+				if(cmd->pid != 0)
+				{
+					if(dup2(cmd->pipe[1], 1) < 0)
+						printf("\nErreur\n");
+					//if(dup2(cmd->previous))
+					ft_dup_fd2(cmd->file);
+					ret = exec_build(cmd, env);
+				}
+				else
+					exit(ret);
+			}
+			else
+			{
+				ret = exec_build(cmd, env);
+			}
+		}
 		else
 		{
-			ret = exec_other(cmd, env);
+			pid = fork();
+			cmd->pid = pid;
+			cmd->is_fork = 1;
+			if(cmd->pid == 0)
+			{
+				if(cmd->file)
+					ft_dup_fd2(cmd->file);
+				exit(exec_other(cmd, env));
+			}
 		}
 	}
 	close_pipes(cmd, is_piped);
 	return(ret);
 }
-
+// SAUVEGARDER LE OUTPUT ET FAIRE UN PIPE FAIRE L EXECUTION ET ATTENDRE POUR LE FORK
 
 int			exec_cmds(t_env *env)
 {
