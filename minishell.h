@@ -6,7 +6,7 @@
 /*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/25 18:50:07 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/17 21:03:39 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/21 13:45:36 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -206,5 +206,12 @@ void		ft_dup_fd2(t_list_file *cmd);
 //PARSING
 void			is_in_word_not_quotes(char *line, int *j, int *redir, int *pipe);
 void			spe_case(char *line, int *j, int *pipe, int *redir);
+
+//EXECUTION
+int			exec_not_build_not_pipe(t_list	*cmd, t_env *env);
+int			exec_build_not_pipe(t_list	*cmd, t_env *env);
+int			exec_pipe(t_list *cmd, t_env *env, int is_piped);
+
+
 
 #endif
