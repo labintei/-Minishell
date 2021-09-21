@@ -6,7 +6,7 @@
 /*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/25 18:48:50 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/21 21:12:07 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/21 22:08:03 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,10 @@ void	add_list_file(t_list_file **file, int i, char c)
 		return ;
 	new->next = NULL;
 	new->redir = c;
-	new->path = malloc(sizeof(char) * (i + 1));
+	if(c != 'L')
+		new->path = malloc(sizeof(char) * (i + 1));
+	else
+		new->path = NULL;
 	if (*file)
 	{
 		(*file)->next = new;
@@ -119,7 +122,7 @@ void	ajout_cmds(t_env *env, char *line, int *i)
 		env->cmds->cmds = malloc(sizeof(char *) * \
 		(count_word(line, i, env) + 1 - nb_redir(line, (*i))));
 	else
-		env->cmds->cmds = malloc(sizeof(char *) * 1);
+		env->cmds->cmds = malloc(sizeof(char *) * 2);
 }
 
 void	is_pipe(t_env *env, char *line)
@@ -324,6 +327,37 @@ int		is_only_var(char *line, int i/*, t_env *env*/)
 	return(1);
 }
 
+void	parse_word_heredoc(char *line, int *i, t_env *env, int *count)
+{
+	int		j;
+	int		quotes;
+
+	quotes = 0;
+	j = 0;
+	while(line[(*i) + j] && line[(*i) + j] != '|' && line[(*i)+ j] != '<' && line[(*i) + j] != '>' && line[(*i) + j] != ' ')
+	{
+		if(line[(*i) + j] && (line[(*i) + j] == '\'' || line[(*i) + j] == '\"'))
+			quotes++;
+		j++;
+	}
+//	if(env->cmds->file->path)
+//		free(env->cmds->file->path);
+	env->cmds->file->path = malloc(sizeof(char) * ((j - quotes) + 1));
+	(*count) = 0;
+	while(line[(*i)] && line[(*i)] != '|' && line[(*i)] != '<' && line[(*i)] != '>' && line[(*i)] != ' ')
+	{
+		if(line[(*i)] == '\'' || line[(*i)] == '\"')
+			(*i)++;
+		else
+		{
+			env->cmds->file->path[(*count)] = line[(*i)];
+			(*i)++;
+			(*count)++;
+		}
+	}
+//	env->cmds->file->path[j] = '\0';
+}
+
 void	is_word_cmds(char *line, int *i, t_env *env)
 {
 	int		count;
@@ -353,25 +387,31 @@ void	is_word_cmds(char *line, int *i, t_env *env)
 		if(res)
 			free(res);
 	}
-	if(!env->is_cmds && env->last_type == 'r' && env->cmds->file && env->cmds->file->redir == 'L')
-	{
-		// STOCKAGE SANS INTERPRETATION
-
-	}
 	if (line[(*i)] && line[(*i)] != '|' && line[(*i)] != ' ')
 	{
-		while (line[(*i)] && line[(*i)] != ' ' && out == 0)
+		if(!env->is_cmds && env->last_type == 'r' && env->cmds->file && env->cmds->file->redir == 'L')
 		{
-			if (is_quotes(line[(*i)], line, (*i)))
-				is_quotes_cmds(line, &count, env);
-			else
-				not_quotes_cmds(line, env, &count, &out);
+			printf("\nTEST\n");
+			parse_word_heredoc(line, i, env, &count);
+		}
+		else
+		{
+			while (line[(*i)] && line[(*i)] != ' ' && out == 0)
+			{
+				if (is_quotes(line[(*i)], line, (*i)))
+					is_quotes_cmds(line, &count, env);
+				else
+					not_quotes_cmds(line, env, &count, &out);
+			}
 		}
 	}
 	if ((env->is_cmds))
 		env->cmds->cmds[(env->word)][count] = '\0';
 	else
+	{
 		env->cmds->file->path[count] = '\0';
+		printf("\nENV REDIRECTION %s\n", env->cmds->file->path);
+	}
 	if ((env->is_cmds))
 		(env->word)++;
 	if ((env->is_cmds) == 0)
@@ -457,7 +497,7 @@ void	parse_line(t_env *env, char *l)
 			}
 		}
 	}
-	if (env->is_cmds && env->cmds && env->cmds->cmds)
+	if (env->is_cmds && env->cmds && (env->word) > 0 && env->cmds->cmds && env->cmds->cmds[(env->word) - 1])
 		env->cmds->cmds[(env->word)] = NULL;
 	if(env->last_type == 'r')
 	{
@@ -480,7 +520,7 @@ int	start_parse(t_env *env)
 		}
 		if (env->cmds && env->error != 1)
 		{
-				exec_cmds(env);
+//				exec_cmds(env);
 				clear_cmds(&(env->cmds));
 		}
 		add_history(line);
