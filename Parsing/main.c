@@ -6,7 +6,7 @@
 /*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/25 18:48:50 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/17 20:40:01 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/21 15:48:55 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,6 +128,7 @@ void	is_pipe(t_env *env, char *line)
 	(env->i)++;
 	env->word = 0;
 	ajout_cmds(env, line, &(env->i));
+	env->empty = 1;
 }
 
 int	is_redir(char *line, int *i, t_env *env)
@@ -372,7 +373,10 @@ void	parse_line(t_env *env, char *l)
 				env->is_cmds = 0;
 			}
 			else
+			{
+				env->empty = 0;
 				is_word_cmds(l, &(env->i), env);
+			}
 		}
 	}
 	if (env->is_cmds && env->cmds && env->cmds->cmds)
@@ -415,6 +419,7 @@ void	init_env(t_env *env)
 	env->cmds = NULL;
 	env->env = NULL;
 	env->split_path = NULL;
+	env->empty = 1;
 }
 
 int	main(int argc, char **argv, char **envp)
