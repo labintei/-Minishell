@@ -6,7 +6,7 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/17 17:39:08 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/17 17:39:16 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/21 22:36:01 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -178,7 +178,8 @@ void		stock_env(t_env		*env, char **envp)
 	{
 		var = ft_strdup_char(envp[i], '=');
 		val = ft_strdup_char_after(envp[i], '=');
-		add_list_env(&(env->env), var , val, i);
+		if(var && ma_strcmp(var, "_") != 0)
+			add_list_env(&(env->env), var , val, i);
 		if(var)
 			free(var);
 		if(val)

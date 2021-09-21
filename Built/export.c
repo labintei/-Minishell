@@ -6,7 +6,7 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/17 17:35:58 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/17 19:08:31 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/21 23:34:58 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,16 +44,9 @@ void		add_list_env_between(t_list_env	**list, char *var, char *val)
 void		add_before(t_list_env **list, char *var, char *val)
 {
 	t_list_env	*new;
-	//t_list_env	*prev_prev;
-//	int			g;
 
-//	g = 0;
-//	if((*list) && (*list)->previous)
-//		prev_prev = (*list)->previous;
-//	else
-//		g = 1;
+
 	new = malloc(sizeof(t_list_env));
-
 	new->previous = (*list)->previous;
 	new->next = (*list);
 	new->var = NULL;
@@ -62,12 +55,22 @@ void		add_before(t_list_env **list, char *var, char *val)
 	if((*list)->previous)
 		(*list)->previous->next = new;
 	(*list)->previous = new;
-//	if(g == 0)
-//		prev_prev->next = new;
+}
 
-// LE PROBLEME EST LA
+int			is_only_alpha_num(char	*var)
+{
+	int		i;
 
-//	(*list)->previous->next = new;
+	i = 0;
+	if(var && is_alphanum(var[i]) && (var[i] >= '0' && var[i] <= '9'))
+		return(0);
+	while(var && var[i])
+	{
+		if(var[i] && !(is_alphanum(var[i])))
+			return(0);
+		i++;
+	}
+	return(1);
 }
 
 void		add_after(t_list_env **list, char *var, char *val)
@@ -82,7 +85,6 @@ void		add_after(t_list_env **list, char *var, char *val)
 	new->var = NULL;
 	new->val = NULL;
 	add_arg(new, var, val);
-	(*list)->next = new;
 }
 
 int			sort_str(char *s, char *sbis)
@@ -147,31 +149,20 @@ void		list_sort(t_list_env *env)
 		ft_strcpy(&(var), c->var);
 		ft_strcpy(&(val), c->val);
 		i = 0;
-		printf("\nVAR C %s\n", c->var);
+		printf("\n%s\n", c->var);
 		while(c && sort && sort->next && (i = ma_strcmp(c->var, sort->var)) > 0)
 		{
-//			printf("\nVAR SORT %s\n", sort->var);
+//			printf("\n%s\n", sort->var);
 			sort = sort->next;
 		}
-		printf("\nVAR STOP %s\n", sort->var);
-		if(sort->previous == NULL && i < 0)
+	//	printf("\nVAR STOP %s\n", sort->var);
+		if(/*sort->previous == NULL &&*/ i < 0)
 		{
-			printf("\nBEFORE\n");
-			add_before(&(sort), c->var, c->val);
-		}
-		else if(!sort->next && i > 0)
-		{
-			printf("\nAFTER\n");
-			add_after(&(sort), c->var, c->val);
-		}
-		else if(i < 0)
-		{
-			printf("\nBEFORE\n");
+	//		printf("\nBEFORE\n");i
 			add_before(&(sort), c->var, c->val);
 		}
 		else
 		{
-			printf("\nBEFORE\n");
 			add_after(&(sort), c->var, c->val);
 		}
 		list_start_env(&sort);
@@ -275,6 +266,102 @@ void		change_value(t_list_env **env, char *var, char *val)
 	}
 }
 
+
+int			ft_find_concat(char *assign)
+{
+	int		i;
+
+	while(assign && assign[i])
+	{
+		if(assign[i] == '=')
+		{
+			if(i > 0 && assign[i - 1] && assign[i - 1] == '+')
+				return(1);
+			return(0);
+		}
+		i++;
+	}
+	return(0);
+}
+
+void		concat_value(t_list_env **env, char *var, char *val)
+{
+	char		*temp;
+	int			i;
+	int			j;
+
+	if((*env))
+	{
+		if((*env) && (*env)->var && ft_strcmp((*env)->var, var))
+		{
+			ft_strcpy(&temp, (*env)->val);
+			if((*env)->val)
+				free((*env)->val);
+			(*env)->val = malloc(sizeof(char) * (ft_strlen(temp) + ft_strlen(val) + 1));
+			i = 0;
+			while(temp && temp[i])
+			{
+				(*env)->val[i] = temp[i];
+				i++;
+			}
+			j = 0;
+			while(val && val[j])
+			{
+				(*env)->val[i + j] = val[j];
+				j++;
+			}
+			(*env)->val[i + j] = '\0';
+			if(temp)
+				free(temp);
+		}
+	}
+}
+
+void		make_concat(t_env *env, char *s)
+{
+	int		i;
+	char	*var;
+	char	*val;
+	int		j;
+	int		g;
+
+	i = 0;
+	g = 0;
+	while(s && s[i] && s[i] != '=')
+		i++;
+	var = malloc(sizeof(char) * (i));
+	i = 0;
+	while(s && s[i] && s[i + 1] != '=')
+	{
+		var[i] = s[i];
+		i++;
+	}
+	var[i] = '\0';
+	if(s[i] == '+' && s[i + 1] == '=')
+		i += 2;
+	val = malloc(sizeof(char) * ((ft_strlen(s) - 1 - ft_strlen(var))));
+	j = 0;
+	while(s && s[i + j])
+	{
+		val[j] = s[i + j];
+		j++;
+	}
+	val[j] = '\0';
+	if(var && is_only_alpha_num(var) && ft_find_env(&(env->env), var))
+	{
+		concat_value(&(env->env), var, val);
+	}	
+	else if(var && is_only_alpha_num(var))
+	{
+		add_list_env(&(env->env), var, val, g);
+	}
+	if(var)
+		free(var);
+	if(val)
+		free(val);
+}
+
+
 int			export_build(t_list *cmds, t_env *env)
 {
 	int		i;
@@ -288,17 +375,21 @@ int			export_build(t_list *cmds, t_env *env)
 	i = 1;
 	while(cmds->cmds && cmds->cmds[0] && cmds->cmds[i])
 	{
-		if(ft_find('=',cmds->cmds[i]))
+		if(ft_find('=', cmds->cmds[i]) && ft_find_concat(cmds->cmds[i]))
+		{
+			make_concat(env, cmds->cmds[i]);
+		}
+		else if(ft_find('=',cmds->cmds[i]))
 		{
 			var = ft_strdup_char(cmds->cmds[i], '=');
 			val = ft_strdup_char_after(cmds->cmds[i], '=');
 			ft_strcpy(&temp, var);
 			ft_strcpy(&to, val);
-			if(var && ft_find_env(&(env->env), var))
+			if(var && is_only_alpha_num(var) && ft_find_env(&(env->env), var))
 			{
 				change_value(&(env->env), var, val);
 			}	
-			else
+			else if(var && is_only_alpha_num(var))
 			{
 				add_list_env(&(env->env), temp, to, g);
 			}

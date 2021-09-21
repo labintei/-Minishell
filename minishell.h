@@ -6,7 +6,7 @@
 /*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/25 18:50:07 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/21 17:33:59 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/21 22:11:22 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ typedef	struct		s_list_file
 	char					*path;
 	int						fd;
 	char					redir;
+	char					is_quotes;
 	int						pipe_fd[2];
 	struct	s_list_file		*next;
 	struct	s_list_file		*previous;

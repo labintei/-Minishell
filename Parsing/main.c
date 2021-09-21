@@ -6,7 +6,7 @@
 /*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/25 18:48:50 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/21 22:08:03 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/21 22:13:05 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ void	add_list_file(t_list_file **file, int i, char c)
 		return ;
 	new->next = NULL;
 	new->redir = c;
+	new->is_quotes = 0;
 	if(c != 'L')
 		new->path = malloc(sizeof(char) * (i + 1));
 	else
@@ -337,7 +338,10 @@ void	parse_word_heredoc(char *line, int *i, t_env *env, int *count)
 	while(line[(*i) + j] && line[(*i) + j] != '|' && line[(*i)+ j] != '<' && line[(*i) + j] != '>' && line[(*i) + j] != ' ')
 	{
 		if(line[(*i) + j] && (line[(*i) + j] == '\'' || line[(*i) + j] == '\"'))
+		{
+			env->cmds->file->is_quotes = 1;
 			quotes++;
+		}
 		j++;
 	}
 //	if(env->cmds->file->path)
@@ -520,7 +524,7 @@ int	start_parse(t_env *env)
 		}
 		if (env->cmds && env->error != 1)
 		{
-//				exec_cmds(env);
+				exec_cmds(env);
 				clear_cmds(&(env->cmds));
 		}
 		add_history(line);
