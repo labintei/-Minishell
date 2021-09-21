@@ -6,7 +6,7 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/13 13:45:00 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/21 13:46:51 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/21 14:13:21 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -192,23 +192,23 @@ int			exec_pipe(t_list *cmd, t_env *env, int is_piped)
 	pid_t		pid;
 	int			ret;
 
+	(void)is_piped;
 	ret = 0;
 	pid = fork();
 	cmd->pid = pid;
 	cmd->is_fork = 1;
-	if(pid == 0 && cmd->pid == 0)
+	if(/*pid == 0 &&*/ cmd->pid == 0)
 	{
-		if(cmd->type == '|' && dup2(cmd->pipe[1], 1) < 0)
+		if(cmd->type == '|'  && dup2(cmd->pipe[1], 1) < 0)
 			printf("\nErreur\n");
-		if(cmd->previous && cmd->previous->type == '|' && dup2(cmd->previous->pipe[0], 0) < 0)
+		if(cmd->previous && cmd->previous->type == '|'  && dup2(cmd->previous->pipe[0], 0) < 0)
 			printf("\nErreur\n");
 		if(cmd->file)
 			ft_dup_fd2(cmd->file);
-		// Pipe open = 1
-		if(is_builtin(cmd->cmds[0]))
-			exit(ret = exec_build(cmd, env));
-		if(is_piped)
-			close(cmd->pipe[0]);
+//		if(is_builtin(cmd->cmds[0]))
+//			exit(ret = exec_build(cmd, env));
+//		if(is_piped)
+//			close(cmd->pipe[0]);
 		if(cmd->cmds /*&& !(is_builtin(cmd->cmds[0]))*/)
 		{
 			if(cmd->cmds && cmd->cmds[0] && is_builtin(cmd->cmds[0]))
