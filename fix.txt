@@ -1,6 +1,14 @@
-Probleme quand unclosed quotes
+sort -n << $VAR
 
-Probleme quand multiples redirection de fd
+($VAR) n est pas interprete
+comportement particulier quand
+
+sort -n << "Entrecote"
+
+pas interprete quand prescence de quotes ou doubles quotes
+
+AMBIGOUS REDIRECT UNIQUEMENT SI NON ""
+
 
 
 

@@ -6,7 +6,7 @@
 /*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/25 18:50:07 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/21 13:45:36 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/21 17:33:59 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,10 @@ typedef	struct		s_list
 	int		is_piped;
 	char	type;//pipe
 	int		pipe[2]; // SAME QUE SUR list_file
+//  POUR GERER LES AMBIGOUS REDIRECTION DANS CHAQUE CMD (UN MESSAGE PAR COMMANDE)
+//  NE PAS OUBLIER LE CAS OU L EXPANSION EST IGNORE DANS LE CAS D UN HEREDOC et si precence
+//  de ""ou'' 
+	int					error;
 	struct	s_list		*previous;
 	struct	s_list		*next;
 }					t_list;
@@ -72,12 +76,18 @@ typedef	struct		s_env
 	t_list			*cmds;
 	t_list_env		*env;
 	char			**split_path;
+	// POUR LES ERREURS
+	int				error;
+	// Unexpexted token
+	char			none_ex;
 	// POUR SIMPLIFIER LE PARSING
 	// UN INT WORD (correspondra au mot dans cmds)
 	// UN INT I (correspondra a l index qu on utilisera pour parcourir line[i])
 	// UN INT CMDS(dira si correspond a une cmds)
 	int				last_ret;
 	int				word;
+	int				empty;
+	char			last_type;
 	int				i;
 	int				is_cmds;
 }					t_env;

@@ -6,7 +6,7 @@
 /*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/25 18:48:50 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/21 15:48:55 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/21 21:12:07 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,13 +115,23 @@ void	ajout_cmds(t_env *env, char *line, int *i)
 		return ;
 	env->cmds->cmds = NULL;
 	env->cmds->file = NULL;
-	env->cmds->cmds = malloc(sizeof(char *) * \
-	(count_word(line, i, env) + 1 - nb_redir(line, (*i))));
+	if(((count_word(line, i, env) + 1) - nb_redir(line, (*i))) > 0)
+		env->cmds->cmds = malloc(sizeof(char *) * \
+		(count_word(line, i, env) + 1 - nb_redir(line, (*i))));
+	else
+		env->cmds->cmds = malloc(sizeof(char *) * 1);
 }
 
 void	is_pipe(t_env *env, char *line)
 {
 	env->cmds->type = '|';
+	if(env->empty == 1 && env->error == 0)
+	{
+//		printf("\nError unexpected token\n");
+		env->error = 1;
+		env->none_ex = (line[(env->i)]);
+		printf("\nError unexpected token : %c\n", env->none_ex);
+	}
 	if (env->is_cmds)
 		env->cmds->cmds[env->word] = NULL;
 	env->is_cmds = 1;
@@ -144,6 +154,13 @@ int	is_redir(char *line, int *i, t_env *env)
 			c = 'R';
 		(*i)++;
 	}
+	if(env->empty == 1 && env->last_type == 'r')
+	{
+		env->error = 1;
+		env->none_ex = c;
+		printf("\nError unexpected token : %c\n", env->none_ex);
+	}
+	env->last_type = 'r';
 	skip_space(line, i);
 	if (line[(*i)] && (line[(*i)] == '<' || line[(*i)] == '>'))
 		return (2);
@@ -271,11 +288,51 @@ void	not_quotes_cmds(char *line, t_env *env, int *count, int *out)
 		*out = 1;
 }
 
+void	save_ambigous(char **stock, char *line, int i)
+{
+	int		j;
+
+	printf("\n");
+	j = (i);
+	while(line[j] && line[j] != '|' && line[j] != '<' && line[j] != '>' && line[j] != ' ')
+		j++;
+	(*stock) = malloc(sizeof(char) * ((j - (i)) + 100));
+	j = 0;
+	while(line[(i)] && line[(i)] != '|' && line[(i)] != '<' && line[(i)] != '>' && line[(i)] != ' ')
+	{
+		(*stock)[j] = line[(i)];
+		write(1, &((*stock)[j]) , 1);
+		j++;
+		++(i);
+	}
+	(*stock)[j] = '\0';
+}
+
+int		is_only_var(char *line, int i/*, t_env *env*/)
+{
+	int		j;
+
+	printf("\nIS ONLY VAR\n");
+	j = i;
+	j++;
+	while(line[j] && line[j] != '|' && line[j] != '<' && line[j] != '>' && line[j] != ' ')
+	{
+		if(line[j] == '\'' || line[j] == '\"')
+			return(0);
+		j++;
+	}
+	return(1);
+}
+
 void	is_word_cmds(char *line, int *i, t_env *env)
 {
 	int		count;
 	int		out;
+//	int		j;
+//	int		is_not_quotes;
+	char	*res;
 
+//	j = 0;
 	out = 0;
 	count = 0;
 	if ((env->is_cmds))
@@ -285,6 +342,21 @@ void	is_word_cmds(char *line, int *i, t_env *env)
 			(count_word(line, i, env) - nb_redir(line, (*i)) + 1));
 		env->cmds->cmds[(env->word)] = malloc(sizeof(char) * \
 		(count_char(line, (*i), env) + 1));
+	}
+	if(!env->is_cmds && env->cmds->error == 0 && env->last_type == 'r' && (env->cmds->file && env->cmds->file->redir != 'L') && line[(*i)] && line[(*i)] == '$' && \
+	is_only_var(line, (*i))  && count_char(line, (*i), env) == 0)
+	{
+		res = NULL;
+		env->cmds->error = 1;
+		save_ambigous(&res, line, (*i));
+		printf("\nIS AMBIGOUS REDIRECTION %s\n", res);
+		if(res)
+			free(res);
+	}
+	if(!env->is_cmds && env->last_type == 'r' && env->cmds->file && env->cmds->file->redir == 'L')
+	{
+		// STOCKAGE SANS INTERPRETATION
+
 	}
 	if (line[(*i)] && line[(*i)] != '|' && line[(*i)] != ' ')
 	{
@@ -356,9 +428,13 @@ void	parse_line(t_env *env, char *l)
 		return ;
 	}
 	env->cmds = NULL;
+	env->error = 0;
+	env->empty = 1;
+	env->none_ex = 0;
 	env->i = 0;
 	env->word = 0;
 	env->is_cmds = 1;
+	env->last_type = 0;
 	ajout_cmds(env, l, &(env->i));
 	while (l && l[(env->i)])
 	{
@@ -374,13 +450,21 @@ void	parse_line(t_env *env, char *l)
 			}
 			else
 			{
+//				env->last_type = 'w';
 				env->empty = 0;
 				is_word_cmds(l, &(env->i), env);
+				env->last_type = 'w';
 			}
 		}
 	}
 	if (env->is_cmds && env->cmds && env->cmds->cmds)
 		env->cmds->cmds[(env->word)] = NULL;
+	if(env->last_type == 'r')
+	{
+		env->error = 1;
+		env->none_ex = 'n';
+		printf("\nError unexpected token : %c\n", env->none_ex);
+	}
 }
 
 int	start_parse(t_env *env)
@@ -393,11 +477,11 @@ int	start_parse(t_env *env)
 		if (line)
 		{
 			parse_line(env, line);
-			if (env->cmds)
-			{
+		}
+		if (env->cmds && env->error != 1)
+		{
 				exec_cmds(env);
 				clear_cmds(&(env->cmds));
-			}
 		}
 		add_history(line);
 		if (!line)
@@ -420,6 +504,8 @@ void	init_env(t_env *env)
 	env->env = NULL;
 	env->split_path = NULL;
 	env->empty = 1;
+	env->error = 0;
+	env->none_ex = 0;
 }
 
 int	main(int argc, char **argv, char **envp)

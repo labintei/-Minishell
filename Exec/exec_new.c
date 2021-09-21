@@ -6,7 +6,7 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/13 13:45:00 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/21 14:13:21 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/21 19:05:22 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -279,7 +279,8 @@ int			exec_cmds(t_env *env)
 	c = env->cmds;
 	while(c)
 	{
-		ret = exec_cmd(c, env);
+		if(c->error == 0)
+			ret = exec_cmd(c, env);
 		env->last_ret = ret;
 		c = c->next;
 	}
