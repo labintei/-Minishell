@@ -6,7 +6,7 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/17 17:42:29 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/20 22:17:48 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/22 15:24:12 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 int	ft_heredoc(t_list_file *f, t_env *env)
 {
 	char	*line;
-	char	*temp;
+//	char	*temp;
 
 	pipe(f->pipe_fd);
 	while (true)
@@ -28,10 +28,10 @@ int	ft_heredoc(t_list_file *f, t_env *env)
 			free(line);
 			break ;
 		}
-		temp = line;
-		line = ft_expansion(line, env, 0, NULL);
-		if(temp)
-			free(temp);
+//		temp = line;
+		line = ft_expansion(line, env);
+//		if(temp)
+//			free(temp);
 		write(f->pipe_fd[1], line, ft_strlen(line));
 		write(f->pipe_fd[1], "\n", 1);
 		if(line)

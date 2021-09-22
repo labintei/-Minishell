@@ -6,7 +6,7 @@
 /*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/25 18:50:07 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/21 22:11:22 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/22 15:23:24 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -188,7 +188,7 @@ int			find_exec_path(char **path, t_env *env);
 void		list_cmds_restart(t_list	**cmds);
 char		*ft_strnewcat(char *first, char *second);
 char		*get_value_from_key(char *str, int *i);
-char		*ft_expansion(char *str, t_env *env, int i, char *read);
+char		*ft_expansion(char *str, t_env *env);
 
 //fancy
 void   		 ascii_art(void);
@@ -207,7 +207,7 @@ int			ma_strcmp(char *s1, char *s2);
 
 //utils3.c 
 char		*ft_strnewcat(char *first, char *second);
-char 		*ft_expansion(char *str, t_env *env, int i, char *read);
+//char 		*ft_expansion(char *str, t_env *env, int i, char *read);
 char		*get_value_from_key(char *str, int *i);
 
 int			count_word_before_redir(char	*line, int  i);
