@@ -6,7 +6,7 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/17 15:33:18 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/22 17:18:21 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/22 20:29:15 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,8 @@ void		file_error(int n, t_env *env)
 		
 
 }
+
+	Filename too long (superieur a 255 char) // Depend de l OS
 
 	Syntax error near unexpexted token
 	Unable to execute

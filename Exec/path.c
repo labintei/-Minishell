@@ -6,7 +6,7 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/17 17:42:04 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/17 17:42:07 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/22 21:16:04 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,48 +84,55 @@ void		get_splitted_path(t_env *env)
 	char	*val;
 	int		i[3];
 
-	ft_strcpy(&s, "PATH");
-//	s = "PATH";
-	find_path(&(env->env), s, &val);
-//	printf("\nPATH : %s\n", val);
-	i[0] = 1;
-	i[1] = -1;
-	while(val && val[(++i[1])])
+	if(env->env && ft_find_env(&(env->env), "PATH"))
 	{
-		if(val && val[(i[1])] == ':')
-			i[0]++;
-	}
-	env->split_path = malloc(sizeof(char*) * (i[0] + 1));
-	i[0] = 0;
-	i[1] = 0;
-	i[2] = 0;
-	while(val && val[(i[0])])
-	{
-		if(val && val[(i[0])] && val[(i[0])] != ':')
+		ft_strcpy(&s, "PATH");
+		find_path(&(env->env), s, &val);
+		i[0] = 1;
+		i[1] = -1;
+		while(val && val[(++i[1])])
 		{
-			i[1] = 0;
-			while(val[(i[0] + i[1])] && val[(i[0] + i[1])] != ':')
-				(i[1])++;
-			env->split_path[(i[2])] = malloc(sizeof(char) * (i[1] + 2));
-			i[0]--;
-			i[1] = 0;
-			while(val[(++i[0])] && val[(i[0])] != ':')
-			{
-//``:				printf("\n%c\n", val[(i[0])]);
-				env->split_path[(i[2])][(i[1])] = val[(i[0])];
-				(i[1])++;
-			}
-			env->split_path[(i[2])][(i[1])] = '/';
-			env->split_path[(i[2])][(i[1] + 1)] = '\0';
-			(i[2])++;
+			if(val && val[(i[1])] == ':')
+				i[0]++;
 		}
-		if(val && val[(i[0])] && val[(i[0])] == ':')
-			(i[0])++;
-	}
-	env->split_path[(i[2])] = NULL;
-	if(val)
-		free(val);
+		env->split_path = malloc(sizeof(char*) * (i[0] + 1));
+		i[0] = 0;
+		i[1] = 0;
+		i[2] = 0;
+		while(val && val[(i[0])])
+		{
+			if(val && val[(i[0])] && val[(i[0])] != ':')
+			{
+				i[1] = 0;
+				while(val[(i[0] + i[1])] && val[(i[0] + i[1])] != ':')
+					(i[1])++;
+				env->split_path[(i[2])] = malloc(sizeof(char) * (i[1] + 2));
+				i[0]--;
+				i[1] = 0;
+				while(val[(++i[0])] && val[(i[0])] != ':')
+				{
+//``:				printf("\n%c\n", val[(i[0])]);
+					env->split_path[(i[2])][(i[1])] = val[(i[0])];
+					(i[1])++;
+				}
+				env->split_path[(i[2])][(i[1])] = '/';
+				env->split_path[(i[2])][(i[1] + 1)] = '\0';
+				(i[2])++;
+			}
+			if(val && val[(i[0])] && val[(i[0])] == ':')
+				(i[0])++;
+		}
+		env->split_path[(i[2])] = NULL;
+		if(val)
+			free(val);
 //	view_tab(env->split_path);
-	if(s)
-		free(s);
+		if(s)
+			free(s);
+	}
+	else
+	{
+		//if(env->split_path)
+		//	clear_tab(&(env->split_path));
+		env->split_path = NULL;
+	}
 }
