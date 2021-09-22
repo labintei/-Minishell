@@ -6,7 +6,7 @@
 /*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/25 18:48:50 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/22 15:12:31 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/22 17:14:39 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -229,6 +229,8 @@ int	find_var_and_strlen_cmds(char *line, t_env *env, int *count)
 	while (line && line[(env->i) + a] && is_alphanum(line[(env->i) + a]))
 		a++;
 	new = malloc(sizeof(char) * (a + 1));
+	if(!new)
+		exit_fatal(1, env);
 	a = 0;
 	while (line && line[(env->i)] && is_alphanum(line[(env->i)]))
 	{
@@ -239,6 +241,7 @@ int	find_var_and_strlen_cmds(char *line, t_env *env, int *count)
 	new[a] = '\0';
 	stock = NULL;
 	ft_dup_env(&(env->env), new, &stock);
+//		exit_fatal(1, env);
 	a = 0;
 	while (stock && stock[a])
 	{
@@ -292,7 +295,7 @@ void	not_quotes_cmds(char *line, t_env *env, int *count, int *out)
 		*out = 1;
 }
 
-void	save_ambigous(char **stock, char *line, int i)
+int		save_ambigous(char **stock, char *line, int i)
 {
 	int		j;
 
@@ -301,6 +304,8 @@ void	save_ambigous(char **stock, char *line, int i)
 	while(line[j] && line[j] != '|' && line[j] != '<' && line[j] != '>' && line[j] != ' ')
 		j++;
 	(*stock) = malloc(sizeof(char) * ((j - (i)) + 100));
+	if(!(*stock))
+		return(0);
 	j = 0;
 	while(line[(i)] && line[(i)] != '|' && line[(i)] != '<' && line[(i)] != '>' && line[(i)] != ' ')
 	{
@@ -310,6 +315,7 @@ void	save_ambigous(char **stock, char *line, int i)
 		++(i);
 	}
 	(*stock)[j] = '\0';
+	return(1);
 }
 
 int		is_only_var(char *line, int i/*, t_env *env*/)
@@ -352,6 +358,8 @@ void	parse_word_heredoc(char *line, int *i, t_env *env, int *count)
 			j++;
 	}
 	env->cmds->file->path = malloc(sizeof(char) * ((j - quotes) + 1));
+	if(!(env->cmds->file->path))
+		exit_fatal(1, env);
 	(*count) = 0;
 	while(line[(*i)] && line[(*i)] != '|' && line[(*i)] != '<' && line[(*i)] != '>' && line[(*i)] != ' ')
 	{
@@ -381,11 +389,7 @@ void	is_word_cmds(char *line, int *i, t_env *env)
 {
 	int		count;
 	int		out;
-//	int		j;
-//	int		is_not_quotes;
-	char	*res;
 
-//	j = 0;
 	out = 0;
 	count = 0;
 	if ((env->is_cmds))
@@ -393,18 +397,19 @@ void	is_word_cmds(char *line, int *i, t_env *env)
 		if (!env->cmds->cmds)
 			env->cmds->cmds = malloc(sizeof(char *) * \
 			(count_word(line, i, env) - nb_redir(line, (*i)) + 1));
+		if(!env->cmds->cmds)
+			exit_fatal(1, env);
 		env->cmds->cmds[(env->word)] = malloc(sizeof(char) * \
 		(count_char(line, (*i), env) + 1));
+		if(!env->cmds->cmds[(env->word)])
+			exit_fatal(1, env);
 	}
 	if(!env->is_cmds && env->cmds->error == 0 && env->last_type == 'r' && (env->cmds->file && env->cmds->file->redir != 'L') && line[(*i)] && line[(*i)] == '$' && \
 	is_only_var(line, (*i))  && count_char(line, (*i), env) == 0)
 	{
-		res = NULL;
 		env->cmds->error = 1;
-		save_ambigous(&res, line, (*i));
-		printf("\nIS AMBIGOUS REDIRECTION %s\n", res);
-		if(res)
-			free(res);
+		if(!(save_ambigous(&(env->cmds->file->ambigous), line, (*i))))
+			exit_fatal(1, env);
 	}
 	if (line[(*i)] && line[(*i)] != '|' && line[(*i)] != ' ')
 	{
@@ -522,7 +527,6 @@ void	parse_line(t_env *env, char *l)
 	{
 		env->error = 1;
 		env->none_ex = 'n';
-		printf("\nError unexpected token : %c\n", env->none_ex);
 	}
 }
 

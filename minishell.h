@@ -6,7 +6,7 @@
 /*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/25 18:50:07 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/22 15:23:24 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/22 17:06:13 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ typedef	struct		s_list_file
 	int						fd;
 	char					redir;
 	char					is_quotes;
+	char					*ambigous;
 	int						pipe_fd[2];
 	struct	s_list_file		*next;
 	struct	s_list_file		*previous;
@@ -223,6 +224,8 @@ int			exec_not_build_not_pipe(t_list	*cmd, t_env *env);
 int			exec_build_not_pipe(t_list	*cmd, t_env *env);
 int			exec_pipe(t_list *cmd, t_env *env, int is_piped);
 
+//ERROR
+void		exit_fatal(int	n, t_env *env);
 
 
 #endif
