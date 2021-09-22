@@ -6,7 +6,7 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/17 17:39:38 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/17 17:39:41 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/22 17:58:31 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,6 @@ int	ft_count_char(char *line, t_env *env)
 			if (tmp && tmp->val)
 				count = count + ft_strlen(tmp->val);
 			i = j;
-				
 		}
 		else
 		{
@@ -94,6 +93,8 @@ char	*ft_expansion(char *line, t_env *env)
 	j = 0;
 	k = 0;
 	res = malloc(sizeof(char) * (ft_count_char(line, env) + 1));
+	if(!res)
+		exit_fatal(1, env);
 	while (line[i])
 	{
 		if (line[i] == '$')
@@ -112,7 +113,6 @@ char	*ft_expansion(char *line, t_env *env)
 					j++;
 					k++;
 				}
-
 		}
 		else
 		{

@@ -6,13 +6,12 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/17 17:35:25 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/20 22:32:48 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/22 18:29:35 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-/* retours a verifier, tests */
 bool	ft_isdigit(int c)
 {
 	if (c >= '0' && c <= '9')
@@ -49,10 +48,6 @@ int	ft_atoi(const char *str)
 	return (((int)result) * ((int)sign));
 }
 
-/* A afficher si l argument d exit n est pas un nombre */
-//int exit_error_message
-
-/* Permet de savoir si la chaine est entierement composee de chiffres */
 bool	ft_str_is_digit(char *str)
 {
 	int	i;
@@ -67,15 +62,12 @@ bool	ft_str_is_digit(char *str)
 	return (true);
 }
 
-
-// Si Exit a un input et que le documents en Input existe pas (N e s exeecute pas)
-// Sinon s execute
-
 int		exit_build(t_env *env, t_list *cmds, bool fork)
 {
 	int	ret;
 	fork = 1;
-	if (cmds && cmds->cmds[0] && cmds->cmds[1] && cmds->cmds[2]/*cmds_length(cmds) > 2 && fork*/)
+
+	if (cmds && cmds->cmds[0] && cmds->cmds[1] && cmds->cmds[2])
 	{
 		ft_putstr_fd("minishell: exit: too many arguments\n", 2);
 		return (1);

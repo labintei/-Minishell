@@ -6,15 +6,12 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/17 17:34:39 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/17 17:34:42 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/22 18:26:10 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-/* Retours a verifier */
-
-/* Returns the value of the corresponding key env */
 char	*find_value(t_list_env *env, char *key)
 {
 	t_list_env	*elem;
@@ -31,7 +28,6 @@ char	*find_value(t_list_env *env, char *key)
 	return (NULL);
 }
 
-/* Prints current cd errors */
 int		cd_errors(t_list *cmds, int err, bool fork, char *path)
 {
 	(void)fork;
@@ -58,8 +54,6 @@ int		cd_errors(t_list *cmds, int err, bool fork, char *path)
 	return(0);
 }
 
-/* Finds the target path for cd depending on the arguments */
-/* revoir la valeur de fork */
 char	*find_path_1(t_list *cmds, t_list_env *env, bool fork)
 {
 	int		length;
@@ -89,7 +83,6 @@ char	*find_path_1(t_list *cmds, t_list_env *env, bool fork)
 	return (path);
 }
 
-/* executes the cd commands */
 int		cd(t_list *cmds, t_list_env *env, bool fork)
 {
 	int		ret;

@@ -6,7 +6,7 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/17 17:38:11 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/17 17:38:15 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/22 18:20:30 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@ char			*ft_dup_var_val(t_list_env	*env)
 	int		j;
 
 	new = malloc(sizeof(char) * (ft_strlen(env->val) + ft_strlen(env->var) + 2));
-	if(!new)
-		return(NULL);
+//	if(!new)
+//		return(NULL);
 	i = 0;
 	while(env->var && env->var[i])
 	{
@@ -40,7 +40,7 @@ char			*ft_dup_var_val(t_list_env	*env)
 	return(new);
 }
 
-void			ft_convert_env(t_list_env **env, char ***stock)
+int			ft_convert_env(t_list_env **env, char ***stock)
 {
 	int		i;
 	t_list_env	*l;
@@ -50,15 +50,15 @@ void			ft_convert_env(t_list_env **env, char ***stock)
 	(l) = (*env);
 	(*stock) = malloc(sizeof(char *) * (ft_len_env(env) + 1));
 	if(!(*stock))
-		return ;
+		return(0);
 	while((l))
 	{
 		(*stock)[i] = ft_dup_var_val((l));
 		l = l->next;
 		i++;
 	}
-//	list_start_env(env);
 	(*stock)[i] = NULL;
+	return(1);
 }
 
 void			view_tab(char	**tab)

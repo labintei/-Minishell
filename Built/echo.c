@@ -6,15 +6,12 @@
 /*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/30 15:39:47 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/13 22:49:42 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/22 18:14:26 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-/* Lauranne - a verifier / tester */
-/* VERIFIER POUR "" SI COMPTER COMME UN MOT ET ALORS EXISTANT */
-/* Marche au final */
 int			echo_build(t_list *cmds)
 {
 	int		i;

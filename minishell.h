@@ -6,7 +6,7 @@
 /*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/25 18:50:07 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/22 17:06:13 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/22 17:51:36 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,12 +133,12 @@ int			find_var_and_strlen(char *line, int *j, t_env *env);
 // CONVERT ENV
 void		get_splitted_path(t_env *env);
 void		ft_dup_env(t_list_env **env, char *var, char **val);
-void		ft_convert_env(t_list_env **env, char ***stock);
+int			ft_convert_env(t_list_env **env, char ***stock);
 void		view_tab(char **tab);
 int			ft_strlen_env(t_list_env	**list, char *var);
 int			view_list_env(t_list_env	**l);
 void		list_start_env(t_list_env **list);
-void		add_arg(t_list_env	*list, char *var, char *val);
+int			add_arg(t_list_env	*list, char *var, char *val);
 
 // ENV
 void		stock_env(t_env *env, char **envp);
@@ -161,7 +161,7 @@ int			ft_strlen_char(char *s, char c);
 char		*ft_strdup(char *copy);
 char		*ft_strdup_char(char *copy, char c);
 char		*ft_strdup_char_after(char *copy, char c);
-void		add_list_env(t_list_env	**list, char	*var, char *val, int i);
+int			add_list_env(t_list_env	**list, char	*var, char *val, int i);
 int			ft_find_env(t_list_env **env, char *var);
 void		ft_putstr_fd(char const *s, int fd);
 int			cmds_length(t_list *cmds);

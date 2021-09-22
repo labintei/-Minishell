@@ -6,13 +6,12 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/17 17:39:08 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/22 17:12:22 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/22 18:24:32 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-//Besoin pour Mahaut
 t_list_env	*sub_add_arg_2(char *key, char *value)
 {
 	t_list_env	*next;
@@ -34,7 +33,6 @@ t_list_env	*sub_add_arg_2(char *key, char *value)
 	return (next);
 }
 
-//Besoin pour Mahaut
 int	add_arg_2(t_list_env *env, char *key, char *value)
 {
 	t_list_env	*next;
@@ -81,7 +79,7 @@ int	env_manager(char *key, char *value, t_list_env *env)
 			elem->val = ft_strdup(value);
 			if (!elem->val && value)
 			{
-				ft_putstr_fd("Failure to allocate memory\n", 2);//a revoir Mahaut
+				ft_putstr_fd("Failure to allocate memory\n", 2);
 				exit (EXIT_FAILURE);
 			}
 			return (0);
@@ -124,7 +122,6 @@ int			view_list_env(t_list_env	**l)
 	list_start_env(l);
 	c = (*l);
 	printf("\n");
-//	printf("\nVIEW_ENV\n");
 	while(c)
 	{
 		printf("%s=", c->var);
@@ -134,35 +131,39 @@ int			view_list_env(t_list_env	**l)
 	printf("\n");
 	return(0);
 }
-void		add_arg(t_list_env	*list, char *var, char *val)
+
+int			add_arg(t_list_env	*list, char *var, char *val)
 {
 	ft_strcpy(&(list->var), var);
+//	if(var != NULL && list->var == NULL)
+//		return(0);
 	ft_strcpy(&(list->val), val);
+//	if(val != NULL && list->val == NULL)
+//		return(0);
+	return(1);
 }
 
 
-void		add_list_env(t_list_env	**list, char	*var, char *val, int i)
+int			add_list_env(t_list_env	**list, char	*var, char *val, int i)
 {
 	t_list_env	*new;
 
 	new = malloc(sizeof(t_list_env));
 //	if(!new)
-//		return ;
+//		return(0);
 	new->previous = NULL;
 	new->next = NULL;
 	new->var = NULL;
 	new->val = NULL;
-//	ft_strcpy(&(new->var), var);
-//	ft_strcpy(&(new->val), val);
-//	new->var = var;
-//	new->val = val;
 	if(i != 0)
 	{
 		(*list)->next = new;
 		new->previous = *list;
 	}
 	(*list) = new;
-	add_arg(new, var, val);
+	if(!(add_arg(new, var, val)))
+		return(0);
+	return(1);
 }
 
 void		stock_env(t_env		*env, char **envp)
@@ -179,14 +180,16 @@ void		stock_env(t_env		*env, char **envp)
 		var = ft_strdup_char(envp[i], '=');
 		val = ft_strdup_char_after(envp[i], '=');
 		if(var && ma_strcmp(var, "_") != 0)
-			add_list_env(&(env->env), var , val, i);
+		{
+			/*if(!(*/add_list_env(&(env->env), var , val, i);/*))*/
+			//	exit_fatal(1, env);
+		}
 		if(var)
 			free(var);
 		if(val)
 			free(val);
 		i++;
 	}
-//	view_list_env(&(env->env));
 }
 
 int			ft_strlen_env(t_list_env **list, char *var)
@@ -194,8 +197,6 @@ int			ft_strlen_env(t_list_env **list, char *var)
 	t_list_env	*l;
 
 	list_start_env(list);
-//	printf("\nVIEW-LIST\n");
-//	view_list_env(list);
 	l = (*list);
 	while(l)
 	{
@@ -205,5 +206,3 @@ int			ft_strlen_env(t_list_env **list, char *var)
 	}
 	return(0);
 }
-
-// 
