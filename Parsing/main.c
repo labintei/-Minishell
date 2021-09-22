@@ -6,7 +6,7 @@
 /*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/25 18:48:50 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/21 22:13:05 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/22 15:12:31 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -332,31 +332,46 @@ void	parse_word_heredoc(char *line, int *i, t_env *env, int *count)
 {
 	int		j;
 	int		quotes;
+	char	c;
 
 	quotes = 0;
 	j = 0;
 	while(line[(*i) + j] && line[(*i) + j] != '|' && line[(*i)+ j] != '<' && line[(*i) + j] != '>' && line[(*i) + j] != ' ')
 	{
-		if(line[(*i) + j] && (line[(*i) + j] == '\'' || line[(*i) + j] == '\"'))
+		if(line[(*i) + j] && ((line[(*i) + j] == '\'' || line[(*i) + j] == '\"') && ft_second(line[(*i) + j], line, ((*i) + j))))
 		{
-			env->cmds->file->is_quotes = 1;
+			c = line[(*i) + j];
+			j++;
+			quotes++;
+			while(line[(*i) + j] && line[(*i) + j] != c)
+				j++;
+			j++;
 			quotes++;
 		}
-		j++;
+		else
+			j++;
 	}
-//	if(env->cmds->file->path)
-//		free(env->cmds->file->path);
 	env->cmds->file->path = malloc(sizeof(char) * ((j - quotes) + 1));
 	(*count) = 0;
 	while(line[(*i)] && line[(*i)] != '|' && line[(*i)] != '<' && line[(*i)] != '>' && line[(*i)] != ' ')
 	{
-		if(line[(*i)] == '\'' || line[(*i)] == '\"')
+		if(line[(*i)] && ((line[(*i)] == '\'' || line[(*i)] == '\"') && ft_second(line[(*i)], line, ((*i)))))
+		{
+			c = line[(*i)];
 			(*i)++;
+			while(line[(*i)] && line[(*i)] != c)
+			{
+				env->cmds->file->path[(*count)] = line[(*i)];
+				(*count)++;
+				(*i)++;
+			}
+			(*i)++;
+		}
 		else
 		{
 			env->cmds->file->path[(*count)] = line[(*i)];
-			(*i)++;
 			(*count)++;
+			(*i)++;
 		}
 	}
 //	env->cmds->file->path[j] = '\0';
