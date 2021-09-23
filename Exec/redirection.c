@@ -6,7 +6,7 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/17 17:42:29 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/23 14:11:40 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/23 14:18:33 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,6 @@ int		redir_input_simple(t_list_file	*f, t_env *env)
 	}
 	else if (f && f->redir == 'L')
 	{
-		printf("\nTEST\n");
 		ft_heredoc(f, env);
 	}
 	return (0);
@@ -87,7 +86,6 @@ int		error_redirection(t_list_file	*f, char y)
 	{
 		if(y == 1)
 		{
-			//ft_putstr_fd("", 2);
 			ft_putstr_fd(f->path, 2);
 			ft_putstr_fd(": File name too long\n", 2);
 		}
@@ -110,7 +108,7 @@ int		error_redirection(t_list_file	*f, char y)
 		return(1);
 	}
 
-	return(2);
+	return(0);
 }
 
 int		ft_redirection(t_list_file		*file, t_env *env)
@@ -118,11 +116,10 @@ int		ft_redirection(t_list_file		*file, t_env *env)
 	t_list_file		*new;
 
 	new = file;
-	printf("\ntest\n");
 	while(new)
 	{
-//		if(error_redirection(file, 1))
-//			return(-1);
+		if(error_redirection(file, 1))
+			return(-1);
 		if (redir_input_simple(new, env) != 0)
 			return (-1);
 		if (redir_output_simple(new) != 0)

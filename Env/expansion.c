@@ -6,7 +6,7 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/17 17:39:38 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/22 17:58:31 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/23 14:33:16 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,8 @@ int	ft_count_char(char *line, t_env *env)
 			{
 				tmp = tmp->next;
 			}
+			if(res)
+				free(res);
 			if (tmp && tmp->val)
 				count = count + ft_strlen(tmp->val);
 			i = j;

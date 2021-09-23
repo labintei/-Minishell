@@ -6,7 +6,7 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/17 18:01:30 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/17 18:01:37 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/23 14:20:58 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,6 @@ int	ma_strcmp(char *s1, char *s2)
 		i++;
 	return (s1[i] - s2[i]);
 }
-
-
 
 char	*ft_strnewcat(char *first, char *second)
 {
@@ -53,7 +51,6 @@ char	*ft_strnewcat(char *first, char *second)
 	return (new);
 }
 
-/* returns the number of arguments from commands' list */
 int	cmds_length(t_list *cmds)
 {
 	int	i;
