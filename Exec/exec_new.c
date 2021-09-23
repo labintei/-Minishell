@@ -6,7 +6,7 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/13 13:45:00 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/23 14:07:49 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/23 16:09:22 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,21 @@ int		exec_other(t_list	*c, t_env *env)
 {
 	char	**test;
 	int		ret;
+	int		j;
+	struct	stat		si;
 
 	ret = 0;
 	if(c->pid == 0)
 	{
 		if(c->cmds && c->cmds[0] && c->cmds[0][0] && c->cmds[0][0] == '.' && c->cmds[0][1] && c->cmds[0][1] == '/')
 		{
+			j = open(c->cmds[0], O_RDONLY);
+			if(fstat(j, &si) == -1)
+			{
+				ft_putstr_fd(c->cmds[0], 2);
+				ft_putstr_fd(": command not found\n",2);
+				exit(1);
+			}
 			ft_convert_env(&(env->env), &test);
 			ret = execve(c->cmds[0], c->cmds, test);
 			if(test)

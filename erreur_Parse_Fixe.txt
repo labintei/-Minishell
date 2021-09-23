@@ -1,0 +1,10 @@
+
+
+
+Toutes les erreurs a FIXERROR
+
+conditional jump 
+
+Beaucoup d invalid Read lors de CLear Tab
+
+

@@ -6,7 +6,7 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/17 17:42:29 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/23 14:18:33 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/23 16:33:17 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int			redir_output_simple(t_list_file *f)
 	{
 		if((f->fd = open(f->path, O_RDWR | O_CREAT | O_TRUNC, 0644)) < 0)
 		{
-			ft_putstr_fd("\nFailed to open fd\n", 2);
+			ft_putstr_fd("Failed to open fd\n", 2);
 			return(1);
 		}
 	}
@@ -53,7 +53,7 @@ int			redir_output_simple(t_list_file *f)
 	{
 		if((f->fd = open(f->path, O_CREAT | O_RDWR | O_APPEND, 0644)) < 0)
 		{
-			ft_putstr_fd("\nFailed to open fd\n", 2);
+			ft_putstr_fd("Failed to open fd\n", 2);
 			return(1);
 		}
 	}
@@ -67,7 +67,7 @@ int		redir_input_simple(t_list_file	*f, t_env *env)
 		f->fd = open(f->path, O_RDONLY);
 		if (f->fd < 0)
 		{
-			ft_putstr_fd("\nminishell : ", 2);
+			ft_putstr_fd("minishell : ", 2);
 			ft_putstr_fd(f->path, 2);
 			ft_putstr_fd("No such file or directory\n", 2);
 			return (1);

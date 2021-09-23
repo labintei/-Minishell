@@ -6,7 +6,7 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/17 15:33:18 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/23 15:53:27 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/23 16:36:25 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,9 @@ void		exit_fatal(int n, t_env *env)
 {
 	(void)n;
 	(void)env;
-	printf("\n%d\n", n);
-	exit(2);
+//	printf("\n%d\n", n);
+//	exit(2);
+	return ;
 }
 
 void		error_exec(int n, t_env *env)

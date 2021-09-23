@@ -6,7 +6,7 @@
 /*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/25 18:48:50 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/23 15:51:41 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/23 16:50:03 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,9 @@ void	skip_quotes(char *line, int *j)
 	}
 }
 
+int			next_is_word(char *line, int i);
+
+
 int	nb_redir(char *line, int h)
 {
 	int		i[3];
@@ -103,9 +106,10 @@ int	nb_redir(char *line, int h)
 		{
 			i[2] = line[i[0]];
 			(i[0])++;
-			(i[1])++;
 			if (line[i[0]] && line[i[0]] == (char)i[2])
 				(i[0])++;
+			if(next_is_word(line, (i[0])))
+				(i[1])++;
 		}
 		else
 			(i[0])++;
@@ -136,7 +140,7 @@ void	is_pipe(t_env *env, char *line)
 		env->none_ex = (line[(env->i)]);
 //		ft_putstr_fd("\nError unexpected token :", 2); %c\n", env->none_ex);
 	}
-	if (env->is_cmds)
+	if (env->is_cmds && env->cmds && env->cmds->cmds)
 		env->cmds->cmds[env->word] = NULL;
 	env->is_cmds = 1;
 	(env->i)++;
@@ -229,8 +233,8 @@ int	find_var_and_strlen_cmds(char *line, t_env *env, int *count)
 	while (line && line[(env->i) + a] && is_alphanum(line[(env->i) + a]))
 		a++;
 	new = malloc(sizeof(char) * (a + 1));
-	if(!new)
-		exit_fatal(1, env);
+//	if(!new)
+//		exit_fatal(1, env);
 	a = 0;
 	while (line && line[(env->i)] && is_alphanum(line[(env->i)]))
 	{
@@ -383,6 +387,7 @@ void	parse_word_heredoc(char *line, int *i, t_env *env, int *count)
 //	env->cmds->file->path[j] = '\0';
 }
 
+// Il y avait des erreur
 void	is_word_cmds(char *line, int *i, t_env *env)
 {
 	int		count;
@@ -392,15 +397,16 @@ void	is_word_cmds(char *line, int *i, t_env *env)
 	count = 0;
 	if ((env->is_cmds))
 	{
-		if (!env->cmds->cmds)
+		if (!env->cmds->cmds && (count_word(line, i, env) - nb_redir(line, (*i))) > 0)
 			env->cmds->cmds = malloc(sizeof(char *) * \
 			(count_word(line, i, env) - nb_redir(line, (*i)) + 1));
-		if(!env->cmds->cmds)
-			exit_fatal(1, env);
-		env->cmds->cmds[(env->word)] = malloc(sizeof(char) * \
-		(count_char(line, (*i), env) + 1));
-		if(!env->cmds->cmds[(env->word)])
-			exit_fatal(1, env);
+	//	if(!env->cmds->cmds)
+	//		exit_fatal(1, env);
+		if(env->cmds->cmds)
+			env->cmds->cmds[(env->word)] = malloc(sizeof(char) * \
+			(count_char(line, (*i), env) + 1));
+	//	if(!env->cmds->cmds[(env->word)])
+	//		exit_fatal(1, env);
 	}
 	if(!env->is_cmds && env->cmds->error == 0 && env->last_type == 'r' && (env->cmds->file && env->cmds->file->redir != 'L') && line[(*i)] && line[(*i)] == '$' && \
 	is_only_var(line, (*i))  && count_char(line, (*i), env) == 0)
@@ -445,7 +451,7 @@ int			next_is_word(char *line, int i)
 	{
 		if(line && line[i] == ' ')
 			i++;
-		else if(line && (line[i] == '\'' || line[i] == '\"' || line[i] == '|'))
+		else if(line && (line[i] == '<' || line[i] == '>' || line[i] == '|'))
 			return(0);
 		else
 			return(1);

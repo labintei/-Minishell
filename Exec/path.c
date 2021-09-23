@@ -6,7 +6,7 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/17 17:42:04 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/22 21:16:04 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/23 16:04:33 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,8 @@ int		find_exec_path(char **path, t_env *env)
 		if(temp)
 			free(temp);
 	}
+	ft_putstr_fd((*path), 2);
+	ft_putstr_fd(": command not found\n", 2);
 	return (0);
 }
 
