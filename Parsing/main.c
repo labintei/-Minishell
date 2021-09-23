@@ -6,7 +6,7 @@
 /*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/25 18:48:50 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/23 14:15:49 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/23 14:40:04 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,7 +132,6 @@ void	is_pipe(t_env *env, char *line)
 	env->cmds->type = '|';
 	if(env->empty == 1 && env->error == 0)
 	{
-//		printf("\nError unexpected token\n");
 		env->error = 1;
 		env->none_ex = (line[(env->i)]);
 		printf("\nError unexpected token : %c\n", env->none_ex);
@@ -432,8 +431,8 @@ void	is_word_cmds(char *line, int *i, t_env *env)
 	else
 	{
 		env->cmds->file->path[count] = '\0';
-		if(env->cmds->file->path)
-			printf("\n%s\n", env->cmds->file->path);
+	//	if(env->cmds->file->path)
+	//		printf("\n%s\n", env->cmds->file->path);
 	}
 	if ((env->is_cmds))
 		(env->word)++;
@@ -540,8 +539,11 @@ int	start_parse(t_env *env)
 			parse_line(env, line);
 		}
 		if (env->cmds && env->error != 1)
-				exec_cmds(env);
-		if (env->cmds)
+		{
+			exec_cmds(env);
+			clear_cmds(&(env->cmds));
+		}
+		else if (env->cmds)
 			clear_cmds(&(env->cmds));
 		add_history(line);
 		if (!line)
