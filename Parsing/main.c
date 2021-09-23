@@ -6,7 +6,7 @@
 /*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/25 18:48:50 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/23 15:21:02 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/23 15:51:41 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,8 +123,8 @@ void	ajout_cmds(t_env *env, char *line, int *i)
 	if(((count_word(line, i, env) + 1) - nb_redir(line, (*i))) > 0)
 		env->cmds->cmds = malloc(sizeof(char *) * \
 		(count_word(line, i, env) + 1 - nb_redir(line, (*i))));
-	else
-		env->cmds->cmds = malloc(sizeof(char *) * 2);
+//	else
+//		env->cmds->cmds = malloc(sizeof(char *) * 2);
 }
 
 void	is_pipe(t_env *env, char *line)
@@ -158,11 +158,11 @@ int	is_redir(char *line, int *i, t_env *env)
 			c = 'R';
 		(*i)++;
 	}
-	if(env->empty == 1 && env->last_type == 'r')
+	if((env->last_type == 'r') && env->error == 0)
 	{
 		env->error = 1;
 		env->none_ex = c;
-		printf("\nError unexpected token : %c\n", env->none_ex);
+//		printf("\nError unexpected token : %c\n", env->none_ex);
 	}
 	env->last_type = 'r';
 	skip_space(line, i);
@@ -405,7 +405,6 @@ void	is_word_cmds(char *line, int *i, t_env *env)
 	if(!env->is_cmds && env->cmds->error == 0 && env->last_type == 'r' && (env->cmds->file && env->cmds->file->redir != 'L') && line[(*i)] && line[(*i)] == '$' && \
 	is_only_var(line, (*i))  && count_char(line, (*i), env) == 0)
 	{
-//		env->cmds->error = 1;
 		if(!(save_ambigous(&(env->cmds->file->ambigous), line, (*i))))
 			exit_fatal(1, env);
 	}
@@ -438,6 +437,20 @@ void	is_word_cmds(char *line, int *i, t_env *env)
 		(env->word)++;
 	if ((env->is_cmds) == 0)
 		(env->is_cmds) = 1;
+}
+
+int			next_is_word(char *line, int i)
+{
+	while(line && line[i])
+	{
+		if(line && line[i] == ' ')
+			i++;
+		else if(line && (line[i] == '\'' || line[i] == '\"' || line[i] == '|'))
+			return(0);
+		else
+			return(1);
+	}
+	return(0);
 }
 
 int	count_redir(char *line, int j)
@@ -473,7 +486,8 @@ int	count_redir(char *line, int j)
 					i++;
 					if (line[i] == c)
 						i++;
-					redir++;
+					if(next_is_word(line , i))
+						redir++;
 				}
 				i++;
 			}
@@ -484,6 +498,7 @@ int	count_redir(char *line, int j)
 
 void	parse_line(t_env *env, char *l)
 {
+	env->cmds = NULL;
 	if (!l || l[0] == '\0' || is_only_space(l))
 	{
 		env->cmds = NULL;
@@ -518,9 +533,9 @@ void	parse_line(t_env *env, char *l)
 			}
 		}
 	}
-	if (env->is_cmds && env->cmds && (env->word) > 0 && env->cmds->cmds && env->cmds->cmds[(env->word) - 1])
+	if (/*env->is_cmds &&*/ env->cmds /*&& (env->word) > 0*/ && env->cmds->cmds /*&& env->cmds->cmds[(env->word) - 1]*/)
 		env->cmds->cmds[(env->word)] = NULL;
-	if(env->last_type == 'r')
+	if(env->last_type == 'r'  && env->error == 0)
 	{
 		env->error = 1;
 		env->none_ex = 'n';
