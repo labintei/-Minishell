@@ -6,7 +6,7 @@
 /*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/25 18:50:07 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/23 13:28:05 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/23 15:21:55 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -227,8 +227,7 @@ void		exec_pipe(t_list *cmd, t_env *env, int is_piped);
 //ERROR
 void		exit_fatal(int	n, t_env *env);
 void		error_exec(int	n, t_env *env);
-
 int		error_redirection(t_list_file	*f, char y);
-
+int			error_unexpected(int n, t_env *env);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/25 18:48:50 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/23 14:40:04 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/23 15:21:02 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,7 +134,7 @@ void	is_pipe(t_env *env, char *line)
 	{
 		env->error = 1;
 		env->none_ex = (line[(env->i)]);
-		printf("\nError unexpected token : %c\n", env->none_ex);
+//		ft_putstr_fd("\nError unexpected token :", 2); %c\n", env->none_ex);
 	}
 	if (env->is_cmds)
 		env->cmds->cmds[env->word] = NULL;
@@ -538,7 +538,7 @@ int	start_parse(t_env *env)
 		{
 			parse_line(env, line);
 		}
-		if (env->cmds && env->error != 1)
+		if (env->cmds && error_unexpected(env->error, env))
 		{
 			exec_cmds(env);
 			clear_cmds(&(env->cmds));

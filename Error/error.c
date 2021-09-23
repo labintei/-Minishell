@@ -6,13 +6,32 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/17 15:33:18 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/23 12:27:08 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/23 15:23:37 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
 // Grosso modo
+
+int			error_unexpected(int n, t_env *env)
+{
+	if(n == 1)
+	{
+		ft_putstr_fd("Error unexpected token : ", 2);
+		if(env->none_ex == 'n')
+			ft_putstr_fd("newline", 2);
+		else if(env->none_ex == 'L')
+			ft_putstr_fd("<<", 2);
+		else if(env->none_ex == 'R')
+			ft_putstr_fd(">>", 2);
+		else
+			write(2, &(env->none_ex), 1);
+		write(2, "\n", 1);
+		return(0);
+	}
+	return(1);
+}
 
 void		fatal_error(int n, t_env *env)
 {
