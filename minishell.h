@@ -6,7 +6,7 @@
 /*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/25 18:50:07 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/22 17:51:36 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/23 13:28:05 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -213,19 +213,22 @@ char		*get_value_from_key(char *str, int *i);
 
 int			count_word_before_redir(char	*line, int  i);
 
-void		ft_dup_fd2(t_list_file *cmd);
+void		ft_dup_fd2(t_list_file *cmd, t_env *env);
 
 //PARSING
 void			is_in_word_not_quotes(char *line, int *j, int *redir, int *pipe);
 void			spe_case(char *line, int *j, int *pipe, int *redir);
 
 //EXECUTION
-int			exec_not_build_not_pipe(t_list	*cmd, t_env *env);
-int			exec_build_not_pipe(t_list	*cmd, t_env *env);
-int			exec_pipe(t_list *cmd, t_env *env, int is_piped);
+void		exec_not_build_not_pipe(t_list	*cmd, t_env *env);
+void		exec_build_not_pipe(t_list	*cmd, t_env *env);
+void		exec_pipe(t_list *cmd, t_env *env, int is_piped);
 
 //ERROR
 void		exit_fatal(int	n, t_env *env);
+void		error_exec(int	n, t_env *env);
+
+int		error_redirection(t_list_file	*f, char y);
 
 
 #endif

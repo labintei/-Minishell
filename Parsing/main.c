@@ -6,7 +6,7 @@
 /*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/25 18:48:50 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/22 17:14:39 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/23 14:10:15 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ void	add_list_file(t_list_file **file, int i, char c)
 	new->next = NULL;
 	new->redir = c;
 	new->is_quotes = 0;
+	new->ambigous = NULL;
 	if(c != 'L')
 		new->path = malloc(sizeof(char) * (i + 1));
 	else
@@ -299,18 +300,16 @@ int		save_ambigous(char **stock, char *line, int i)
 {
 	int		j;
 
-	printf("\n");
 	j = (i);
 	while(line[j] && line[j] != '|' && line[j] != '<' && line[j] != '>' && line[j] != ' ')
 		j++;
-	(*stock) = malloc(sizeof(char) * ((j - (i)) + 100));
+	(*stock) = malloc(sizeof(char) * ((j - (i)) + 1));
 	if(!(*stock))
 		return(0);
 	j = 0;
 	while(line[(i)] && line[(i)] != '|' && line[(i)] != '<' && line[(i)] != '>' && line[(i)] != ' ')
 	{
 		(*stock)[j] = line[(i)];
-		write(1, &((*stock)[j]) , 1);
 		j++;
 		++(i);
 	}
@@ -318,11 +317,10 @@ int		save_ambigous(char **stock, char *line, int i)
 	return(1);
 }
 
-int		is_only_var(char *line, int i/*, t_env *env*/)
+int		is_only_var(char *line, int i)
 {
 	int		j;
 
-	printf("\nIS ONLY VAR\n");
 	j = i;
 	j++;
 	while(line[j] && line[j] != '|' && line[j] != '<' && line[j] != '>' && line[j] != ' ')
@@ -366,6 +364,7 @@ void	parse_word_heredoc(char *line, int *i, t_env *env, int *count)
 		if(line[(*i)] && ((line[(*i)] == '\'' || line[(*i)] == '\"') && ft_second(line[(*i)], line, ((*i)))))
 		{
 			c = line[(*i)];
+			env->cmds->file->is_quotes = 1;
 			(*i)++;
 			while(line[(*i)] && line[(*i)] != c)
 			{
@@ -407,7 +406,7 @@ void	is_word_cmds(char *line, int *i, t_env *env)
 	if(!env->is_cmds && env->cmds->error == 0 && env->last_type == 'r' && (env->cmds->file && env->cmds->file->redir != 'L') && line[(*i)] && line[(*i)] == '$' && \
 	is_only_var(line, (*i))  && count_char(line, (*i), env) == 0)
 	{
-		env->cmds->error = 1;
+//		env->cmds->error = 1;
 		if(!(save_ambigous(&(env->cmds->file->ambigous), line, (*i))))
 			exit_fatal(1, env);
 	}
@@ -415,7 +414,6 @@ void	is_word_cmds(char *line, int *i, t_env *env)
 	{
 		if(!env->is_cmds && env->last_type == 'r' && env->cmds->file && env->cmds->file->redir == 'L')
 		{
-			printf("\nTEST\n");
 			parse_word_heredoc(line, i, env, &count);
 		}
 		else
@@ -434,7 +432,8 @@ void	is_word_cmds(char *line, int *i, t_env *env)
 	else
 	{
 		env->cmds->file->path[count] = '\0';
-		printf("\nENV REDIRECTION %s\n", env->cmds->file->path);
+		if(env->cmds->file->path)
+			printf("\n%s\n", env->cmds->file->path);
 	}
 	if ((env->is_cmds))
 		(env->word)++;
@@ -514,7 +513,6 @@ void	parse_line(t_env *env, char *l)
 			}
 			else
 			{
-//				env->last_type = 'w';
 				env->empty = 0;
 				is_word_cmds(l, &(env->i), env);
 				env->last_type = 'w';
@@ -541,11 +539,10 @@ int	start_parse(t_env *env)
 		{
 			parse_line(env, line);
 		}
-		if (env->cmds && env->error != 1)
-		{
+		if (env->cmds /*&& env->error != 1*/)
 				exec_cmds(env);
-				clear_cmds(&(env->cmds));
-		}
+		if (env->cmds)
+			clear_cmds(&(env->cmds));
 		add_history(line);
 		if (!line)
 		{

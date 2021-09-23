@@ -6,12 +6,13 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/17 15:33:18 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/22 20:29:15 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/23 12:27:08 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
+// Grosso modo
 
 void		fatal_error(int n, t_env *env)
 {
@@ -27,6 +28,25 @@ void		exit_fatal(int n, t_env *env)
 	(void)n;
 	(void)env;
 	exit(2);
+}
+
+void		error_exec(int n, t_env *env)
+{
+	if(n == 1)
+		ft_putstr_fd("\nFailed to Pipe\n", 2);
+	if(n == 2)
+	{
+		ft_putstr_fd("\nFailed to Fork Process\n", 2);
+		env->last_ret = 1;
+	}
+	if(n == 3)
+	{
+		ft_putstr_fd("\nFailed to Dup fd\n", 2);
+	}
+	if(n == 4)
+	{
+		
+	}
 }
 
 /*

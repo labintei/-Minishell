@@ -6,7 +6,7 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/31 15:29:51 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/10 19:02:01 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/23 13:44:10 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,8 @@ void		clear_t_list_file(t_list_file	**file)
 		temp = (*file)->next;
 		if((*file)->path)
 			free((*file)->path);
+		if((*file)->ambigous)
+			free((*file)->ambigous);
 		free(*file);
 		(*file) = temp;
 	}

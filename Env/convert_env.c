@@ -6,7 +6,7 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/17 17:38:11 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/22 18:20:30 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/23 10:42:05 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,8 @@ char			*ft_dup_var_val(t_list_env	*env)
 	int		i;
 	int		j;
 
+	new = NULL;
 	new = malloc(sizeof(char) * (ft_strlen(env->val) + ft_strlen(env->var) + 2));
-//	if(!new)
-//		return(NULL);
 	i = 0;
 	while(env->var && env->var[i])
 	{
