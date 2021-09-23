@@ -6,7 +6,7 @@
 /*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/25 18:50:07 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/23 15:21:55 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/23 18:05:43 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@
 # include	<fcntl.h>
 # include	<stdbool.h>
 # include	<errno.h>
+
+extern	int		STATUS;
 
 //Revoir les erreurs - sous forme de variables globales (comme qdam)
 #define CD_ERROR 4
@@ -175,6 +177,9 @@ int			wait_execution(t_list *cmds, t_env *env);
 int			dup_pipes(t_list *cmd);
 
 //Signals
+int			define_signals(void);
+
+//
 int			handle_signals(void);
 void		ctrl_c(int sig);
 void		ctrl_slash(int sig);

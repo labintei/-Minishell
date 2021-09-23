@@ -6,7 +6,7 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/13 13:45:00 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/23 16:09:22 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/23 18:04:41 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -180,6 +180,8 @@ void			exec_pipe(t_list *cmd, t_env *env, int is_piped)
 	(void)is_piped;
 	if((pid = fork()) < 0)
 		return(error_exec(2, env));
+	if(pid)
+		STATUS = pid;
 	cmd->pid = pid;
 	cmd->is_fork = 1;
 	if(cmd->pid == 0)
@@ -208,6 +210,8 @@ void		exec_not_build_not_pipe(t_list	*cmd, t_env *env)
 
 	if((pid = fork()) < 0)
 		error_exec(2, env);
+	if(pid)
+		STATUS = pid;
 	cmd->pid = pid;
 	cmd->is_fork = 1;
 	if(cmd->pid == 0)
@@ -262,6 +266,7 @@ int			exec_cmds(t_env *env)
 		c = c->next;
 	}
 	wait_exec_cmds(env->cmds);
+	STATUS = 0;
 	return(ret);
 
 }

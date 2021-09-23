@@ -6,7 +6,7 @@
 /*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/25 18:48:50 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/23 16:50:03 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/23 18:06:08 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -591,6 +591,8 @@ void	init_env(t_env *env)
 	env->none_ex = 0;
 }
 
+int		STATUS;
+
 int	main(int argc, char **argv, char **envp)
 {
 	t_env	env;
@@ -600,6 +602,8 @@ int	main(int argc, char **argv, char **envp)
 	ret = 0;
 	if (argc == 1)
 	{
+		STATUS = 0;
+		define_signals();
 		ascii_art();
 		env.split_path = NULL;
 		stock_env(&env, envp);

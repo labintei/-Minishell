@@ -6,12 +6,12 @@
 #    By: malatini <malatini@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/08/16 20:11:09 by labintei          #+#    #+#              #
-#    Updated: 2021/09/23 16:16:20 by labintei         ###   ########.fr        #
+#    Updated: 2021/09/23 18:01:34 by labintei         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 SRCS		=	./Exec/exec_new.c ./Exec/path.c ./Exec/redirection.c \
-				./Exec/exec_builtin.c ./Exec/signals.c \
+				./Exec/exec_builtin.c ./Exec/signals.c ./Exec/handle_signal.c \
 				./Env/convert_env.c ./Env/env.c ./Env/expansion.c\
 				./Utils/utils.c ./Utils/utils1.c ./Utils/utils2.c \
 				./Utils/fancy.c ./Utils/utils3.c ./Utils/free.c \
