@@ -6,7 +6,7 @@
 /*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/25 18:48:50 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/23 18:06:08 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/23 20:33:08 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -602,12 +602,14 @@ int	main(int argc, char **argv, char **envp)
 	ret = 0;
 	if (argc == 1)
 	{
-		STATUS = 0;
-		define_signals();
+//		STATUS = 0;
+//		define_signals();
+		handle_signals();
 		ascii_art();
 		env.split_path = NULL;
 		stock_env(&env, envp);
 		get_splitted_path(&env);
+		handle_signals();
 		env.cmds = NULL;
 		ret = start_parse(&env);
 	}

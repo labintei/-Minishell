@@ -6,7 +6,7 @@
 /*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/25 18:50:07 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/23 18:05:43 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/23 20:32:25 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,8 @@
 #define		MINISHELL_H
 
 #include	<limits.h>
-# include	<stdlib.h>
+
+/*# include	<stdlib.h>
 # include	<stdio.h>
 # include	<unistd.h>
 # include	<readline/readline.h>
@@ -27,11 +28,34 @@
 # include	<signal.h>
 # include	<fcntl.h>
 # include	<stdbool.h>
-# include	<errno.h>
+*/
 
-extern	int		STATUS;
+
+# include <string.h>
+# include <errno.h>
+# include <curses.h>
+# include <signal.h>
+# include <sys/wait.h>
+# include <stdbool.h>
+# include <stdio.h>
+# include <stdlib.h>
+# include <stdio.h>
+# include <unistd.h>
+# include <fcntl.h>
+# include <readline/readline.h>
+# include <readline/history.h>
+# include <sys/types.h>
+# include <sys/stat.h>
+# include <stdarg.h>
+
+
+
+
+
+//extern	int		STATUS;
 
 //Revoir les erreurs - sous forme de variables globales (comme qdam)
+
 #define CD_ERROR 4
 
 typedef	struct		s_list_env

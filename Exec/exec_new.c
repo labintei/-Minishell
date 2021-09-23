@@ -6,7 +6,7 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/13 13:45:00 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/23 18:04:41 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/23 20:33:43 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,18 +127,23 @@ int			wait_exec_cmds(t_list		*cmds)
 {
 	int			ret;
 	int			status;
+//	int			i;
 
+//	i = 0;
 	ret = 0;
 	while(cmds)
 	{
 		if(cmds && cmds->cmds && cmds->is_fork)
 		{
+//			i = 1;
 			waitpid(cmds->pid, &status, 0);
 			if(WIFEXITED(status))
 				ret = WEXITSTATUS(status);
 		}
 		cmds = cmds->next;
 	}
+//	if(i == 1)
+	handle_signals();
 	return(ret);
 }
 
@@ -180,9 +185,11 @@ void			exec_pipe(t_list *cmd, t_env *env, int is_piped)
 	(void)is_piped;
 	if((pid = fork()) < 0)
 		return(error_exec(2, env));
-	if(pid)
-		STATUS = pid;
+	inhibit_signals(pid);
+//	if(pid)
+//		STATUS = pid;
 	cmd->pid = pid;
+	inhibit_signals(cmd->pid);
 	cmd->is_fork = 1;
 	if(cmd->pid == 0)
 	{
@@ -210,8 +217,9 @@ void		exec_not_build_not_pipe(t_list	*cmd, t_env *env)
 
 	if((pid = fork()) < 0)
 		error_exec(2, env);
-	if(pid)
-		STATUS = pid;
+//	if(pid)
+//		STATUS = pid;
+	inhibit_signals(cmd->pid);
 	cmd->pid = pid;
 	cmd->is_fork = 1;
 	if(cmd->pid == 0)
@@ -266,7 +274,7 @@ int			exec_cmds(t_env *env)
 		c = c->next;
 	}
 	wait_exec_cmds(env->cmds);
-	STATUS = 0;
+//	STATUS = 0;
 	return(ret);
 
 }
