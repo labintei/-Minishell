@@ -6,7 +6,7 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/26 12:22:03 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/10 19:02:33 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/24 15:07:37 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,28 @@ int		ft_strlen_char(char	*s, char c)
 	}
 	return(i);
 }
+
+char		*ft_itoa(int n)
+{
+	char *s;
+	int		size;
+	long int	i;
+
+	size = 0;
+	i = (long int)n;
+	while(i && ++size)
+		i /= 10;
+	s = malloc(sizeof(char) * (size + 1));
+	s[size] = '\0';
+	while(n)
+	{
+		s[(--size)] = n % 10;
+		n /= 10;
+	}
+	printf("\n%s\n",s);
+	return(s);
+}
+
 
 /* version Lauranne */
 /*

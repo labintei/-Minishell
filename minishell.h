@@ -6,7 +6,7 @@
 /*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/25 18:50:07 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/23 20:32:25 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/24 14:42:36 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,23 +14,6 @@
 #define		MINISHELL_H
 
 #include	<limits.h>
-
-/*# include	<stdlib.h>
-# include	<stdio.h>
-# include	<unistd.h>
-# include	<readline/readline.h>
-# include	<readline/history.h>
-# include	<errno.h>
-# include	<sys/wait.h>
-# include	<sys/time.h>
-# include	<sys/stat.h>
-# include	<curses.h>
-# include	<signal.h>
-# include	<fcntl.h>
-# include	<stdbool.h>
-*/
-
-
 # include <string.h>
 # include <errno.h>
 # include <curses.h>
@@ -48,13 +31,7 @@
 # include <sys/stat.h>
 # include <stdarg.h>
 
-
-
-
-
-//extern	int		STATUS;
-
-//Revoir les erreurs - sous forme de variables globales (comme qdam)
+extern		int		RET;
 
 #define CD_ERROR 4
 

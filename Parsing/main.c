@@ -6,7 +6,7 @@
 /*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/25 18:48:50 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/24 14:25:50 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/24 14:43:37 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -584,6 +584,7 @@ int	start_parse(t_env *env)
 		if (line)
 			free(line);
 	}
+	RET = 0;
 	return (1);
 }
 
@@ -597,19 +598,16 @@ void	init_env(t_env *env)
 	env->none_ex = 0;
 }
 
-int		STATUS;
+int		RET;
 
 int	main(int argc, char **argv, char **envp)
 {
 	t_env	env;
-	int		ret;
 
 	(void)argv;
-	ret = 0;
+	RET = 0;
 	if (argc == 1)
 	{
-//		STATUS = 0;
-//		define_signals();
 		handle_signals();
 		ascii_art();
 		env.split_path = NULL;
@@ -617,8 +615,8 @@ int	main(int argc, char **argv, char **envp)
 		get_splitted_path(&env);
 		handle_signals();
 		env.cmds = NULL;
-		ret = start_parse(&env);
+		start_parse(&env);
 	}
 	clear_env(&env);
-	return (ret);
+	return (RET);
 }
