@@ -6,7 +6,7 @@
 /*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/25 18:50:07 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/24 14:42:36 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/24 15:42:05 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,7 +149,9 @@ int			ft_len_env(t_list_env **env);
 t_list_env	*sub_add_arg_2(char *key, char *value);
 int			add_arg_2(t_list_env *env, char *key, char *value);
 int			env_manager(char *key, char *value, t_list_env *env);
-
+// BON PROBLEME
+//void		add_list_env(t_list_env **env, char *var, char *val);
+void		change_value(t_list_env **env, char *var, char *val);
 // CMDS
 void		add_cmds(t_list	**cmds);
 
@@ -170,7 +172,7 @@ void		ft_putstr_fd(char const *s, int fd);
 int			cmds_length(t_list *cmds);
 void		ft_putstr_fd(char const *s, int fd);
 int			ft_strcmp_cd(const char *s1, const char *s2);
-
+char		*ft_itoa(int n);
 // exec
 void		exec_cmds_old(t_env *env);
 int			exec_cmds(t_env *env);

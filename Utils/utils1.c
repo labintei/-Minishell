@@ -6,7 +6,7 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/26 12:22:03 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/24 15:07:37 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/24 15:28:41 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int		ft_strlen_char(char	*s, char c)
 	}
 	return(i);
 }
-
+/*
 char		*ft_itoa(int n)
 {
 	char *s;
@@ -44,7 +44,7 @@ char		*ft_itoa(int n)
 	}
 	printf("\n%s\n",s);
 	return(s);
-}
+}*/
 
 
 /* version Lauranne */

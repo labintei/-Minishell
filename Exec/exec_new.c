@@ -6,7 +6,7 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/13 13:45:00 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/24 15:00:42 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/24 15:54:21 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,6 +144,7 @@ int			wait_exec_cmds(t_list		*cmds)
 	}
 	if(i == 1)
 		handle_signals();
+	
 	return(ret);
 }
 
@@ -158,6 +159,7 @@ void		exec_cmd(t_list *cmd, t_env *env)
 			error_exec(1, env);
 		is_piped = 1;
 		cmd->is_piped = 1;
+		RET = 1;
 	}
 	if(cmd->error == 0 && cmd->file)
 	{
@@ -259,6 +261,7 @@ int			exec_cmds(t_env *env)
 {
 	t_list		*c;
 	int			ret;
+	char		*s;
 
 	ret = 0;
 	list_cmds_restart(&(env->cmds));
@@ -271,7 +274,11 @@ int			exec_cmds(t_env *env)
 		c = c->next;
 	}
 	wait_exec_cmds(env->cmds);
-//	STATUS = 0;
+	s = ft_itoa(RET);
+	printf("\n%s\n", s);
+	change_value(&(env->env), "?", s);
+	if(s)
+		free(s);
 	return(ret);
 
 }

@@ -6,7 +6,7 @@
 /*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/25 18:48:50 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/24 14:43:37 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/24 15:47:09 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -551,7 +551,13 @@ void	parse_line(t_env *env, char *l)
 int	start_parse(t_env *env)
 {
 	char	*line;
+//	char	*s;
+//	char	*s2;
 
+//	s = ft_itoa(RET);
+//	add_list_env(&(env->env), "?", s, 4);
+//	if(s)
+//		free(s);
 	while (true)
 	{
 		line = readline("\033[1;36muser@minishell$ \033[0m$ ");
@@ -603,6 +609,7 @@ int		RET;
 int	main(int argc, char **argv, char **envp)
 {
 	t_env	env;
+//	char	*s;
 
 	(void)argv;
 	RET = 0;
@@ -612,6 +619,10 @@ int	main(int argc, char **argv, char **envp)
 		ascii_art();
 		env.split_path = NULL;
 		stock_env(&env, envp);
+//		s = ft_itoa(RET);
+/*		add_list_env(&(env.env), "?", s);
+		if(s)
+			free(s);*/
 		get_splitted_path(&env);
 		handle_signals();
 		env.cmds = NULL;

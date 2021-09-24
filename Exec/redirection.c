@@ -6,7 +6,7 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/17 17:42:29 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/23 16:33:17 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/24 15:52:20 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ int			redir_output_simple(t_list_file *f)
 		if((f->fd = open(f->path, O_RDWR | O_CREAT | O_TRUNC, 0644)) < 0)
 		{
 			ft_putstr_fd("Failed to open fd\n", 2);
+			RET = 1;
 			return(1);
 		}
 	}
@@ -54,6 +55,7 @@ int			redir_output_simple(t_list_file *f)
 		if((f->fd = open(f->path, O_CREAT | O_RDWR | O_APPEND, 0644)) < 0)
 		{
 			ft_putstr_fd("Failed to open fd\n", 2);
+			RET = 1;
 			return(1);
 		}
 	}
@@ -70,6 +72,7 @@ int		redir_input_simple(t_list_file	*f, t_env *env)
 			ft_putstr_fd("minishell : ", 2);
 			ft_putstr_fd(f->path, 2);
 			ft_putstr_fd("No such file or directory\n", 2);
+			RET = 1;
 			return (1);
 		}
 	}
@@ -88,6 +91,7 @@ int		error_redirection(t_list_file	*f, char y)
 		{
 			ft_putstr_fd(f->path, 2);
 			ft_putstr_fd(": File name too long\n", 2);
+			RET = 1;
 		}
 		return(1);
 	}
@@ -98,13 +102,17 @@ int		error_redirection(t_list_file	*f, char y)
 			ft_putstr_fd("minishell: ", 2);
 			ft_putstr_fd(f->ambigous, 2);
 			ft_putstr_fd(" ambigous redirect\n", 2);
+			RET = 1;
 		}
 		return(1);
 	}
 	if(f && (!f->path || !f->path[0]))
 	{
 		if(y == 1)
+		{
+			RET = 1;
 			ft_putstr_fd("minishell : No such file or directory\n", 2);
+		}
 		return(1);
 	}
 
