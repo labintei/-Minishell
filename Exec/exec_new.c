@@ -6,7 +6,7 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/13 13:45:00 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/24 15:54:21 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/24 16:45:05 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -262,6 +262,7 @@ int			exec_cmds(t_env *env)
 	t_list		*c;
 	int			ret;
 	char		*s;
+	char		*s2;
 
 	ret = 0;
 	list_cmds_restart(&(env->cmds));
@@ -275,8 +276,10 @@ int			exec_cmds(t_env *env)
 	}
 	wait_exec_cmds(env->cmds);
 	s = ft_itoa(RET);
-	printf("\n%s\n", s);
-	change_value(&(env->env), "?", s);
+	if(ft_find_env(&(env->env), "?"))
+	{
+		change_value(&(env->env), "?", s);
+	}
 	if(s)
 		free(s);
 	return(ret);
