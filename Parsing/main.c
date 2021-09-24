@@ -6,7 +6,7 @@
 /*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/25 18:48:50 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/23 20:33:08 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/24 14:25:50 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -555,6 +555,12 @@ int	start_parse(t_env *env)
 	while (true)
 	{
 		line = readline("\033[1;36muser@minishell$ \033[0m$ ");
+		if(!line)
+		{
+			ft_putstr_fd("\b\b", 0);
+			ft_putstr_fd("exit\n", 1);
+			break ;
+		}
 		if (line)
 		{
 			parse_line(env, line);
@@ -613,5 +619,6 @@ int	main(int argc, char **argv, char **envp)
 		env.cmds = NULL;
 		ret = start_parse(&env);
 	}
+	clear_env(&env);
 	return (ret);
 }

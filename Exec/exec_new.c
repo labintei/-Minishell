@@ -6,7 +6,7 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/13 13:45:00 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/23 20:33:43 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/24 14:19:32 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,23 +127,23 @@ int			wait_exec_cmds(t_list		*cmds)
 {
 	int			ret;
 	int			status;
-//	int			i;
+	int			i;
 
-//	i = 0;
+	i = 0;
 	ret = 0;
 	while(cmds)
 	{
 		if(cmds && cmds->cmds && cmds->is_fork)
 		{
-//			i = 1;
+			i = 1;
 			waitpid(cmds->pid, &status, 0);
 			if(WIFEXITED(status))
 				ret = WEXITSTATUS(status);
 		}
 		cmds = cmds->next;
 	}
-//	if(i == 1)
-	handle_signals();
+	if(i == 1)
+		handle_signals();
 	return(ret);
 }
 
