@@ -6,7 +6,7 @@
 /*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/25 18:48:50 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/24 15:47:09 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/24 17:12:44 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,8 +127,6 @@ void	ajout_cmds(t_env *env, char *line, int *i)
 	if(((count_word(line, i, env) + 1) - nb_redir(line, (*i))) > 0)
 		env->cmds->cmds = malloc(sizeof(char *) * \
 		(count_word(line, i, env) + 1 - nb_redir(line, (*i))));
-//	else
-//		env->cmds->cmds = malloc(sizeof(char *) * 2);
 }
 
 void	is_pipe(t_env *env, char *line)
@@ -138,7 +136,6 @@ void	is_pipe(t_env *env, char *line)
 	{
 		env->error = 1;
 		env->none_ex = (line[(env->i)]);
-//		ft_putstr_fd("\nError unexpected token :", 2); %c\n", env->none_ex);
 	}
 	if (env->is_cmds && env->cmds && env->cmds->cmds)
 		env->cmds->cmds[env->word] = NULL;
@@ -166,7 +163,6 @@ int	is_redir(char *line, int *i, t_env *env)
 	{
 		env->error = 1;
 		env->none_ex = c;
-//		printf("\nError unexpected token : %c\n", env->none_ex);
 	}
 	env->last_type = 'r';
 	skip_space(line, i);
@@ -233,8 +229,6 @@ int	find_var_and_strlen_cmds(char *line, t_env *env, int *count)
 	while (line && line[(env->i) + a] && is_alphanum(line[(env->i) + a]))
 		a++;
 	new = malloc(sizeof(char) * (a + 1));
-//	if(!new)
-//		exit_fatal(1, env);
 	a = 0;
 	while (line && line[(env->i)] && is_alphanum(line[(env->i)]))
 	{
@@ -245,7 +239,6 @@ int	find_var_and_strlen_cmds(char *line, t_env *env, int *count)
 	new[a] = '\0';
 	stock = NULL;
 	ft_dup_env(&(env->env), new, &stock);
-//		exit_fatal(1, env);
 	a = 0;
 	while (stock && stock[a])
 	{
@@ -384,10 +377,8 @@ void	parse_word_heredoc(char *line, int *i, t_env *env, int *count)
 			(*i)++;
 		}
 	}
-//	env->cmds->file->path[j] = '\0';
 }
 
-// Il y avait des erreur
 void	is_word_cmds(char *line, int *i, t_env *env)
 {
 	int		count;
@@ -400,13 +391,9 @@ void	is_word_cmds(char *line, int *i, t_env *env)
 		if (!env->cmds->cmds && (count_word(line, i, env) - nb_redir(line, (*i))) > 0)
 			env->cmds->cmds = malloc(sizeof(char *) * \
 			(count_word(line, i, env) - nb_redir(line, (*i)) + 1));
-	//	if(!env->cmds->cmds)
-	//		exit_fatal(1, env);
 		if(env->cmds->cmds)
 			env->cmds->cmds[(env->word)] = malloc(sizeof(char) * \
 			(count_char(line, (*i), env) + 1));
-	//	if(!env->cmds->cmds[(env->word)])
-	//		exit_fatal(1, env);
 	}
 	if(!env->is_cmds && env->cmds->error == 0 && env->last_type == 'r' && (env->cmds->file && env->cmds->file->redir != 'L') && line[(*i)] && line[(*i)] == '$' && \
 	is_only_var(line, (*i))  && count_char(line, (*i), env) == 0)
@@ -459,49 +446,6 @@ int			next_is_word(char *line, int i)
 	return(0);
 }
 
-int	count_redir(char *line, int j)
-{
-	int		i;
-	int		redir;
-	char	c;
-	int		stop;
-
-	redir = 0;
-	i = j;
-	stop = 0;
-	while (line[i] && stop == 0)
-	{
-		if (line[i] && stop == 0 && (line[i] == '\'' || line[i] == '\"') && ft_second(line[i], line, i))
-		{
-			c = line[i];
-			i++;
-			while (line[i] && line[i] != c)
-				i++;
-			if (line[i] == c)
-				i++;
-		}
-		else
-		{
-			while (line[i] && stop == 0 && !((line[i] == '\'' || line[i] == '\"') && ft_second(line[i], line, i)))
-			{
-				if (line[i] && line[i] == '|')
-					stop = 1;
-				else if (line[i] && (line[i] == '<' || line[i] == '>'))
-				{
-					c = line[i];
-					i++;
-					if (line[i] == c)
-						i++;
-					if(next_is_word(line , i))
-						redir++;
-				}
-				i++;
-			}
-		}
-	}
-	return (redir);
-}
-
 void	parse_line(t_env *env, char *l)
 {
 	env->cmds = NULL;
@@ -551,13 +495,7 @@ void	parse_line(t_env *env, char *l)
 int	start_parse(t_env *env)
 {
 	char	*line;
-//	char	*s;
-//	char	*s2;
 
-//	s = ft_itoa(RET);
-//	add_list_env(&(env->env), "?", s, 4);
-//	if(s)
-//		free(s);
 	while (true)
 	{
 		line = readline("\033[1;36muser@minishell$ \033[0m$ ");
@@ -609,7 +547,6 @@ int		RET;
 int	main(int argc, char **argv, char **envp)
 {
 	t_env	env;
-//	char	*s;
 
 	(void)argv;
 	RET = 0;
@@ -619,10 +556,6 @@ int	main(int argc, char **argv, char **envp)
 		ascii_art();
 		env.split_path = NULL;
 		stock_env(&env, envp);
-//		s = ft_itoa(RET);
-/*		add_list_env(&(env.env), "?", s);
-		if(s)
-			free(s);*/
 		get_splitted_path(&env);
 		handle_signals();
 		env.cmds = NULL;

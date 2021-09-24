@@ -6,7 +6,7 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/17 17:42:29 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/24 15:52:20 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/24 17:13:44 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	ft_heredoc(t_list_file *f, t_env *env)
 
 	if(pipe(f->pipe_fd))
 		error_exec(1, env);
-	while (true)
+	while (1)
 	{
 		line = readline("> ");
 		if (!line)

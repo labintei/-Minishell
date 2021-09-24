@@ -6,7 +6,7 @@
 #    By: malatini <malatini@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/08/16 20:11:09 by labintei          #+#    #+#              #
-#    Updated: 2021/09/24 14:18:28 by labintei         ###   ########.fr        #
+#    Updated: 2021/09/24 16:58:03 by labintei         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,7 @@ SRCS		=	./Exec/exec_new.c ./Exec/path.c ./Exec/redirection.c \
 				./Utils/fancy.c ./Utils/utils3.c ./Utils/free.c \
 				./Utils/clear.c ./Utils/view.c\
 				./Parsing/count_word.c ./Parsing/count_char.c \
-				./Parsing/main.c ./Parsing/cmds.c \
+				./Parsing/main.c ./Parsing/cmds.c ./Parsing/parse.c \
 				./Built/cd.c ./Built/echo.c ./Built/exit.c ./Built/export.c \
 				./Built/pwd.c ./Built/unset.c \
 				./Error/error.c
