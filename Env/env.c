@@ -6,7 +6,7 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/17 17:39:08 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/24 15:48:04 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/27 15:59:44 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,11 +124,11 @@ int			view_list_env(t_list_env	**l)
 	printf("\n");
 	while(c)
 	{
-//		if(c && c->var != "?")
-//		{
-		printf("%s=", c->var);
-		printf("%s\n", c->val);
-//		}
+		if(c && c->var != "?")
+		{
+			printf("%s=", c->var);
+			printf("%s\n", c->val);
+		}
 		c = c->next;
 	}
 	printf("\n");
