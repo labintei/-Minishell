@@ -6,7 +6,7 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/17 17:42:29 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/27 15:34:00 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/27 16:34:57 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,6 +129,8 @@ int		ft_redirection(t_list_file		*file, t_env *env)
 {
 	t_list_file		*new;
 
+//	if(pid != 0)
+//		return(0);
 	new = file;
 	while(new)
 	{
@@ -140,5 +142,6 @@ int		ft_redirection(t_list_file		*file, t_env *env)
 			return (-1);
 		new = new->next;
 	}
+//	*j = 4;
 	return (0);
 }

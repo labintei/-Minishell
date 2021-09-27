@@ -6,7 +6,7 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/13 13:45:00 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/27 15:40:13 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/27 17:07:31 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -251,6 +251,17 @@ void		exec_not_build_not_pipe(t_list	*cmd, t_env *env)
 	}
 }
 
+void			result(t_list_file *file, t_env *env, int *j, int pid)
+{
+	if(pid == 0)
+	{
+		ft_redirection(file, env);
+		exit(0);
+	}
+	else
+		return ;
+}
+
 void		exec_build_not_pipe(t_list	*cmd, t_env *env)
 {
 	int		input;
@@ -258,38 +269,41 @@ void		exec_build_not_pipe(t_list	*cmd, t_env *env)
 	int		pid;
 	int		j;
 	int		status;
+	int		c;
 
 	if(cmd->file)
 	{
+		status = 3;
+		restart_t_list_file(&(cmd->file));
 		pid = fork();
 		inhibit_signals(pid);
-		if(pid == 0)
-		{
-			j = 3;
-			restart_t_list_file(&(cmd->file));
-			ft_redirection(cmd->file, env);
-			j = 4;
-			exit(j);
-		}
-		waitpid(pid , &status, 0);
+		result(cmd->file, env, &j, pid);
+		waitpid(pid, &status, 0);
 		handle_signals();
-		input = dup(0);
-		output = dup(1);
-		pipe(cmd->pipe);
-		if(dup2(cmd->pipe[1], 1) < 0)
-			error_exec(3, env);
-		if(dup2(cmd->pipe[0], 0) < 0)
-			error_exec(3, env);
-		ft_dup_fd2(cmd->file, env);
-		if(j = 4)
-			env->last_ret = exec_build(cmd, env);
-		close(cmd->pipe[0]);
-		close(cmd->pipe[1]);
-		close_fd(&(cmd->file));
-		if(input < 0 || dup2(input, 0) < 0)
-			error_exec(3, env);
-		if(output < 0 || dup2(output, 1) < 0)
-			error_exec(3, env);
+		printf("\nRET APRES LE SIGNAL %d %d \n", status, pid);
+		if(pid != 0)
+		{
+			input = dup(0);
+			output = dup(1);
+			pipe(cmd->pipe);
+			if(dup2(cmd->pipe[1], 1) < 0)
+				error_exec(3, env);
+			if(dup2(cmd->pipe[0], 0) < 0)
+				error_exec(3, env);
+			ft_dup_fd2(cmd->file, env);
+			if(status != 2)
+			{
+				//ft_putstr_fd("\nS execute\n", cmd->pipe[1]);
+				env->last_ret = exec_build(cmd, env);
+			}
+			close(cmd->pipe[0]);
+			close(cmd->pipe[1]);
+			close_fd(&(cmd->file));
+			if(input < 0 || dup2(input, 0) < 0)
+				error_exec(3, env);
+			if(output < 0 || dup2(output, 1) < 0)
+				error_exec(3, env);
+		}
 	}
 	else
 		RET = exec_build(cmd, env);
