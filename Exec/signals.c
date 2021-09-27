@@ -6,7 +6,7 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/31 16:00:53 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/24 18:14:22 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/27 17:42:51 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 void	ctrl_backslash(int signal)
 {
 	(void)signal;
+	RET = 131;
 	ft_putstr_fd("\b\b", 0);
 	ft_putstr_fd("  \b\b", 0);
 }
@@ -25,6 +26,7 @@ void	ctrl_backslash(int signal)
 void	ctrl_c(int signal)
 {
 	(void)signal;
+	RET = 130;
 	ft_putstr_fd("\b\b", 0);
 	ft_putstr_fd("  \b\b", 0);
 	write(1, "\n", 1);
@@ -33,6 +35,21 @@ void	ctrl_c(int signal)
 	rl_redisplay();
 //faire un free mem ?
 }
+
+void	ctrl_c_heredoc(int signal)
+{
+	(void)signal;
+	RET = 130;
+//	ft_putstr_fd("\b\b", 0);
+//	ft_putstr_fd("  \b\b", 0);
+//	write(1, "\n", 1);
+//	rl_replace_line("", 0);
+//	rl_on_new_line();
+//	rl_redisplay();
+//faire un free mem ?
+}
+
+
 
 void	ignore_signals(int signal)
 {
@@ -60,6 +77,18 @@ int	inhibit_signals(int id)
 		if((i = (signal(SIGINT, ignore_signals))) < 0)
 			return (0);
 	}
+	return (1);
+}
+
+int	handle_signals_bis(void)
+{
+	void	*i;
+
+	i = 0;
+	if ((i = (signal(SIGQUIT, SIG_DFL))) < 0)
+		return (0);
+	if ((i = (signal(SIGINT, ctrl_c_heredoc))) < 0)
+		return (0);
 	return (1);
 }
 

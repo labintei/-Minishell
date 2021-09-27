@@ -6,7 +6,7 @@
 /*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/25 18:50:07 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/24 15:42:05 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/27 17:43:17 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -181,6 +181,8 @@ int			dup_pipes(t_list *cmd);
 
 //Signals
 int			define_signals(void);
+int			handle_signals_bis(void);
+
 
 //
 int			handle_signals(void);
