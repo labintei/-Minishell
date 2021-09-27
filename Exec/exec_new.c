@@ -6,7 +6,7 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/13 13:45:00 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/27 17:44:49 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/27 20:08:07 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int		exec_other(t_list	*c, t_env *env)
 	int		j;
 	struct	stat		si;
 
-	RET = 0;
+	g_ret = 0;
 	if(c->pid == 0)
 	{
 		if(c->cmds && c->cmds[0] && c->cmds[0][0] && c->cmds[0][0] == '.' && c->cmds[0][1] && c->cmds[0][1] == '/')
@@ -35,27 +35,27 @@ int		exec_other(t_list	*c, t_env *env)
 			{
 				ft_putstr_fd(c->cmds[0], 2);
 				ft_putstr_fd(": command not found\n",2);
-				RET = 1;
+				g_ret = 1;
 				exit(1);
 			}
 			ft_convert_env(&(env->env), &test);
-			RET = execve(c->cmds[0], c->cmds, test);
+			g_ret = execve(c->cmds[0], c->cmds, test);
 			if(test)
 				clear_tab(&test);
-			exit(RET);
+			exit(g_ret);
 		}
 		else if(c->cmds && c->cmds[0])
 		{
 			find_exec_path(&(c->cmds[0]), env);
 			ft_convert_env(&(env->env), &test);
-			RET = execve(c->cmds[0], c->cmds, test);
+			g_ret = execve(c->cmds[0], c->cmds, test);
 			if(test)
 				clear_tab(&test);
-			exit(RET);
+			exit(g_ret);
 		}
-		exit(RET);
+		exit(g_ret);
 	}
-	return(RET);
+	return(g_ret);
 }
 
 void		close_fd(t_list_file	**file)
@@ -138,7 +138,7 @@ int			wait_exec_cmds(t_list		*cmds)
 			i = 1;
 			waitpid(cmds->pid, &status, 0);
 			if(WIFEXITED(status))
-				RET = WEXITSTATUS(status);
+				g_ret = WEXITSTATUS(status);
 		}
 		cmds = cmds->next;
 	}
@@ -159,7 +159,7 @@ void		exec_cmd(t_list *cmd, t_env *env)
 			error_exec(1, env);
 		is_piped = 1;
 		cmd->is_piped = 1;
-		RET = 1;
+		g_ret = 1;
 	}
 //	if(cmd->error == 0 && cmd->file)
 //	{
@@ -216,14 +216,14 @@ void			exec_pipe(t_list *cmd, t_env *env, int is_piped)
 		if(cmd->cmds && !cmd->error)
 		{
 			if(cmd->cmds && cmd->cmds[0] && is_builtin(cmd->cmds[0]))
-				exit(RET = exec_build(cmd, env));
+				exit(g_ret = exec_build(cmd, env));
 			else
 				exit(exec_other(cmd, env));
 		}
 		else if(cmd->error)
-			exit(RET = 1);
+			exit(g_ret = 1);
 		else
-			exit(RET = 0);
+			exit(g_ret = 0);
 	}
 }
 
@@ -247,7 +247,7 @@ void		exec_not_build_not_pipe(t_list	*cmd, t_env *env)
 		}
 		if(cmd->file)
 			ft_dup_fd2(cmd->file, env);
-		exit(RET = exec_other(cmd, env));
+		exit(g_ret = exec_other(cmd, env));
 	}
 }
 
@@ -313,7 +313,7 @@ void		exec_build_not_pipe(t_list	*cmd, t_env *env)
 			error_exec(3, env);
 	}
 	else
-		RET = exec_build(cmd, env);
+		g_ret = exec_build(cmd, env);
 }
 
 int			exec_cmds(t_env *env)
@@ -334,7 +334,7 @@ int			exec_cmds(t_env *env)
 		c = c->next;
 	}
 	wait_exec_cmds(env->cmds);
-	s = ft_itoa(RET);
+	s = ft_itoa(g_ret);
 	if(ft_find_env(&(env->env), "?"))
 	{
 		change_value(&(env->env), "?", s);
@@ -342,5 +342,4 @@ int			exec_cmds(t_env *env)
 	if(s)
 		free(s);
 	return(ret);
-
 }

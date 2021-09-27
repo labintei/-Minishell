@@ -6,7 +6,7 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/17 17:42:29 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/27 17:38:36 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/27 20:09:28 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,10 @@ int	ft_heredoc(t_list_file *f, t_env *env)
 
 	if(pipe(f->pipe_fd))
 		error_exec(1, env);
-	while (1 && RET != 130)
+	while (1 && g_ret != 130)
 	{
 		line = readline("> ");
-		if(RET == 130)
+		if(g_ret == 130)
 		{
 			if(line)
 				free(line);
@@ -58,7 +58,7 @@ int			redir_output_simple(t_list_file *f)
 		if((f->fd = open(f->path, O_RDWR | O_CREAT | O_TRUNC, 0644)) < 0)
 		{
 			ft_putstr_fd("Failed to open fd\n", 2);
-			RET = 1;
+			g_ret = 1;
 			return(1);
 		}
 	}
@@ -67,7 +67,7 @@ int			redir_output_simple(t_list_file *f)
 		if((f->fd = open(f->path, O_CREAT | O_RDWR | O_APPEND, 0644)) < 0)
 		{
 			ft_putstr_fd("Failed to open fd\n", 2);
-			RET = 1;
+			g_ret = 1;
 			return(1);
 		}
 	}
@@ -84,7 +84,7 @@ int		redir_input_simple(t_list_file	*f, t_env *env)
 			ft_putstr_fd("minishell : ", 2);
 			ft_putstr_fd(f->path, 2);
 			ft_putstr_fd("No such file or directory\n", 2);
-			RET = 1;
+			g_ret = 1;
 			return (1);
 		}
 	}
@@ -103,7 +103,7 @@ int		error_redirection(t_list_file	*f, char y)
 		{
 			ft_putstr_fd(f->path, 2);
 			ft_putstr_fd(": File name too long\n", 2);
-			RET = 1;
+			g_ret = 1;
 		}
 		return(1);
 	}
@@ -114,7 +114,7 @@ int		error_redirection(t_list_file	*f, char y)
 			ft_putstr_fd("minishell: ", 2);
 			ft_putstr_fd(f->ambigous, 2);
 			ft_putstr_fd(" ambigous redirect\n", 2);
-			RET = 1;
+			g_ret = 1;
 		}
 		return(1);
 	}
@@ -122,7 +122,7 @@ int		error_redirection(t_list_file	*f, char y)
 	{
 		if(y == 1)
 		{
-			RET = 1;
+			g_ret = 1;
 			ft_putstr_fd("minishell : No such file or directory\n", 2);
 		}
 		return(1);

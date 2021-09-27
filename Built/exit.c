@@ -6,7 +6,7 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/17 17:35:25 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/22 18:29:35 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/27 21:56:22 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,10 @@ bool	ft_isdigit(int c)
 
 int	ft_atoi(const char *str)
 {
-	int i;
-	int max;
-	int sign;
-	int result;
+	int	i;
+	int	max;
+	int	sign;
+	int	result;
 
 	i = 0;
 	max = 0;
@@ -62,11 +62,11 @@ bool	ft_str_is_digit(char *str)
 	return (true);
 }
 
-int		exit_build(t_env *env, t_list *cmds, bool fork)
+int	exit_build(t_env *env, t_list *cmds, bool fork)
 {
 	int	ret;
-	fork = 1;
 
+	fork = 1;
 	if (cmds && cmds->cmds[0] && cmds->cmds[1] && cmds->cmds[2])
 	{
 		ft_putstr_fd("minishell: exit: too many arguments\n", 2);
@@ -79,7 +79,8 @@ int		exit_build(t_env *env, t_list *cmds, bool fork)
 		else
 		{
 			if (fork)
-				printf("bash: exit: %s: numeric argument required\n", cmds->cmds[1]);
+				printf("bash: exit: %s: numeric argument required\n", \
+				cmds->cmds[1]);
 			return (1);
 		}
 	}

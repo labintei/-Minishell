@@ -6,7 +6,7 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/31 16:00:53 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/27 17:42:51 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/27 20:10:13 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 void	ctrl_backslash(int signal)
 {
 	(void)signal;
-	RET = 131;
+	g_ret = 131;
 	ft_putstr_fd("\b\b", 0);
 	ft_putstr_fd("  \b\b", 0);
 }
@@ -26,7 +26,7 @@ void	ctrl_backslash(int signal)
 void	ctrl_c(int signal)
 {
 	(void)signal;
-	RET = 130;
+	g_ret = 130;
 	ft_putstr_fd("\b\b", 0);
 	ft_putstr_fd("  \b\b", 0);
 	write(1, "\n", 1);
@@ -39,7 +39,7 @@ void	ctrl_c(int signal)
 void	ctrl_c_heredoc(int signal)
 {
 	(void)signal;
-	RET = 130;
+	g_ret = 130;
 //	ft_putstr_fd("\b\b", 0);
 //	ft_putstr_fd("  \b\b", 0);
 //	write(1, "\n", 1);

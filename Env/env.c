@@ -6,7 +6,7 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/17 17:39:08 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/27 15:59:44 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/27 20:10:39 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -193,7 +193,7 @@ void		stock_env(t_env		*env, char **envp)
 			free(val);
 		i++;
 	}
-	add_list_env(&(env->env), "?" , ft_itoa(RET) , i);
+	add_list_env(&(env->env), "?" , ft_itoa(g_ret) , i);
 }
 
 int			ft_strlen_env(t_list_env **list, char *var)

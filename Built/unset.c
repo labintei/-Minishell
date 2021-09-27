@@ -6,56 +6,57 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/30 15:38:44 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/22 18:38:43 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/27 21:59:52 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void		unset_in_env(t_list_env **env, char *var)
+void	unset_in_env(t_list_env **env, char *var)
 {
 	t_list_env	*previous;
 	t_list_env	*next;
 
-	if(*env)
+	if (*env)
 	{
-		if((*env)->var && ft_strcmp((*env)->var, var))
+		if ((*env)->var && ft_strcmp((*env)->var, var))
 		{
 			next = (*env)->next;
 			previous = (*env)->previous;
-			if((*env)->var)
+			if ((*env)->var)
 				free((*env)->var);
-			if((*env)->val)
+			if ((*env)->val)
 				free((*env)->val);
-			if((*env))
+			if ((*env))
 				free(*env);
-			if(next)
+			if (next)
 				next->previous = previous;
-			if(previous)
+			if (previous)
 				previous->next = next;
-			if(previous)
+			if (previous)
 				(*env) = previous;
 			else
 				(*env) = next;
 		}
 	}
-	list_start_env(env);
 }
 
-
-int			unset(t_list *cmds, t_env *env)
+int	unset(t_list *cmds, t_env *env)
 {
-	int			i;
+	int	i;
 
 	i = 0;
 	list_start_env(&(env->env));
-	while(cmds->cmds && cmds->cmds[0] && cmds->cmds[i])
+	while (cmds->cmds && cmds->cmds[0] && cmds->cmds[i])
 	{
-		if(env->env && ft_find_env(&(env->env), cmds->cmds[i]))
+		if (env->env && ft_find_env(&(env->env), cmds->cmds[i]))
+		{
 			unset_in_env(&(env->env), cmds->cmds[i]);
+			list_start_env(&(env->env));
+		}
 		i++;
 	}
-	if(!(env->env))
+	if (!(env->env))
 		exit_fatal(2, env);
 	return (0);
 }

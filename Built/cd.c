@@ -6,7 +6,7 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/17 17:34:39 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/22 18:26:10 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/27 21:08:38 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,30 +28,30 @@ char	*find_value(t_list_env *env, char *key)
 	return (NULL);
 }
 
-int		cd_errors(t_list *cmds, int err, bool fork, char *path)
+int	cd_errors(t_list *cmds, int err, bool fork, char *path)
 {
 	(void)fork;
-	if(cmds->cmds && cmds->cmds[0] && cmds->cmds[1] && cmds->cmds[2])
+	if (cmds->cmds && cmds->cmds[0] && cmds->cmds[1] && cmds->cmds[2])
 	{
 		ft_putstr_fd("cd: ", 2);
 		ft_putstr_fd(": trop d'arguments\n", 2);
-		return(1);
+		return (1);
 	}
 	else if (err == ENOTDIR)
 	{
 		ft_putstr_fd("cd: ", 2);
 		ft_putstr_fd(path, 2);
 		ft_putstr_fd(": Not a directory\n", 2);
-		return(1);
+		return (1);
 	}
 	else if (err == ENOENT)
 	{
 		ft_putstr_fd("cd: ", 2);
 		ft_putstr_fd(path, 2);
 		ft_putstr_fd(": No such file or directory\n", 2);
-		return(1);
+		return (1);
 	}
-	return(0);
+	return (0);
 }
 
 char	*find_path_1(t_list *cmds, t_list_env *env, bool fork)
@@ -83,7 +83,7 @@ char	*find_path_1(t_list *cmds, t_list_env *env, bool fork)
 	return (path);
 }
 
-int		cd(t_list *cmds, t_list_env *env, bool fork)
+int	cd(t_list *cmds, t_list_env *env, bool fork)
 {
 	int		ret;
 	char	*previous;
@@ -96,18 +96,18 @@ int		cd(t_list *cmds, t_list_env *env, bool fork)
 		return (CD_ERROR);
 	previous = getcwd(NULL, 0);
 	ret = chdir(current);
-	if(cd_errors(cmds, errno, fork, current))
+	if (cd_errors(cmds, errno, fork, current))
 		i = 1;
 	if (previous && i == 0)
 		env_manager("OLDPWD", previous, env);
 	current = getcwd(NULL, 0);
 	if (current == NULL)
 		return (CD_ERROR);
-	if(i == 0)
+	if (i == 0)
 		env_manager("PWD", current, env);
-	if(current)
+	if (current)
 		free(current);
-	if(previous)
+	if (previous)
 		free(previous);
 	return (ret);
 }

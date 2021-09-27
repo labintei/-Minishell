@@ -6,7 +6,7 @@
 /*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/25 18:50:07 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/27 17:43:17 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/27 21:51:22 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@
 # include <sys/stat.h>
 # include <stdarg.h>
 
-extern		int		RET;
+extern		int		g_ret;
 
 #define CD_ERROR 4
 
@@ -89,6 +89,7 @@ typedef	struct		s_env
 	// UN INT WORD (correspondra au mot dans cmds)
 	// UN INT I (correspondra a l index qu on utilisera pour parcourir line[i])
 	// UN INT CMDS(dira si correspond a une cmds)
+	char			*line; 
 	int				last_ret;
 	int				word;
 	int				empty;
@@ -98,7 +99,7 @@ typedef	struct		s_env
 }					t_env;
 
 
-int			find_var_and_strlen_cmds(char *line, t_env *env, int *count);
+void		find_var_and_strlen_cmds(char *line, t_env *env, int *count);
 int			count_redir(char *line, int j);
 void		restart_t_list_file(t_list_file		**file);
 
@@ -237,7 +238,51 @@ void		exec_pipe(t_list *cmd, t_env *env, int is_piped);
 //ERROR
 void		exit_fatal(int	n, t_env *env);
 void		error_exec(int	n, t_env *env);
-int		error_redirection(t_list_file	*f, char y);
+int			error_redirection(t_list_file	*f, char y);
 int			error_unexpected(int n, t_env *env);
+
+// LAURANNE NORM
+
+void	restart_t_list_file(t_list_file **file);
+void	add_list_file(t_list_file **file, int i, char c);
+int		find_var_and_strlen(char *line, int *j, t_env *env);
+void	skip_quotes(char *line, int *j);
+int		nb_redir(char *line, int h);
+void	ajout_cmds(t_env *env, char *line, int *i);
+void	is_pipe(t_env *env, char *line);
+int		is_redir(char *line, int *i, t_env *env);
+void	is_quotes_cmds(char *line, int *count, t_env *env);
+int			next_is_word(char *line, int i);
+int		is_redir_pipe_space(char c);
+void	find_var_and_strlen_2(char *stock, t_env *env, int *count);
+void	find_var_and_strlen_cmds(char *line, t_env *env, int *count);
+int	is_only_space(char *line);
+int	is_quotes(char c, char *line, int i);
+void	not_quotes_cmds(char *line, t_env *env, int *count, int *out);
+int	save_ambigous(char **stock, char *line, int i);
+int	is_only_var(char *line, int i);
+void	parse_word_heredoc_0(char *line, int *i, t_env *env);
+void	parse_word_heredoc(char *line, int *i, t_env *env, int *count);
+void	is_word_cmds_0(char *line, int *i, t_env *env);
+void	is_word_cmds_1(char	*line, int	*count, int	*i, t_env *env);
+void	is_word_cmds(char *line, int *i, t_env *env);
+int	next_is_word(char *line, int i);
+void	init_parse_line(t_env *env, char *line);
+
+
+void	make_concat(t_env *env, char *s);
+
+void	export_simple(char	*s, t_env *env);
+void	list_sort(t_list_env *env);
+
+
+void	add_before(t_list_env **list, char *var, char *val);
+void	concat_value(t_list_env **env, char *var, char *val);
+
+int	is_only_alpha_num(char	*var);
+
+void	add_after(t_list_env **list, char *var, char *val);
+
+
 
 #endif
