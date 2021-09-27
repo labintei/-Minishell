@@ -6,7 +6,7 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/17 17:42:29 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/27 20:09:28 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/27 22:57:35 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,8 @@ int	ft_heredoc(t_list_file *f, t_env *env)
 			free(line);
 			break ;
 		}
-		if(!(f->is_quotes))
-			line = ft_expansion(line, env);
+	//	if(!(f->is_quotes))
+		line = ft_expansion(line, env);
 		write(f->pipe_fd[1], line, ft_strlen(line));
 		write(f->pipe_fd[1], "\n", 1);
 		if(line)

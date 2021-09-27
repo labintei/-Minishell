@@ -6,7 +6,7 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/17 17:39:08 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/27 20:10:39 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/27 22:17:23 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,12 @@ t_list_env	*sub_add_arg_2(char *key, char *value)
 	return (next);
 }
 
+int	ft_putstr_fd_err(void)
+{
+	ft_putstr_fd("Failure to allocate memory\n", 2);
+	return (1);
+}
+
 int	add_arg_2(t_list_env *env, char *key, char *value)
 {
 	t_list_env	*next;
@@ -46,18 +52,12 @@ int	add_arg_2(t_list_env *env, char *key, char *value)
 		env->var = ft_strdup(key);
 		env->val = ft_strdup(value);
 		if (!env->var || !env->val)
-		{
-			ft_putstr_fd("Failure to allocate memory\n", 2);
-			exit (EXIT_FAILURE);
-		}
+			exit(ft_putstr_fd_err());
 		return (0);
 	}
 	next = sub_add_arg_2(key, value);
 	if (!next)
-	{
-		ft_putstr_fd("Failure to allocate memory\n", 2);
-		exit (EXIT_FAILURE);
-	}
+		exit(ft_putstr_fd_err());
 	while (current->next)
 		current = current->next;
 	current->next = next;
@@ -91,122 +91,8 @@ int	env_manager(char *key, char *value, t_list_env *env)
 	return (0);
 }
 
-void		list_start_env(t_list_env **list)
+void	list_start_env(t_list_env **list)
 {
 	while ((*list) && ((*list)->previous))
-	{
 		*list = (*list)->previous;
-	}
-}
-
-int			ft_len_env(t_list_env **env)
-{
-	int		i;
-	t_list_env	*c;
-
-	i = 0;
-	list_start_env(env);
-	c = (*env);
-	while(c)
-	{
-		i++;
-		c = c->next;
-	}
-	return(i);
-}
-
-int			view_list_env(t_list_env	**l)
-{
-	t_list_env		*c;
-
-	list_start_env(l);
-	c = (*l);
-	printf("\n");
-	while(c)
-	{
-		if(c && c->var != "?")
-		{
-			printf("%s=", c->var);
-			printf("%s\n", c->val);
-		}
-		c = c->next;
-	}
-	printf("\n");
-	return(0);
-}
-
-int			add_arg(t_list_env	*list, char *var, char *val)
-{
-	ft_strcpy(&(list->var), var);
-//	if(var != NULL && list->var == NULL)
-//		return(0);
-	ft_strcpy(&(list->val), val);
-//	if(val != NULL && list->val == NULL)
-//		return(0);
-	return(1);
-}
-
-
-int			add_list_env(t_list_env	**list, char	*var, char *val, int i)
-{
-	t_list_env	*new;
-
-	new = malloc(sizeof(t_list_env));
-//	if(!new)
-//		return(0);
-	new->previous = NULL;
-	new->next = NULL;
-	new->var = NULL;
-	new->val = NULL;
-	if(i != 0)
-	{
-		(*list)->next = new;
-		new->previous = *list;
-	}
-	(*list) = new;
-	if(!(add_arg(new, var, val)))
-		return(0);
-	return(1);
-}
-
-void		stock_env(t_env		*env, char **envp)
-{
-	int		i;
-	char	*var;
-	char	*val;
-
-	i = 0;
-	var = NULL;
-	val = NULL;
-	while(envp && envp[i])
-	{
-		var = ft_strdup_char(envp[i], '=');
-		val = ft_strdup_char_after(envp[i], '=');
-		if(var && ma_strcmp(var, "_") != 0)
-		{
-			/*if(!(*/add_list_env(&(env->env), var , val, i);/*))*/
-			//	exit_fatal(1, env);
-		}
-		if(var)
-			free(var);
-		if(val)
-			free(val);
-		i++;
-	}
-	add_list_env(&(env->env), "?" , ft_itoa(g_ret) , i);
-}
-
-int			ft_strlen_env(t_list_env **list, char *var)
-{
-	t_list_env	*l;
-
-	list_start_env(list);
-	l = (*list);
-	while(l)
-	{
-		if(l->var && ft_strcmp(l->var, var))
-			return(ft_strlen(l->val));
-		l = l->next;
-	}
-	return(0);
 }
