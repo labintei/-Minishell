@@ -6,7 +6,7 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/17 17:42:29 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/24 17:13:44 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/27 15:34:00 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 int	ft_heredoc(t_list_file *f, t_env *env)
 {
 	char	*line;
+	int		ret;
 
 	if(pipe(f->pipe_fd))
 		error_exec(1, env);
@@ -22,7 +23,12 @@ int	ft_heredoc(t_list_file *f, t_env *env)
 	{
 		line = readline("> ");
 		if (!line)
+		{
+			ft_putstr_fd("minishell: warning: here-document delimited by end-of-file (wanted '",2);
+			ft_putstr_fd(f->path, 2);
+			ft_putstr_fd("')\n", 2);
 			break;
+		}
 		if (!ma_strcmp(line, f->path))
 		{
 			free(line);
