@@ -6,7 +6,7 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/13 13:45:00 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/29 20:22:28 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/29 21:46:21 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -264,12 +264,25 @@ void		exec_build_not_pipe(t_list	*cmd, t_env *env)
 {
 	int		input;
 	int		output;
+	int		pid;
+	int		status;
 
 	if(cmd->file)
 	{
-		restart_t_list_file(&(cmd->file));
-		if(cmd->error == 0 && ft_redirection(cmd->file, env) == -1)
-			cmd->error = 3;
+		pid = fork();
+		inhibit_signals(pid);
+		if(pid == 0)
+		{
+			restart_t_list_file(&(cmd->file));
+			if(cmd->error == 0 && ft_redirection(cmd->file, env) == -1)
+				cmd->error = 3;
+		}
+		waitpid(pid, &status, 0);
+		if(pid != 0 && status != 2)
+		{
+			exit(0);
+		}
+		handle_signals();
 		restart_t_list_file(&(cmd->file));
 		input = dup(0);
 		output = dup(1);
