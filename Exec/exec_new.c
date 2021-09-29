@@ -6,7 +6,7 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/13 13:45:00 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/29 15:28:03 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/29 17:48:49 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,9 @@ int		exec_other(t_list	*c, t_env *env)
 		}
 		else if(c->cmds && c->cmds[0])
 		{
-			find_exec_path(&(c->cmds[0]), env);
+			j = open(c->cmds[0], O_RDONLY);
+			if(fstat(j, &si) == -1)
+				find_exec_path(&(c->cmds[0]), env);
 			ft_convert_env(&(env->env), &test);
 			g_ret = execve(c->cmds[0], c->cmds, test);
 			if(test)
