@@ -6,7 +6,7 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/13 13:45:00 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/29 17:48:49 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/29 20:22:28 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,6 +167,7 @@ int			wait_exec_cmds(t_list		*cmds)
 void		exec_cmd(t_list *cmd, t_env *env)
 {
 	int			is_piped;
+	int			status;
 
 	is_piped = 0;
 	if(cmd->type == '|' || (cmd->previous && cmd->previous->type == '|'))
@@ -176,13 +177,6 @@ void		exec_cmd(t_list *cmd, t_env *env)
 		is_piped = 1;
 		cmd->is_piped = 1;
 		g_ret = 1;
-	}
-	if(cmd->error == 0 && cmd->file)
-	{
-		restart_t_list_file(&(cmd->file));
-		if(cmd->error == 0 && ft_redirection(cmd->file, env) == -1)
-			cmd->error = 3;
-		restart_t_list_file(&(cmd->file));
 	}
 	if(cmd->type == '|' || (cmd->previous && cmd->previous->type == '|'))
 		exec_pipe(cmd, env, is_piped);
@@ -201,11 +195,25 @@ void			exec_pipe(t_list *cmd, t_env *env, int is_piped)
 	pid_t		pid;
 
 	(void)is_piped;
+	if(cmd->file /*&& cmd->pid == 0*/)
+	{
+		restart_t_list_file(&(cmd->file));
+		if(cmd->error == 0 && ft_redirection(cmd->file, env) == -1)
+			cmd->error = 3;
+		restart_t_list_file(&(cmd->file));
+	}
 	if((pid = fork()) < 0)
 		return(error_exec(2, env));
-	inhibit_signals(pid);
 	cmd->pid = pid;
 	cmd->is_fork = 1;
+	inhibit_signals(pid);
+//	if(cmd->file && cmd->pid == 0)
+//	{
+//		restart_t_list_file(&(cmd->file));
+//		if(cmd->error == 0 && ft_redirection(cmd->file, env) == -1)
+//			cmd->error = 3;
+//		restart_t_list_file(&(cmd->file));
+//	}
 	if(cmd->pid == 0)
 	{
 		if(cmd->type == '|'  && dup2(cmd->pipe[1], 1) < 0)
@@ -240,7 +248,13 @@ void		exec_not_build_not_pipe(t_list	*cmd, t_env *env)
 	if(cmd->pid == 0)
 	{
 		if(cmd->file)
+		{
+			restart_t_list_file(&(cmd->file));
+			if(cmd->error == 0 && ft_redirection(cmd->file, env) == -1)
+				cmd->error = 3;
+			restart_t_list_file(&(cmd->file));
 			ft_dup_fd2(cmd->file, env);
+		}
 		exit(g_ret = exec_other(cmd, env));
 	}
 }
@@ -253,6 +267,10 @@ void		exec_build_not_pipe(t_list	*cmd, t_env *env)
 
 	if(cmd->file)
 	{
+		restart_t_list_file(&(cmd->file));
+		if(cmd->error == 0 && ft_redirection(cmd->file, env) == -1)
+			cmd->error = 3;
+		restart_t_list_file(&(cmd->file));
 		input = dup(0);
 		output = dup(1);
 		pipe(cmd->pipe);
