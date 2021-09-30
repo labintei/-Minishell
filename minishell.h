@@ -6,7 +6,7 @@
 /*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/25 18:50:07 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/30 18:34:48 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/30 19:31:39 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -216,7 +216,7 @@ int			list_env_len(t_list_env *env);
 //env2.c 
 char		**ft_env_string_tab(t_env *env);
 int			exec_build(t_list	*a, t_env *env);
-int			ma_strcmp(char *s1, char *s2);
+int			ft_strcmp_1(char *s1, char *s2);
 
 //utils3.c 
 char		*ft_strnewcat(char *first, char *second);

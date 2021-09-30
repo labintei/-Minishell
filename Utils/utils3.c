@@ -6,13 +6,13 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/17 18:01:30 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/27 21:03:17 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/30 19:35:20 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int	ma_strcmp(char *s1, char *s2)
+int	ft_strcmp_1(char *s1, char *s2)
 {
 	int	i;
 

@@ -6,7 +6,7 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/17 18:01:02 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/27 21:02:31 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/30 19:34:56 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,10 +47,10 @@ int	is_builtin(char *s)
 {
 	if (s)
 	{
-		if (!ma_strcmp(s, "echo") || !ma_strcmp(s, "cd") || \
-		!ma_strcmp(s, "pwd") || !ma_strcmp(s, "unset") || \
-		!ma_strcmp(s, "export") || !ma_strcmp(s, "exit") || \
-		!ma_strcmp(s, "env"))
+		if (!ft_strcmp_1(s, "echo") || !ft_strcmp_1(s, "cd") || \
+		!ft_strcmp_1(s, "pwd") || !ft_strcmp_1(s, "unset") || \
+		!ft_strcmp_1(s, "export") || !ft_strcmp_1(s, "exit") || \
+		!ft_strcmp_1(s, "env"))
 			return (true);
 	}
 	return (false);

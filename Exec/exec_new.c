@@ -6,7 +6,7 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/13 13:45:00 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/30 19:00:25 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/30 19:52:32 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,8 +161,8 @@ void	ft_dup_fd2(t_list_file *cmd)
 				dup2(temp->fd, 0);
 			else
 			{
-				if(j == 0)
-					dup2(temp->pipe_fd[0], 0);
+				//if(j == 0)
+				dup2(temp->pipe_fd[0], 0);
 				close(temp->pipe_fd[0]);
 			}
 		}
@@ -230,9 +230,13 @@ void			exec_pipe(t_list *cmd, t_env *env, int is_piped)
 		return(error_exec(2, env));
 	cmd->pid = pid;
 	cmd->is_fork = 1;
-	inhibit_signals(pid);
+	signal(SIGINT , SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
+	//inhibit_signals(pid);
 	if(cmd->pid == 0)
 	{
+		signal(SIGINT , SIG_DFL);
+		signal(SIGQUIT, SIG_DFL);
 		j = 0;
 		if(cmd->type == '|'  && dup2(cmd->pipe[1], 1) < 0)
 			error_exec(3, env);
@@ -256,6 +260,7 @@ void			exec_pipe(t_list *cmd, t_env *env, int is_piped)
 		else
 			exit(g_ret = 0);
 	}
+	handle_signals();
 	close_pipes(cmd, 1);
 }
 
@@ -322,7 +327,8 @@ int			exec_build_not_pipe(t_list	*cmd, t_env *env)
 			error_exec(3, env);
 		if(dup2(cmd->pipe[0], 0) < 0)
 			error_exec(3, env);
-		ft_dup_fd2(cmd->file);
+		if(cmd->file)
+			ft_dup_fd2(cmd->file);
 		if(g_ret != 130 && cmd->error != 3)
 			g_ret = exec_build(cmd, env);
 		close(cmd->pipe[0]);

@@ -6,7 +6,7 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/27 19:19:17 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/27 19:22:31 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/30 19:37:14 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,7 @@ int	save_ambigous(char **stock, char *line, int i)
 	if (!(*stock))
 		return (0);
 	j = 0;
-	while (line[(i)] && !(is_redir_pipe_space(line[j])))
+	while (line[(i)] && !(is_redir_pipe_space(line[i])))
 	{
 		(*stock)[j] = line[(i)];
 		j++;

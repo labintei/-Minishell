@@ -6,7 +6,7 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/27 21:38:24 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/27 21:47:01 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/30 19:32:32 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ void	view_list_env_export(t_list_env	**l)
 	c = (*l);
 	while (c)
 	{
-		if (c->var && ma_strcmp(c->var, "?") != 0)
+		if (c->var && ft_strcmp_1(c->var, "?") != 0)
 		{
 			printf("\ndeclare -x ");
 			printf("%s=", c->var);
@@ -95,11 +95,11 @@ void	list_sort(t_list_env *env)
 	c = env->next;
 	while (c)
 	{
-		i = ma_strcmp(c->var, sort->var);
+		i = ft_strcmp_1(c->var, sort->var);
 		while (c && sort && sort->next && i > 0)
 		{
 			sort = sort->next;
-			i = ma_strcmp(c->var, sort->var);
+			i = ft_strcmp_1(c->var, sort->var);
 		}
 		if (i < 0)
 			add_before(&(sort), c->var, c->val);
