@@ -6,7 +6,7 @@
 /*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/25 18:50:07 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/30 19:31:39 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/30 21:38:46 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -196,7 +196,7 @@ int			inhibit_signals(int id);
 
 // redirection
 int			exec_other(t_list *c, t_env *env);
-int			ft_redirection(t_list_file *file, t_env *env);
+int			ft_redirection(t_list_file *file, t_env *env, int is_fork);
 int			find_exec_path(char **path, t_env *env);
 void		list_cmds_restart(t_list	**cmds);
 char		*ft_strnewcat(char *first, char *second);
@@ -285,7 +285,7 @@ int	is_only_alpha_num(char	*var);
 void	add_after(t_list_env **list, char *var, char *val);
 
 int		redir_output_simple(t_list_file	*f);
-int		redir_input_simple(t_list_file	*f, t_env *env);
+int		redir_input_simple(t_list_file	*f, t_env *env, int is_fork);
 
 char	*ft_strndup(char *str, int n);
 

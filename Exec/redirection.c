@@ -6,19 +6,17 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/17 17:42:29 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/30 19:33:28 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/30 21:36:01 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int	ft_heredoc(t_list_file *f, t_env *env)
+int	ft_heredoc_under(t_list_file *f, t_env *env)
 {
 	char	*line;
 	int		ret;
 
-	if(pipe(f->pipe_fd))
-		error_exec(1, env);
 	while (1)
 	{
 		line = readline("> ");
@@ -42,7 +40,38 @@ int	ft_heredoc(t_list_file *f, t_env *env)
 			free(line);
 	}
 	close(f->pipe_fd[1]);
-	return (0);
+}
+
+int	ft_heredoc(t_list_file *f, t_env *env, int	is_fork)
+{
+	char	*line;
+	int		ret;
+	int		pid;
+	int		status;
+
+	if(pipe(f->pipe_fd))
+		error_exec(1, env);
+	if(!is_fork)
+	{
+		pid = fork();
+		inhibit_signals(pid);
+		if(pid == 0)
+		{
+			ft_heredoc_under(f, env);
+			exit(0);
+		}
+		waitpid(pid, &status, 0);
+		handle_signals();
+		if(status == 2)
+			return(1);
+		return (0);
+	}
+	if(is_fork)
+	{
+		ft_heredoc_under(f, env);
+		return(0);
+	}
+	return(0);
 }
 
 int			redir_output_simple(t_list_file *f)
@@ -68,7 +97,7 @@ int			redir_output_simple(t_list_file *f)
 	return (0);
 }
 
-int		redir_input_simple(t_list_file	*f, t_env *env)
+int		redir_input_simple(t_list_file	*f, t_env *env, int is_fork)
 {
 	if (f && f->redir == '<')
 	{
@@ -84,7 +113,7 @@ int		redir_input_simple(t_list_file	*f, t_env *env)
 	}
 	else if (f && f->redir == 'L')
 	{
-		ft_heredoc(f, env);
+		return(ft_heredoc(f, env, is_fork));
 	}
 	return (0);
 }
@@ -125,7 +154,7 @@ int		error_redirection(t_list_file	*f, char y)
 	return(0);
 }
 
-int		ft_redirection(t_list_file		*file, t_env *env)
+int		ft_redirection(t_list_file		*file, t_env *env, int	is_fork)
 {
 	t_list_file		*new;
 
@@ -136,7 +165,7 @@ int		ft_redirection(t_list_file		*file, t_env *env)
 	{
 		if(error_redirection(file, 1))
 			return(-1);
-		if (redir_input_simple(new, env) != 0)
+		if (redir_input_simple(new, env, is_fork) != 0)
 			return (-1);
 		if (redir_output_simple(new) != 0)
 			return (-1);

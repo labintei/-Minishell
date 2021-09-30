@@ -6,7 +6,7 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/31 16:00:53 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/27 20:10:13 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/30 21:41:45 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,9 +72,9 @@ int	inhibit_signals(int id)
 	}
 	else
 	{
-		if ((i = (signal(SIGQUIT, ignore_signals))) < 0)
+		if ((i = (signal(SIGQUIT, SIG_IGN))) < 0)
 			return(0);
-		if((i = (signal(SIGINT, ignore_signals))) < 0)
+		if((i = (signal(SIGINT, SIG_IGN))) < 0)
 			return (0);
 	}
 	return (1);

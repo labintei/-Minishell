@@ -6,7 +6,7 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/13 13:45:00 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/30 19:52:32 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/30 21:41:50 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,12 @@ void		make_all_redir(t_list		*cmds, t_env	*env)
 	c = cmds;
 	status = 0;
 	pid = fork();
-	inhibit_signals(pid);
+	signal(SIGINT , SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
 	if(pid == 0)
 	{
+		signal(SIGINT , SIG_DFL);
+		signal(SIGQUIT, SIG_IGN);
 		while(c)
 		{
 			restart_t_list_file(&(c->file));
@@ -32,19 +35,20 @@ void		make_all_redir(t_list		*cmds, t_env	*env)
 				c->error = error_redirection(c->file, 1);
 				if(c->error == 0)
 				{
-					redir_input_simple(c->file, env);
+					redir_input_simple(c->file, env, 1);
 					redir_output_simple(c->file);
 					c->file = c->file->next;
 				}
 			}
 			c = c->next;
 		}
-	}
-	waitpid(pid, &status, 0);
-	if(status != 2 && pid != 0)
 		exit(0);
-	else if(pid != 0)
+	}
+	waitpid(pid ,&status, 0);
+	if(status == 2)
 		g_ret = 130;
+//	if(pid != 0 && status != 2)
+//		exit(0);
 	handle_signals();
 }
 
@@ -236,7 +240,7 @@ void			exec_pipe(t_list *cmd, t_env *env, int is_piped)
 	if(cmd->pid == 0)
 	{
 		signal(SIGINT , SIG_DFL);
-		signal(SIGQUIT, SIG_DFL);
+		signal(SIGQUIT, SIG_IGN);
 		j = 0;
 		if(cmd->type == '|'  && dup2(cmd->pipe[1], 1) < 0)
 			error_exec(3, env);
@@ -245,7 +249,9 @@ void			exec_pipe(t_list *cmd, t_env *env, int is_piped)
 		if(cmd->file)
 		{
 			restart_t_list_file(&(cmd->file));
-			j = error_exec_redir(cmd->file);
+//			if(cmd->error == 0 && ft_redirection(cmd->file, env) == -1)
+//				cmd->error = 3;
+//			restart_t_list_file(&(cmd->file));
 			ft_dup_fd2(cmd->file);
 		}
 		if(cmd->cmds && !j)
@@ -260,14 +266,26 @@ void			exec_pipe(t_list *cmd, t_env *env, int is_piped)
 		else
 			exit(g_ret = 0);
 	}
-	handle_signals();
+//	handle_signals();
 	close_pipes(cmd, 1);
+	handle_signals();
 }
+
+//           ls -a << END | sort -n << END | ls -a
+//           ls -a << END 
 
 int			exec_not_build_not_pipe(t_list	*cmd, t_env *env)
 {
 	pid_t		pid;
 
+	//if(cmd->file)
+	//{
+	//	restart_t_list_file(&(cmd->file));
+	//	if(cmd->error == 0 && ft_redirection(cmd->file, env) == -1)
+	//		cmd->error = 3;
+	//	restart_t_list_file(&(cmd->file));
+	//	ft_dup_fd2(cmd->file);
+	//}
 	if((pid = fork()) < 0)
 		error_exec(2, env);
 	inhibit_signals(pid);
@@ -278,7 +296,7 @@ int			exec_not_build_not_pipe(t_list	*cmd, t_env *env)
 		if(cmd->file)
 		{
 			restart_t_list_file(&(cmd->file));
-			if(cmd->error == 0 && ft_redirection(cmd->file, env) == -1)
+			if(cmd->error == 0 && ft_redirection(cmd->file, env, 1) == -1)
 				cmd->error = 3;
 			restart_t_list_file(&(cmd->file));
 			ft_dup_fd2(cmd->file);
@@ -302,21 +320,19 @@ int			exec_build_not_pipe(t_list	*cmd, t_env *env)
 
 	if(cmd->file)
 	{
-		pid = fork();
-		inhibit_signals(pid);
-		if(pid == 0)
+//		pid = fork();
+//		inhibit_signals(pid);/		
+//		if(pid == 0)
+//		{
+		restart_t_list_file(&(cmd->file));
+		if(cmd->error == 0 && ft_redirection(cmd->file, env, 0) == -1)
 		{
-			restart_t_list_file(&(cmd->file));
-			if(cmd->error == 0 && ft_redirection(cmd->file, env) == -1)
-			{
-				g_ret = 1;
-				cmd->error = 3;
-			}
+			g_ret = 1;
+			cmd->error = 3;
 		}
-		waitpid(pid, &status, 0);
-		if(pid != 0 && status != 2)
-			exit(0);
-		else if(pid != 0)
+//		}
+//		waitpid(pid, &status, 0);
+		if(status == 2)
 			g_ret = 130;
 		handle_signals();
 		restart_t_list_file(&(cmd->file));
@@ -363,7 +379,6 @@ int			exec_cmds(t_env *env)
 				exec_cmd(c, env);
 			c = c->next;
 		}
-//	if(env->cmds && env->cmds->next)
 		wait_exec_cmds(env->cmds);
 	}
 	s = ft_itoa(g_ret);
