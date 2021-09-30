@@ -6,29 +6,47 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/13 13:45:00 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/30 19:02:02 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/30 19:00:25 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-//
-//Cmds  (pas de pipe)
-//
-//      ()
+void		make_all_redir(t_list		*cmds, t_env	*env)
+{
+	int			pid;
+	int			status;
+	t_list		*c;
 
-// redirection (NULL)
-// ft_redirection -> cmds
-//  > a > b
-//
-// pas executer la commande Crtl_C 
-// _________                ___________
-//> sort -n << END | ls -a | sort -n << END
-//> >
-//> END
-//>>
-
-
+	c = cmds;
+	status = 0;
+	pid = fork();
+	inhibit_signals(pid);
+	if(pid == 0)
+	{
+		while(c)
+		{
+			restart_t_list_file(&(c->file));
+			while(c->file && c->error == 0)
+			{
+				c->error = error_redirection(c->file, 1);
+				if(c->error == 0)
+				{
+					redir_input_simple(c->file, env);
+					redir_output_simple(c->file);
+					c->file = c->file->next;
+				}
+			}
+			c = c->next;
+		}
+	}
+	waitpid(pid, &status, 0);
+	if(status != 2 && pid != 0)
+		exit(0);
+	else if(pid != 0)
+		g_ret = 130;
+	handle_signals();
+}
 
 void		close_fd(t_list_file	**file);
 
@@ -110,31 +128,44 @@ int		close_pipes(t_list		*cmd, int is_piped)
 	return(1);
 }
 
-void	ft_dup_fd2(t_list_file *cmd, t_env *env)
+int		error_exec_redir(t_list_file *cmds)
 {
 	t_list_file		*temp;
-	int				i;
 
-	i = 0;
-	temp = cmd;
+	temp = cmds;
 	while(temp)
 	{
-		if(temp->redir == '>' || temp->redir == 'R')
-			i = dup2(temp->fd, 1);
+		if(temp && temp->error)
+			return(1);
+		temp = temp->next;
+	}
+	return(0);
+}
+
+void	ft_dup_fd2(t_list_file *cmd)
+{
+	t_list_file		*temp;
+	int				j;
+
+	j = 0;
+	temp = cmd;
+	if(error_exec_redir(cmd))
+		j = 1;
+	while(temp)
+	{
+		if(j == 0 && (temp->redir == '>' || temp->redir == 'R'))
+			dup2(temp->fd, 1);
 		else
 		{
-			if(temp->redir == '<')
-			{
-				i = dup2(temp->fd, 0);
-			}
+			if(j == 0 && temp->redir == '<')
+				dup2(temp->fd, 0);
 			else
 			{
-				i = dup2(temp->pipe_fd[0], 0);
+				if(j == 0)
+					dup2(temp->pipe_fd[0], 0);
 				close(temp->pipe_fd[0]);
 			}
 		}
-		if(i < 0)
-			error_exec(3, env);
 		temp = temp->next;
 	}
 }
@@ -167,7 +198,6 @@ int			wait_exec_cmds(t_list		*cmds)
 void		exec_cmd(t_list *cmd, t_env *env)
 {
 	int			is_piped;
-	int			status;
 
 	is_piped = 0;
 	if(cmd->type == '|' || (cmd->previous && cmd->previous->type == '|'))
@@ -187,56 +217,49 @@ void		exec_cmd(t_list *cmd, t_env *env)
 		else if(!env->error && !cmd->error)
 			exec_not_build_not_pipe(cmd, env);
 	}
-	close_pipes(cmd, is_piped);
+//	close_pipes(cmd, is_piped);
 }
 
 void			exec_pipe(t_list *cmd, t_env *env, int is_piped)
 {
 	pid_t		pid;
+	int			j;
 
 	(void)is_piped;
-	if(cmd->file /*&& cmd->pid == 0*/)
-	{
-		restart_t_list_file(&(cmd->file));
-		if(cmd->error == 0 && ft_redirection(cmd->file, env) == -1)
-			cmd->error = 3;
-		restart_t_list_file(&(cmd->file));
-	}
 	if((pid = fork()) < 0)
 		return(error_exec(2, env));
 	cmd->pid = pid;
 	cmd->is_fork = 1;
 	inhibit_signals(pid);
-//	if(cmd->file && cmd->pid == 0)
-//	{
-//		restart_t_list_file(&(cmd->file));
-//		if(cmd->error == 0 && ft_redirection(cmd->file, env) == -1)
-//			cmd->error = 3;
-//		restart_t_list_file(&(cmd->file));
-//	}
 	if(cmd->pid == 0)
 	{
+		j = 0;
 		if(cmd->type == '|'  && dup2(cmd->pipe[1], 1) < 0)
 			error_exec(3, env);
 		if(cmd->previous && cmd->previous->type == '|'  && dup2(cmd->previous->pipe[0], 0) < 0)
 			error_exec(3, env);
-		if(cmd->file && !cmd->error)
-			ft_dup_fd2(cmd->file, env);
-		if(cmd->cmds && !cmd->error)
+		if(cmd->file)
+		{
+			restart_t_list_file(&(cmd->file));
+			j = error_exec_redir(cmd->file);
+			ft_dup_fd2(cmd->file);
+		}
+		if(cmd->cmds && !j)
 		{
 			if(cmd->cmds && cmd->cmds[0] && is_builtin(cmd->cmds[0]))
-				exit(g_ret = exec_build(cmd, env));
+				exit(exec_build(cmd, env));
 			else
 				exit(exec_other(cmd, env));
 		}
-		else if(cmd->error)
+		else if(j)
 			exit(g_ret = 1);
 		else
 			exit(g_ret = 0);
 	}
+	close_pipes(cmd, 1);
 }
 
-void		exec_not_build_not_pipe(t_list	*cmd, t_env *env)
+int			exec_not_build_not_pipe(t_list	*cmd, t_env *env)
 {
 	pid_t		pid;
 
@@ -245,7 +268,7 @@ void		exec_not_build_not_pipe(t_list	*cmd, t_env *env)
 	inhibit_signals(pid);
 	cmd->pid = pid;
 	cmd->is_fork = 1;
-	if(cmd->pid == 0)
+	if(pid == 0)
 	{
 		if(cmd->file)
 		{
@@ -253,14 +276,19 @@ void		exec_not_build_not_pipe(t_list	*cmd, t_env *env)
 			if(cmd->error == 0 && ft_redirection(cmd->file, env) == -1)
 				cmd->error = 3;
 			restart_t_list_file(&(cmd->file));
-			ft_dup_fd2(cmd->file, env);
+			ft_dup_fd2(cmd->file);
 		}
-		exit(g_ret = exec_other(cmd, env));
+		if(cmd->error != 3)
+			exit(g_ret = exec_other(cmd, env));
+		else
+			exit(1);
 	}
+	close_pipes(cmd, 0);
+	return(g_ret);
 }
 
 
-void		exec_build_not_pipe(t_list	*cmd, t_env *env)
+int			exec_build_not_pipe(t_list	*cmd, t_env *env)
 {
 	int		input;
 	int		output;
@@ -275,13 +303,16 @@ void		exec_build_not_pipe(t_list	*cmd, t_env *env)
 		{
 			restart_t_list_file(&(cmd->file));
 			if(cmd->error == 0 && ft_redirection(cmd->file, env) == -1)
+			{
+				g_ret = 1;
 				cmd->error = 3;
+			}
 		}
 		waitpid(pid, &status, 0);
 		if(pid != 0 && status != 2)
-		{
 			exit(0);
-		}
+		else if(pid != 0)
+			g_ret = 130;
 		handle_signals();
 		restart_t_list_file(&(cmd->file));
 		input = dup(0);
@@ -291,9 +322,9 @@ void		exec_build_not_pipe(t_list	*cmd, t_env *env)
 			error_exec(3, env);
 		if(dup2(cmd->pipe[0], 0) < 0)
 			error_exec(3, env);
-		if(cmd->file)
-			ft_dup_fd2(cmd->file, env);
-		env->last_ret = exec_build(cmd, env);
+		ft_dup_fd2(cmd->file);
+		if(g_ret != 130 && cmd->error != 3)
+			g_ret = exec_build(cmd, env);
 		close(cmd->pipe[0]);
 		close(cmd->pipe[1]);
 		close_fd(&(cmd->file));
@@ -304,35 +335,35 @@ void		exec_build_not_pipe(t_list	*cmd, t_env *env)
 	}
 	else
 		g_ret = exec_build(cmd, env);
+	close_pipes(cmd, 0);
+	return(g_ret);
 }
 
 int			exec_cmds(t_env *env)
 {
 	t_list		*c;
-	int			ret;
 	char		*s;
-	char		*s2;
 
-	ret = 0;
+	g_ret = 0;
 	list_cmds_restart(&(env->cmds));
-//	if(env->cmds && env->cmds->next == NULL)
-//		exec_one_commande(env->cmds, env);
-//	else
-//	{
-	c = env->cmds;
-	while(c)
+	if(env->cmds && env->cmds->next)
+		make_all_redir(env->cmds, env);
+	if(g_ret != 130)
 	{
-		if(c->error == 0)
-			exec_cmd(c, env);
-		env->last_ret = ret;
-		c = c->next;
+		c = env->cmds;
+		while(c)
+		{
+			if(c->error == 0)
+				exec_cmd(c, env);
+			c = c->next;
+		}
+//	if(env->cmds && env->cmds->next)
+		wait_exec_cmds(env->cmds);
 	}
-	wait_exec_cmds(env->cmds);
-//	}
 	s = ft_itoa(g_ret);
 	if(ft_find_env(&(env->env), "?"))
 		change_value(&(env->env), "?", s);
 	if(s)
 		free(s);
-	return(ret);
+	return (g_ret);
 }

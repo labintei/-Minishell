@@ -6,7 +6,7 @@
 /*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/25 18:50:07 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/27 21:51:22 by labintei         ###   ########.fr       */
+/*   Updated: 2021/09/30 18:34:48 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ typedef	struct		s_list_file
 	int						fd;
 	char					redir;
 	char					is_quotes;
+	int						error;
 	char					*ambigous;
 	int						pipe_fd[2];
 	struct	s_list_file		*next;
@@ -224,15 +225,15 @@ char		*get_value_from_key(char *str, int *i);
 
 int			count_word_before_redir(char	*line, int  i);
 
-void		ft_dup_fd2(t_list_file *cmd, t_env *env);
+void		ft_dup_fd2(t_list_file *cmd);
 
 //PARSING
 void			is_in_word_not_quotes(char *line, int *j, int *redir, int *pipe);
 void			spe_case(char *line, int *j, int *pipe, int *redir);
 
 //EXECUTION
-void		exec_not_build_not_pipe(t_list	*cmd, t_env *env);
-void		exec_build_not_pipe(t_list	*cmd, t_env *env);
+int			exec_not_build_not_pipe(t_list	*cmd, t_env *env);
+int			exec_build_not_pipe(t_list	*cmd, t_env *env);
 void		exec_pipe(t_list *cmd, t_env *env, int is_piped);
 
 //ERROR
@@ -283,6 +284,14 @@ int	is_only_alpha_num(char	*var);
 
 void	add_after(t_list_env **list, char *var, char *val);
 
+int		redir_output_simple(t_list_file	*f);
+int		redir_input_simple(t_list_file	*f, t_env *env);
+
+char	*ft_strndup(char *str, int n);
+
+char	*ft_get_val(char *var, t_env *env);
+
+int	ft_count_char(char *line, t_env *env);
 
 
 #endif
