@@ -6,7 +6,7 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/13 13:45:00 by labintei          #+#    #+#             */
-/*   Updated: 2021/10/01 16:49:56 by labintei         ###   ########.fr       */
+/*   Updated: 2021/10/01 16:56:12 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,7 @@ void	ft_dup_fd2(t_list_file *cmd)
 	t_list_file		*temp;
 
 	temp = cmd;
-	while (temp)
+	while (temp && temp->fd != -2)
 	{
 		if (temp->redir == '>' || temp->redir == 'R')
 			dup2(temp->fd, 1);
