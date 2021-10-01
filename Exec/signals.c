@@ -6,7 +6,7 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/31 16:00:53 by labintei          #+#    #+#             */
-/*   Updated: 2021/10/01 15:14:49 by labintei         ###   ########.fr       */
+/*   Updated: 2021/10/01 16:07:37 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,21 +41,18 @@ void	ignore_signals(int signal)
 
 int	inhibit_signals(int id)
 {
-	void	*i;
-
-	i = 0;
 	if (id == 0)
 	{
-		if ((i = (signal(SIGQUIT, SIG_IGN))) < 0)
-			return(0);
-		if((i = (signal(SIGINT, SIG_DFL))) < 0)
+		if ((signal(SIGQUIT, SIG_IGN)) == SIG_ERR)
+			return (0);
+		if ((signal(SIGINT, SIG_DFL)) == SIG_ERR)
 			return (0);
 	}
 	else
 	{
-		if ((i = (signal(SIGQUIT, SIG_IGN))) < 0)
-			return(0);
-		if((i = (signal(SIGINT, SIG_IGN))) < 0)
+		if ((signal(SIGQUIT, SIG_IGN)) == SIG_ERR)
+			return (0);
+		if ((signal(SIGINT, SIG_IGN)) == SIG_ERR)
 			return (0);
 	}
 	return (1);
@@ -63,12 +60,9 @@ int	inhibit_signals(int id)
 
 int	handle_signals(void)
 {
-	void	*i;
-
-	i = 0;
-	if ((i = (signal(SIGQUIT, SIG_IGN))) < 0)
+	if ((signal(SIGQUIT, SIG_IGN)) == SIG_ERR)
 		return (0);
-	if ((i = (signal(SIGINT, ctrl_c))) < 0)
+	if ((signal(SIGINT, ctrl_c)) == SIG_ERR)
 		return (0);
 	return (1);
 }

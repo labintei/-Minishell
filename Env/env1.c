@@ -6,7 +6,7 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/27 22:12:29 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/30 19:33:53 by labintei         ###   ########.fr       */
+/*   Updated: 2021/10/01 16:04:01 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	view_list_env(t_list_env	**l)
 	printf("\n");
 	while (c)
 	{
-		if (c && c->var != "?")
+		if (c && ft_strcmp(c->var, "?"))
 		{
 			printf("%s=", c->var);
 			printf("%s\n", c->val);

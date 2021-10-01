@@ -6,7 +6,7 @@
 #    By: malatini <malatini@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/08/16 20:11:09 by labintei          #+#    #+#              #
-#    Updated: 2021/10/01 15:13:48 by labintei         ###   ########.fr        #
+#    Updated: 2021/10/01 15:53:07 by labintei         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,10 +26,10 @@ SRCS		=	./Exec/exec_new.c ./Exec/path.c ./Exec/redirection.c \
 				./Error/error.c
 
 OBJS		= $(SRCS:.c=.o)
-CC			= gcc# -g3 fsanitize=address
+CC			= gcc
 RM			= rm -rf
 NAME		= minishell
-CFLAGS		= #-Wall -Wextra -Werror
+CFLAGS		= -Wall -Wextra -Werror
 
 all:		${NAME}
 

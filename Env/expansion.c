@@ -6,7 +6,7 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/17 17:39:38 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/27 23:10:11 by labintei         ###   ########.fr       */
+/*   Updated: 2021/10/01 16:05:11 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,13 +65,11 @@ int	ft_search_var(char *line, t_list_env *tmp, int *i, char *res)
 int	ft_count_char(char *line, t_env *env)
 {
 	int			i;
-	int			j;
 	int			count;
 	char		*res;
 	t_list_env	*tmp;
 
 	i = 0;
-	j = 0;
 	count = 0;
 	res = NULL;
 	while (line[i])
@@ -99,7 +97,7 @@ int	ft_expansion_var(char *line, t_env *env, char **tmp, int (*h)[3])
 	(*h)[0] = j;
 	j = 0;
 	(*tmp) = ft_get_val((*tmp), env);
-	printf("\nTEMP %s\n", (*tmp));
+	return (1);
 }
 
 int	ft_expansion_bis(char *tmp, char **res, int *j)
@@ -116,6 +114,7 @@ int	ft_expansion_bis(char *tmp, char **res, int *j)
 			(*j)++;
 		}
 	}
+	return(1);
 }
 
 void	init_h(int	(*h)[3])

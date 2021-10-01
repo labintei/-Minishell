@@ -6,7 +6,7 @@
 /*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/25 18:50:07 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/30 21:38:46 by labintei         ###   ########.fr       */
+/*   Updated: 2021/10/01 16:08:11 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -276,7 +276,7 @@ void	make_concat(t_env *env, char *s);
 void	export_simple(char	*s, t_env *env);
 void	list_sort(t_list_env *env);
 
-
+void		close_fd(t_list_file	**file);
 void	add_before(t_list_env **list, char *var, char *val);
 void	concat_value(t_list_env **env, char *var, char *val);
 

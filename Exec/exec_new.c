@@ -6,131 +6,71 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/13 13:45:00 by labintei          #+#    #+#             */
-/*   Updated: 2021/10/01 14:57:16 by labintei         ###   ########.fr       */
+/*   Updated: 2021/10/01 16:49:56 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-/*
-void		make_all_redir(t_list		*cmds, t_env	*env)
+
+int	exec_o(char ***test, t_env *env, t_list *c)
 {
-	int			pid;
-	int			status;
-	t_list		*c;
-
-	c = cmds;
-	status = 0;
-	pid = fork();
-	signal(SIGINT , SIG_IGN);
-	signal(SIGQUIT, SIG_IGN);
-	if(pid == 0)
-	{
-		signal(SIGINT , SIG_DFL);
-		signal(SIGQUIT, SIG_IGN);
-		while(c)
-		{
-			restart_t_list_file(&(c->file));
-			while(c->file && c->error == 0)
-			{
-				c->error = error_redirection(c->file, 1);
-				if(c->error == 0)
-				{
-					redir_input_simple(c->file, env, 1);
-					redir_output_simple(c->file);
-					c->file = c->file->next;
-				}
-			}
-			c = c->next;
-		}
-		exit(0);
-	}
-	waitpid(pid ,&status, 0);
-	if(status == 2)
-		g_ret = 130;
-//	if(pid != 0 && status != 2)
-//		exit(0);
-	handle_signals();
-}*/
-
-int			make_all_redir(t_list		*cmds, t_env	*env)
-{
-	int			pid;
-	int			status;
-	t_list		*c;
-
-	c = cmds;
-	while(c)
-	{
-		restart_t_list_file(&(c->file));
-		while(c->file && c->error == 0)
-		{
-			if(redir_input_simple(c->file, env, 0) == -1)
-				return(-1);
-			if(redir_output_simple(c->file) == -1)
-				return(-1);
-			c->file = c->file->next;
-		}
-		c = c->next;
-	}
-}
-
-void		close_fd(t_list_file	**file);
-
-
-int		exec_other(t_list	*c, t_env *env)
-{
-	char	**test;
-	int		j;
-	struct	stat		si;
-
-	g_ret = 0;
-	if(c->pid == 0)
-	{
-		if(c->cmds && c->cmds[0] && c->cmds[0][0] && c->cmds[0][0] == '.' && c->cmds[0][1] && c->cmds[0][1] == '/')
-		{
-			j = open(c->cmds[0], O_RDONLY);
-			if(fstat(j, &si) == -1)
-			{
-				ft_putstr_fd(c->cmds[0], 2);
-				ft_putstr_fd(": command not found\n",2);
-				g_ret = 1;
-				exit(1);
-			}
-			ft_convert_env(&(env->env), &test);
-			g_ret = execve(c->cmds[0], c->cmds, test);
-			if(test)
-				clear_tab(&test);
-			exit(g_ret);
-		}
-		else if(c->cmds && c->cmds[0])
-		{
-			j = open(c->cmds[0], O_RDONLY);
-			if(fstat(j, &si) == -1)
-				find_exec_path(&(c->cmds[0]), env);
-			ft_convert_env(&(env->env), &test);
-			g_ret = execve(c->cmds[0], c->cmds, test);
-			if(test)
-				clear_tab(&test);
-			exit(g_ret);
-		}
-		exit(g_ret);
-	}
+	ft_convert_env(&(env->env), test);
+	g_ret = execve(c->cmds[0], c->cmds, (*test));
+	if (test)
+		clear_tab(test);
 	return(g_ret);
 }
 
-void		close_fd(t_list_file	**file)
+int	erreur_o(t_list	*c)
+{
+	ft_putstr_fd(c->cmds[0], 2);
+	ft_putstr_fd(": No such file or directory\n", 2);
+	g_ret = 1;
+	return (1);
+}
+
+int	exec_other(t_list	*c, t_env *env)
+{
+	char			**test;
+	int				j;
+	struct stat		si;
+
+	g_ret = 0;
+	if (c->pid == 0)
+	{
+		if (c->cmds && c->cmds[0] && c->cmds[0][0] && \
+		c->cmds[0][0] == '.' && c->cmds[0][1] && c->cmds[0][1] == '/')
+		{
+			j = open(c->cmds[0], O_RDONLY);
+			if (fstat(j, &si) == -1)
+				exit(erreur_o(c));
+			exec_o(&(test), env, c);
+		}
+		else if (c->cmds && c->cmds[0])
+		{
+			j = open(c->cmds[0], O_RDONLY);
+			if (fstat(j, &si) == -1)
+				find_exec_path(&(c->cmds[0]), env);
+			exec_o(&(test), env, c);
+		}
+	}
+	exit(g_ret);
+	return (g_ret);
+}
+
+void	close_fd(t_list_file	**file)
 {
 	t_list_file		*temp;
 
 	restart_t_list_file(file);
 	temp = (*file);
-	while(temp)
+	while (temp)
 	{
-		if(error_redirection(temp, 0))
+		if (error_redirection(temp, 0))
 			return ;
-		if(temp->redir != 'L' && temp->fd > 0)
+		if (temp->redir != 'L' && temp->fd > 0)
 			close(temp->fd);
-		if(temp->redir == 'L' && temp->fd > 0)
+		if (temp->redir == 'L' && temp->fd > 0)
 		{
 			close(temp->pipe_fd[0]);
 			close(temp->pipe_fd[1]);
@@ -139,33 +79,31 @@ void		close_fd(t_list_file	**file)
 	}
 }
 
-
-int		close_pipes(t_list		*cmd, int is_piped)
+int	close_pipes(t_list	*cmd, int is_piped)
 {
-
 	close_fd(&(cmd->file));
-	if(cmd->previous && cmd->previous->type == '|')
+	if (cmd->previous && cmd->previous->type == '|')
 		close(cmd->previous->pipe[0]);
-	if(!is_piped)
-		return(1);
+	if (!is_piped)
+		return (1);
 	close(cmd->pipe[1]);
-	if(!cmd->next)
+	if (!cmd->next)
 		close(cmd->pipe[0]);
-	return(1);
+	return (1);
 }
 
-int		error_exec_redir(t_list_file *cmds)
+int	error_exec_redir(t_list_file *cmds)
 {
 	t_list_file		*temp;
 
 	temp = cmds;
-	while(temp)
+	while (temp)
 	{
-		if(temp && temp->error)
-			return(1);
+		if (temp && temp->error)
+			return (1);
 		temp = temp->next;
 	}
-	return(0);
+	return (0);
 }
 
 void	ft_dup_fd2(t_list_file *cmd)
@@ -173,13 +111,13 @@ void	ft_dup_fd2(t_list_file *cmd)
 	t_list_file		*temp;
 
 	temp = cmd;
-	while(temp)
+	while (temp)
 	{
-		if(temp->redir == '>' || temp->redir == 'R')
+		if (temp->redir == '>' || temp->redir == 'R')
 			dup2(temp->fd, 1);
 		else
 		{
-			if(temp->redir == '<')
+			if (temp->redir == '<')
 				dup2(temp->fd, 0);
 			else
 			{
@@ -191,160 +129,152 @@ void	ft_dup_fd2(t_list_file *cmd)
 	}
 }
 
-int			wait_exec_cmds(t_list		*cmds)
+int	wait_exec_cmds(t_list	*cmds)
 {
 	int			ret;
 	int			status;
-	int			i;
 
-	i = 0;
 	ret = 0;
-	while(cmds)
+	while (cmds)
 	{
-		if(cmds && cmds->cmds && cmds->is_fork)
+		if (cmds && cmds->cmds && cmds->is_fork)
 		{
-			i = 1;
 			waitpid(cmds->pid, &status, 0);
-			if(WIFEXITED(status))
+			if (WIFEXITED(status))
 				g_ret = WEXITSTATUS(status);
 		}
 		cmds = cmds->next;
 	}
 	handle_signals();
-	return(ret);
+	return (ret);
 }
 
-void		exec_cmd(t_list *cmd, t_env *env)
+void	exec_cmd(t_list *cmd, t_env *env)
 {
-	int			is_piped;
+	int	is_piped;
 
 	is_piped = 0;
-	if(cmd->type == '|' || (cmd->previous && cmd->previous->type == '|'))
+	if (cmd->type == '|' || (cmd->previous && cmd->previous->type == '|'))
 	{
-		if(pipe(cmd->pipe))
+		if (pipe(cmd->pipe))
 			error_exec(1, env);
 		is_piped = 1;
 		cmd->is_piped = 1;
 		g_ret = 1;
 	}
-	if(cmd->type == '|' || (cmd->previous && cmd->previous->type == '|'))
+	if (cmd->type == '|' || (cmd->previous && cmd->previous->type == '|'))
 		exec_pipe(cmd, env, is_piped);
 	else
 	{
-		if(!env->error && !cmd->error && cmd->cmds && cmd->cmds[0] && is_builtin(cmd->cmds[0]))
+		if (!env->error && !cmd->error && \
+		cmd->cmds && cmd->cmds[0] && is_builtin(cmd->cmds[0]))
 			exec_build_not_pipe(cmd, env);
-		else if(!env->error && !cmd->error)
+		else if (!env->error && !cmd->error)
 			exec_not_build_not_pipe(cmd, env);
 	}
 	close_pipes(cmd, is_piped);
 }
 
-
-int				wait_heredoc(t_list_file	**file)
+int	wait_heredoc(t_list_file	**file)
 {
 	t_list_file		*f;
 
 	restart_t_list_file(file);
 	f = (*file);
-	while(f)
+	while (f)
 	{
-		if(f && f->redir == 'L')
-			return(1);
+		if (f && f->redir == 'L')
+			return (1);
 		f = f->next;
 	}
-	return(0);
+	return (0);
 }
 
-void			exec_pipe(t_list *cmd, t_env *env, int is_piped)
+void	exec_pipe(t_list *cmd, t_env *env, int is_piped)
 {
 	pid_t		pid;
-	int			j;
 	int			status;
 
+	(void)is_piped;
 	status = 0;
-	if((pid = fork()) < 0)
-		return(error_exec(2, env));
+	pid = fork();
 	cmd->pid = pid;
 	cmd->is_fork = 1;
-	if(cmd->pid == 0)
+	if (cmd->pid == 0)
 	{
 		signal(SIGINT, SIG_DFL);
-		if(cmd->file)
+		if (cmd->file)
 		{
 			restart_t_list_file(&(cmd->file));
-			if(cmd->error == 0 && ft_redirection(cmd->file, env, 1) == -1)
+			if (cmd->error == 0 && ft_redirection(cmd->file, env, 1) == -1)
 				cmd->error = 3;
 			restart_t_list_file(&(cmd->file));
 		}
-		j = 0;
-		if(cmd->type == '|'  && dup2(cmd->pipe[1], 1) < 0)
+		if (cmd->type == '|' && dup2(cmd->pipe[1], 1) < 0)
 			error_exec(3, env);
-		if(cmd->previous && cmd->previous->type == '|'  && dup2(cmd->previous->pipe[0], 0) < 0)
+		if (cmd->previous && cmd->previous->type == '|' \
+		&& dup2(cmd->previous->pipe[0], 0) < 0)
 			error_exec(3, env);
-		if(cmd->file)
+		if (cmd->file)
 		{
 			restart_t_list_file(&(cmd->file));
 			ft_dup_fd2(cmd->file);
 		}
-		if(cmd->cmds && !env->cmds->error)
+		if (cmd->cmds && !env->cmds->error)
 		{
-			if(cmd->cmds && cmd->cmds[0] && is_builtin(cmd->cmds[0]))
+			if (cmd->cmds && cmd->cmds[0] && is_builtin(cmd->cmds[0]))
 				exit(exec_build(cmd, env));
 			else
 				exit(exec_other(cmd, env));
 		}
-		else if(env->cmds->error)
-			exit(g_ret = 1);
+		else if (env->cmds->error)
+			exit(1);
 		else
-			exit(g_ret = 0);
+			exit(0);
 	}
-	if(wait_heredoc(&(cmd->file)))
+	if (wait_heredoc(&(cmd->file)))
 	{
-		waitpid(cmd->pid ,&status, 0);
-		if(status == 2)
+		waitpid(cmd->pid, &status, 0);
+		if (status == 2)
 			g_ret = 130;
 	}
 }
 
-int			exec_not_build_not_pipe(t_list	*cmd, t_env *env)
+int	exec_not_build_not_pipe(t_list	*cmd, t_env *env)
 {
 	pid_t		pid;
 
-	if((pid = fork()) < 0)
-		error_exec(2, env);
+	pid = fork();
 	inhibit_signals(pid);
 	cmd->pid = pid;
 	cmd->is_fork = 1;
-	if(pid == 0)
+	if (pid == 0)
 	{
-		if(cmd->file)
+		if (cmd->file)
 		{
 			restart_t_list_file(&(cmd->file));
-			if(cmd->error == 0 && ft_redirection(cmd->file, env, 1) == -1)
+			if (cmd->error == 0 && ft_redirection(cmd->file, env, 1) == -1)
 				cmd->error = 3;
 			restart_t_list_file(&(cmd->file));
 			ft_dup_fd2(cmd->file);
 		}
-		if(cmd->error != 3)
-			exit(g_ret = exec_other(cmd, env));
+		if (cmd->error != 3)
+			exit(exec_other(cmd, env));
 		else
 			exit(1);
 	}
-	return(g_ret);
+	return (g_ret);
 }
 
-
-int			exec_build_not_pipe(t_list	*cmd, t_env *env)
+int	exec_build_not_pipe(t_list	*cmd, t_env *env)
 {
 	int		input;
 	int		output;
-	int		pid;
-	int		status;
 
-	if(cmd->file)
+	if (cmd->file)
 	{
 		restart_t_list_file(&(cmd->file));
-		if(cmd->error == 0 && ft_redirection(cmd->file, env, 1) == -1)
+		if (cmd->error == 0 && ft_redirection(cmd->file, env, 1) == -1)
 		{
 			g_ret = 1;
 			cmd->error = 3;
@@ -353,29 +283,28 @@ int			exec_build_not_pipe(t_list	*cmd, t_env *env)
 		input = dup(0);
 		output = dup(1);
 		pipe(cmd->pipe);
-		if(dup2(cmd->pipe[1], 1) < 0)
+		if (dup2(cmd->pipe[1], 1) < 0)
 			error_exec(3, env);
-		if(dup2(cmd->pipe[0], 0) < 0)
+		if (dup2(cmd->pipe[0], 0) < 0)
 			error_exec(3, env);
-		if(cmd->file)
+		if (cmd->file)
 			ft_dup_fd2(cmd->file);
-		if(g_ret != 130 && cmd->error != 3)
+		if (g_ret != 130 && cmd->error != 3)
 			g_ret = exec_build(cmd, env);
 		close(cmd->pipe[0]);
 		close(cmd->pipe[1]);
 		close_fd(&(cmd->file));
-		if(input < 0 || dup2(input, 0) < 0)
+		if (input < 0 || dup2(input, 0) < 0)
 			error_exec(3, env);
-		if(output < 0 || dup2(output, 1) < 0)
+		if (output < 0 || dup2(output, 1) < 0)
 			error_exec(3, env);
 	}
 	else
 		g_ret = exec_build(cmd, env);
-//	close_pipes(cmd, 0);
-	return(g_ret);
+	return (g_ret);
 }
 
-int			exec_cmds(t_env *env)
+int	exec_cmds(t_env *env)
 {
 	t_list		*c;
 	char		*s;
@@ -384,17 +313,17 @@ int			exec_cmds(t_env *env)
 	list_cmds_restart(&(env->cmds));
 	c = env->cmds;
 	signal(SIGINT, SIG_IGN);
-	while(c && g_ret != 130)
+	while (c && g_ret != 130)
 	{
-		if(c->error == 0)
+		if (c->error == 0)
 			exec_cmd(c, env);
 		c = c->next;
 	}
 	wait_exec_cmds(env->cmds);
 	s = ft_itoa(g_ret);
-	if(ft_find_env(&(env->env), "?"))
+	if (ft_find_env(&(env->env), "?"))
 		change_value(&(env->env), "?", s);
-	if(s)
+	if (s)
 		free(s);
 	return (g_ret);
 }
