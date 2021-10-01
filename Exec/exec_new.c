@@ -6,7 +6,7 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/13 13:45:00 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/30 22:50:46 by labintei         ###   ########.fr       */
+/*   Updated: 2021/10/01 14:30:35 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,23 +171,20 @@ int		error_exec_redir(t_list_file *cmds)
 void	ft_dup_fd2(t_list_file *cmd)
 {
 	t_list_file		*temp;
-	int				j;
 
-	j = 0;
 	temp = cmd;
-	if(error_exec_redir(cmd))
-		j = 1;
+//	if(error_exec_redir(cmd))
+//		j = 1;
 	while(temp)
 	{
-		if(j == 0 && (temp->redir == '>' || temp->redir == 'R'))
+		if(temp->redir == '>' || temp->redir == 'R')
 			dup2(temp->fd, 1);
 		else
 		{
-			if(j == 0 && temp->redir == '<')
+			if(temp->redir == '<')
 				dup2(temp->fd, 0);
 			else
 			{
-				//if(j == 0)
 				dup2(temp->pipe_fd[0], 0);
 				close(temp->pipe_fd[0]);
 			}
@@ -195,6 +192,33 @@ void	ft_dup_fd2(t_list_file *cmd)
 		temp = temp->next;
 	}
 }
+
+void	ft_dup_fd2_bis(t_list_file *c, t_list *cmd)
+{
+	t_list_file		*temp;
+
+	temp = c;
+//	if(error_exec_redir(cmd))
+//		j = 1;
+	while(temp)
+	{
+		if(temp->redir == '>' || temp->redir == 'R')
+			dup2(temp->fd, cmd->pipe[1]);
+		else
+		{
+			if(temp->redir == '<')
+				dup2(temp->fd, cmd->previous->pipe[0]);
+			else
+			{
+				dup2(temp->pipe_fd[0], cmd->previous->pipe[0]);
+				close(temp->pipe_fd[0]);
+			}
+		}
+		temp = temp->next;
+	}
+}
+
+
 
 int			wait_exec_cmds(t_list		*cmds)
 {
@@ -246,35 +270,54 @@ void		exec_cmd(t_list *cmd, t_env *env)
 //	close_pipes(cmd, is_piped);
 }
 
+
+int				wait_heredoc(t_list_file	**file)
+{
+	t_list_file		*f;
+
+	restart_t_list_file(file);
+	f = (*file);
+	while(f)
+	{
+		if(f && f->redir == 'L')
+			return(1);
+		f = f->next;
+	}
+	return(0);
+}
+
 void			exec_pipe(t_list *cmd, t_env *env, int is_piped)
 {
 	pid_t		pid;
 	int			j;
-
+	int			status;
+	
 
 //	if(cmd->file)
 //	{
 //		restart_t_list_file(&(cmd->file));
-//		if(cmd && cmd->previous)
-//		{
-//			if(cmd->error == 0 && ft_redirection(cmd->file, env, 1) == -1)
-//				cmd->error = 3;
-//		}
-//		else
-//		{
-//			if(cmd->error == 0 && ft_redirection(cmd->file, env, 0) == -1)
-//				cmd->error = 3;
-//		}
+//		if(cmd->error == 0 && ft_redirection(cmd->file, env, 1) == -1)
+//			cmd->error = 3;
 //		restart_t_list_file(&(cmd->file));
-//		ft_dup_fd2(cmd->file);
+//	//	ft_dup_fd2(cmd->file, cmd);
 //	}
+	status = 0;
 	if((pid = fork()) < 0)
 		return(error_exec(2, env));
 	cmd->pid = pid;
 	cmd->is_fork = 1;
-	inhibit_signals(pid);
+//	inhibit_signals(pid);
 	if(cmd->pid == 0)
 	{
+		signal(SIGINT, SIG_DFL);
+		if(cmd->file)
+		{
+			restart_t_list_file(&(cmd->file));
+			if(cmd->error == 0 && ft_redirection(cmd->file, env, 1) == -1)
+				cmd->error = 3;
+			restart_t_list_file(&(cmd->file));
+		//	ft_dup_fd2(cmd->file, cmd);
+		}
 		j = 0;
 		if(cmd->type == '|'  && dup2(cmd->pipe[1], 1) < 0)
 			error_exec(3, env);
@@ -283,9 +326,6 @@ void			exec_pipe(t_list *cmd, t_env *env, int is_piped)
 		if(cmd->file)
 		{
 			restart_t_list_file(&(cmd->file));
-//			if(cmd->error == 0 && ft_redirection(cmd->file, env, 1) == -1)
-//				cmd->error = 3;
-//			restart_t_list_file(&(cmd->file));
 			ft_dup_fd2(cmd->file);
 		}
 		if(cmd->cmds && !env->cmds->error)
@@ -300,8 +340,10 @@ void			exec_pipe(t_list *cmd, t_env *env, int is_piped)
 		else
 			exit(g_ret = 0);
 	}
-	close_pipes(cmd, 1);
-	handle_signals();
+	if(wait_heredoc(&(cmd->file)))
+		waitpid(cmd->pid ,&status, 0);
+	//close_pipes(cmd, 1);
+	//handle_signals();
 }
 
 //           ls -a << END | sort -n << END | ls -a
@@ -311,14 +353,6 @@ int			exec_not_build_not_pipe(t_list	*cmd, t_env *env)
 {
 	pid_t		pid;
 
-	//if(cmd->file)
-	//{
-	//	restart_t_list_file(&(cmd->file));
-	//	if(cmd->error == 0 && ft_redirection(cmd->file, env) == -1)
-	//		cmd->error = 3;
-	//	restart_t_list_file(&(cmd->file));
-	//	ft_dup_fd2(cmd->file);
-	//}
 	if((pid = fork()) < 0)
 		error_exec(2, env);
 	inhibit_signals(pid);
@@ -339,7 +373,7 @@ int			exec_not_build_not_pipe(t_list	*cmd, t_env *env)
 		else
 			exit(1);
 	}
-	close_pipes(cmd, 0);
+//	close_pipes(cmd, 0);
 	return(g_ret);
 }
 
@@ -353,21 +387,12 @@ int			exec_build_not_pipe(t_list	*cmd, t_env *env)
 
 	if(cmd->file)
 	{
-//		pid = fork();
-//		inhibit_signals(pid);/		
-//		if(pid == 0)
-//		{
-//		restart_t_list_file(&(cmd->file));
-		if(cmd->error == 0 && ft_redirection(cmd->file, env, 0) == -1)
+		restart_t_list_file(&(cmd->file));
+		if(cmd->error == 0 && ft_redirection(cmd->file, env, 1) == -1)
 		{
 			g_ret = 1;
 			cmd->error = 3;
 		}
-//		}
-//		waitpid(pid, &status, 0);
-		if(status == 2)
-			g_ret = 130;
-		handle_signals();
 		restart_t_list_file(&(cmd->file));
 		input = dup(0);
 		output = dup(1);
@@ -406,6 +431,7 @@ int			exec_cmds(t_env *env)
 	if(g_ret != 130)
 	{
 		c = env->cmds;
+		signal(SIGINT, SIG_IGN);
 		while(c)
 		{
 			if(c->error == 0)

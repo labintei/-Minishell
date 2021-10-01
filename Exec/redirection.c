@@ -6,7 +6,7 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/17 17:42:29 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/30 21:36:01 by labintei         ###   ########.fr       */
+/*   Updated: 2021/10/01 13:59:14 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,10 +49,12 @@ int	ft_heredoc(t_list_file *f, t_env *env, int	is_fork)
 	int		pid;
 	int		status;
 
-	if(pipe(f->pipe_fd))
-		error_exec(1, env);
+//	if(pipe(f->pipe_fd))
+//		error_exec(1, env);
 	if(!is_fork)
 	{
+		if(pipe(f->pipe_fd))
+			error_exec(1, env);
 		pid = fork();
 		inhibit_signals(pid);
 		if(pid == 0)
@@ -68,6 +70,8 @@ int	ft_heredoc(t_list_file *f, t_env *env, int	is_fork)
 	}
 	if(is_fork)
 	{
+		if(pipe(f->pipe_fd))
+			error_exec(1, env);
 		ft_heredoc_under(f, env);
 		return(0);
 	}
@@ -163,14 +167,26 @@ int		ft_redirection(t_list_file		*file, t_env *env, int	is_fork)
 	new = file;
 	while(new)
 	{
-		if(error_redirection(file, 1))
-			return(-1);
+//		if(error_redirection(file, 1))
+//			return(-1);
 		if (redir_input_simple(new, env, is_fork) != 0)
 			return (-1);
+//		if (redir_output_simple(new) != 0)
+//			return (-1);
+		new = new->next;
+	}
+	new = file;
+	while(new)
+	{
+		if(error_redirection(file, 1))
+			return(-1);
+//		if (redir_input_simple(new, env, is_fork) != 0)
+//			return (-1);
 		if (redir_output_simple(new) != 0)
 			return (-1);
 		new = new->next;
 	}
+
 //	*j = 4;
 	return (0);
 }
