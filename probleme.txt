@@ -1,2 +1,0 @@
-J ai un probleme avecle geredoc grosso modo il y a execution de dup 2 apres le fork()
-et les redirection donc le heredoc sont faite uniquement sur dup2()

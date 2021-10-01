@@ -6,7 +6,7 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/27 17:55:05 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/27 18:06:29 by labintei         ###   ########.fr       */
+/*   Updated: 2021/10/01 15:18:07 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ void	add_list_file(t_list_file **file, int i, char c)
 	new->next = NULL;
 	new->redir = c;
 	new->is_quotes = 0;
+	new->fd = -2;
 	new->ambigous = NULL;
 	if (c != 'L')
 		new->path = malloc(sizeof(char) * (i + 1));
