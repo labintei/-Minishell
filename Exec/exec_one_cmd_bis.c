@@ -6,7 +6,7 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/04 11:10:03 by labintei          #+#    #+#             */
-/*   Updated: 2021/10/04 11:13:42 by labintei         ###   ########.fr       */
+/*   Updated: 2021/10/06 18:22:06 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,8 @@ int	exec_build_not_pipe(t_list	*cmd, t_env *env)
 	waitpid(cmd->pid, &status, 0);
 	if (WIFEXITED(status))
 		g_ret = WEXITSTATUS(status);
+	if (status == 2)
+		g_ret = 130;
 	handle_signals();
 	return (g_ret);
 }

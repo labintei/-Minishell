@@ -6,7 +6,7 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/27 18:12:18 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/27 18:42:28 by labintei         ###   ########.fr       */
+/*   Updated: 2021/10/06 18:34:48 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ void	is_pipe(t_env *env, char *line)
 	{
 		env->error = 1;
 		env->none_ex = (line[(env->i)]);
+		g_ret = 1;
 	}
 	if (env->is_cmds && env->cmds && env->cmds->cmds)
 		env->cmds->cmds[env->word] = NULL;
@@ -58,6 +59,7 @@ int	is_redir(char *line, int *i, t_env *env)
 	{
 		env->error = 1;
 		env->none_ex = c;
+		g_ret = 1;
 	}
 	env->last_type = 'r';
 	skip_space(line, i);

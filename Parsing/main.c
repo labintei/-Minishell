@@ -6,7 +6,7 @@
 /*   By: malatini <malatini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/25 18:48:50 by labintei          #+#    #+#             */
-/*   Updated: 2021/09/27 20:05:37 by labintei         ###   ########.fr       */
+/*   Updated: 2021/10/06 18:38:14 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ void	parse_line(t_env *env, char *l)
 	{
 		env->error = 1;
 		env->none_ex = 'n';
+		g_ret = 1;
 	}
 }
 
@@ -54,6 +55,7 @@ void	start_parse(t_env *env)
 {
 	while (true)
 	{
+		g_ret = 0;
 		env->line = readline("\033[1;36muser@minishell$ \033[0m$ ");
 		if (!env->line)
 		{
@@ -63,8 +65,7 @@ void	start_parse(t_env *env)
 		}
 		if (env->line)
 			parse_line(env, env->line);
-		if (env->cmds && error_unexpected(env->error, env))
-			exec_cmds(env);
+		exec_cmds(env);
 		if (env->cmds)
 			clear_cmds(&(env->cmds));
 		add_history(env->line);

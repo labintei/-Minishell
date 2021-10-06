@@ -6,7 +6,7 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/17 17:40:31 by labintei          #+#    #+#             */
-/*   Updated: 2021/10/01 16:34:07 by labintei         ###   ########.fr       */
+/*   Updated: 2021/10/06 18:16:12 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int	exec_build(t_list	*a, t_env *env)
 		return (pwd(env));
 	else if (a->cmds && !ft_strcmp_1(a->cmds[0], "env"))
 		return (view_list_env(&(env->env)));
-	else if (a->cmds && !ft_strcmp_1(a->cmds[0], "exit") && a->is_fork == 0)
+	else if (a->cmds && !ft_strcmp_1(a->cmds[0], "exit"))
 		return (exit_build(env, a, a->is_fork));
 	return (0);
 }

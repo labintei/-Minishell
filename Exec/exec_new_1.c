@@ -6,7 +6,7 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/04 11:01:17 by labintei          #+#    #+#             */
-/*   Updated: 2021/10/04 16:06:05 by labintei         ###   ########.fr       */
+/*   Updated: 2021/10/06 18:40:19 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,9 +62,6 @@ void	ft_dup_fd2(t_list_file *cmd)
 	}
 }
 
-int	wait_heredoc(t_list_file	**file);
-
-
 void	exec_cmd(t_list *cmd, t_env *env)
 {
 	cmd->pipe_open = 0;
@@ -77,7 +74,7 @@ void	exec_cmd(t_list *cmd, t_env *env)
 	if (cmd->file)
 	{
 		restart_t_list_file(&(cmd->file));
-		if (cmd->error == 0 && ft_redirection(cmd->file, env, 1) == -1)
+		if (cmd->error == 0 && ft_redirection(cmd->file, env, 0) == -1)
 		{
 			cmd->error = 3;
 		}

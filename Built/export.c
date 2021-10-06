@@ -6,7 +6,7 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/17 17:35:58 by labintei          #+#    #+#             */
-/*   Updated: 2021/10/03 23:47:26 by labintei         ###   ########.fr       */
+/*   Updated: 2021/10/06 18:39:51 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ int	ft_find_concat(char *assign)
 {
 	int		i;
 
+	i = 0;
 	while (assign && assign[i])
 	{
 		if (assign[i] == '=')

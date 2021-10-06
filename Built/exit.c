@@ -6,7 +6,7 @@
 /*   By: labintei <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/17 17:35:25 by labintei          #+#    #+#             */
-/*   Updated: 2021/10/03 21:48:43 by labintei         ###   ########.fr       */
+/*   Updated: 2021/10/06 18:16:45 by labintei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ int	exit_build(t_env *env, t_list *cmds, bool fork)
 			return (1);
 		}
 	}
-	if (fork)
+	if (!(cmds->is_fork))
 		ft_putstr_fd("exit\n", 2);
 	clear_env(env);
 	exit (ret);
